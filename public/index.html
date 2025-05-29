@@ -2,42 +2,119 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+    <title>Bible Quest</title>
+    <meta name="description" content="Bible Quest - Interactive Children Bible Story App" />
+    <meta name="theme-color" content="#2E4C6D" />
+
+    <!-- Favicon and icons -->
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/icon.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <!-- Social sharing / Open Graph -->
+    <meta property="og:title" content="Bible Quest" />
+    <meta property="og:description" content="Fun, interactive Bible stories and quizzes for children" />
+    <meta property="og:image" content="%PUBLIC_URL%/icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://your-app-url.com" />
+
+    <!-- iOS meta -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Bible Quest" />
+
+    <!-- Android meta -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#2E4C6D" />
+
+    <!-- Prevent text size adjustment -->
+    <meta name="text-size-adjust" content="none" />
+
+    <!-- Capacitor -->
+    <script type="module" src="%PUBLIC_URL%/capacitor.js"></script>
+
+    <style>
+      #splash {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #2E4C6D;
+        color: white;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        z-index: 9999;
+      }
+      
+      #splash h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      
+      #splash .loader {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      #root {
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+      }
+    </style>
   </head>
+
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="splash">
+      <h1>Bible Quest</h1>
+      <div class="loader"></div>
+      <p>Loading your adventure...</p>
+    </div>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <script>
+      // Hide splash screen once app is ready
+      window.addEventListener('load', () => {
+        const root = document.getElementById('root');
+        const splash = document.getElementById('splash');
+        
+        // Wait for React to render
+        const checkReady = setInterval(() => {
+          if (root && root.children.length > 0) {
+            splash.style.opacity = '0';
+            splash.style.transition = 'opacity 0.5s ease-out';
+            setTimeout(() => {
+              splash.style.display = 'none';
+            }, 500);
+            clearInterval(checkReady);
+          }
+        }, 100);
+        
+        // Fallback - hide splash after 5 seconds regardless
+        setTimeout(() => {
+          if (splash.style.display !== 'none') {
+            splash.style.display = 'none';
+            console.warn('Splash screen hidden by timeout');
+          }
+        }, 5000);
+      });
+    </script>
   </body>
 </html>
+

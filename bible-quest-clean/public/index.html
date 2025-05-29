@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- ✅ Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBVDQDM9Q4"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-ZBVDQDM9Q4');
+    </script>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bible Quest</title>
+    <meta name="description" content="Bible Quest - Interactive Children Bible Story App" />
+    <meta name="theme-color" content="#2E4C6D" />
+
+    <!-- ✅ Favicon and icons -->
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/icon.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <!-- ✅ Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet" />
+
+    <!-- ✅ Global Styles -->
+    <style>
+      body {
+        font-family: 'Nunito', sans-serif;
+        background-color: #fefefe;
+        margin: 0;
+        padding: 0;
+      }
+      #splash {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f5f5f5;
+        height: 100vh;
+        font-size: 1.5rem;
+        color: #333;
+      }
+    </style>
+
+    <!-- ✅ Open Graph (Social sharing) -->
+    <meta property="og:title" content="Bible Quest" />
+    <meta property="og:description" content="Fun, interactive Bible stories and quizzes for children" />
+    <meta property="og:image" content="%PUBLIC_URL%/icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://your-app-url.com" />
+
+    <!-- ✅ Apple PWA support -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  </head>
+
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="splash">🚀 Loading Bible Quest...</div>
+    <div id="root" style="display:none;"></div>
+
+    <!-- ✅ Hide splash once app loads -->
+    <script>
+      window.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('splash').style.display = 'none';
+        document.getElementById('root').style.display = 'block';
+      });
+    </script>
+  </body>
+</html>
+
+
+
