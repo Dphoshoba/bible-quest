@@ -287,7 +287,7 @@ function App() {
         background: darkMode ? '#1a1a1a' : '#ffffff'
       }}>
         <h2>Something went wrong</h2>
-        <p>{appError}</p>
+        <p>{appError.message || 'An unknown error occurred.'}</p>
         <button onClick={() => window.location.reload()}>Try Again</button>
       </div>
     );

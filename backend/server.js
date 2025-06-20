@@ -35,12 +35,27 @@ console.log('OPENAI_API_KEY prefix:', process.env.OPENAI_API_KEY?.substring(0, 7
 const app = express();
 const PORT = process.env.PORT || 5050;
 
-// Cross-platform CORS
-app.use(cors({
-  origin: '*',
+// Whitelist of allowed origins
+const whitelist = [
+  'http://localhost:3000',
+  'http://localhost:5050',
+  'https://bible-quest.netlify.app'
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}));
+};
+
+// Cross-platform CORS
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use('/webhook', webhookRoutes);
