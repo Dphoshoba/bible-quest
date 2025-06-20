@@ -39,7 +39,8 @@ const PORT = process.env.PORT || 5050;
 const whitelist = [
   'http://localhost:3000',
   'http://localhost:5050',
-  'https://bible-quest.netlify.app'
+  'https://bible-quest.netlify.app',
+  'https://roaring-starburst-966bea.netlify.app'
 ];
 
 const corsOptions = {
