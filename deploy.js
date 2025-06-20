@@ -51,4 +51,7 @@ console.log('2. Run: netlify deploy --prod');
 console.log('\nOr visit https://netlify.com to deploy via UI\n');
 
 console.log('📁 Your build is ready in the "build" directory');
-console.log('📄 Check DEPLOYMENT.md for detailed instructions'); 
+console.log('🔄 Your last message was about deployment options:');
+console.log('1. Deploy to Netlify (recommended)');
+console.log('2. Manual deployment instructions');
+console.log('3. Exit');
