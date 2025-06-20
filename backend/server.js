@@ -13,7 +13,8 @@ const PORT = process.env.PORT || 5050;
 const whitelist = [
   'http://localhost:3000',
   'http://localhost:5050',
-  'https://bible-quest.netlify.app' // Your main site
+  'https://bible-quest.netlify.app', // Your main site
+  'https://gleaming-biscotti-314cd2.netlify.app' // Your new Netlify URL
 ];
 
 const corsOptions = {
