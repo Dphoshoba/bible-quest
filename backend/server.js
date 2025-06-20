@@ -39,18 +39,29 @@ const PORT = process.env.PORT || 5050;
 const whitelist = [
   'http://localhost:3000',
   'http://localhost:5050',
-  'https://bible-quest.netlify.app',
-  'https://roaring-starburst-966bea.netlify.app',
-  'https://frabjous-hamster-31a6e2.netlify.app'
+  'https://bible-quest.netlify.app' // Your main site
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    // Allow from the whitelist
+    if (whitelist.indexOf(origin) !== -1) {
+      return callback(null, true);
     }
+    
+    // Allow any Netlify subdomain for preview deploys
+    try {
+      if (new URL(origin).hostname.endsWith('.netlify.app')) {
+        return callback(null, true);
+      }
+    } catch (e) {
+      // Invalid URL, proceed to error
+    }
+
+    callback(new Error('Not allowed by CORS'));
   },
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization']
