@@ -1,7 +1,3 @@
-import { fileURLToPath } from 'url';
-import path from 'path';
-import fs from 'fs';
-import dotenv from 'dotenv';
 import OpenAI from 'openai';
 import fetch from 'node-fetch';
 import express from 'express';
@@ -280,14 +276,6 @@ app.get('/', (req, res) => {
       ai: '/api/ask-ai'
     }
   });
-});
-
-// Serve static files from the frontend build directory
-app.use(express.static(path.resolve(__dirname, '../build')));
-
-// Catch-all route for client-side routing - must be last
-app.use((req, res) => {
-  res.sendFile(path.resolve(__dirname, '../build', 'index.html'));
 });
 
 app.listen(PORT, '0.0.0.0', () => {
