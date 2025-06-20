@@ -40,7 +40,8 @@ const whitelist = [
   'http://localhost:3000',
   'http://localhost:5050',
   'https://bible-quest.netlify.app',
-  'https://roaring-starburst-966bea.netlify.app'
+  'https://roaring-starburst-966bea.netlify.app',
+  'https://frabjous-hamster-31a6e2.netlify.app'
 ];
 
 const corsOptions = {
