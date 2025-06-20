@@ -16,7 +16,8 @@ const whitelist = [
   'https://bible-quest.netlify.app', // Your main site
   'https://gleaming-biscotti-314cd2.netlify.app', // Your new Netlify URL
   'https://gentle-alfajores-7ea2c7.netlify.app', // Your latest Netlify URL
-  'https://helpful-conkies-d34e73.netlify.app' // Your current Netlify URL
+  'https://helpful-conkies-d34e73.netlify.app', // Your current Netlify URL
+  'https://idyllic-tartufo-de9771.netlify.app' // Your latest Netlify URL
 ];
 
 const corsOptions = {
@@ -29,7 +30,7 @@ const corsOptions = {
       return callback(null, true);
     }
     
-    // Allow any Netlify subdomain for preview deploys
+    // Allow any Netlify subdomain for preview deploys and new deployments
     try {
       if (new URL(origin).hostname.endsWith('.netlify.app')) {
         return callback(null, true);
