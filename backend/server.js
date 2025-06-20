@@ -14,7 +14,8 @@ const whitelist = [
   'http://localhost:3000',
   'http://localhost:5050',
   'https://bible-quest.netlify.app', // Your main site
-  'https://gleaming-biscotti-314cd2.netlify.app' // Your new Netlify URL
+  'https://gleaming-biscotti-314cd2.netlify.app', // Your new Netlify URL
+  'https://gentle-alfajores-7ea2c7.netlify.app' // Your latest Netlify URL
 ];
 
 const corsOptions = {
@@ -282,4 +283,5 @@ app.get('/', (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ Server running on http://0.0.0.0:${PORT}`);
 });
+
 
