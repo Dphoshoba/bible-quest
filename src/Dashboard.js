@@ -5,7 +5,7 @@ import ShareButton from './components/ShareButton.js';
 const characters = [
   { id: 'david', name: 'David', avatar: '/avatars/david.png', completed: true },
   { id: 'esther', name: 'Esther', avatar: '/avatars/esther.png', completed: false },
-  { id: 'samson', name: 'Samson', avatar: '/avatars/sampson.png', completed: false },
+  { id: 'samson', name: 'Samson', avatar: '/avatars/samson.png', completed: false },
   { id: 'joseph', name: 'Joseph', avatar: '/avatars/joseph.png', completed: false },
   { id: 'mary-joseph', name: 'Mary & Joseph', avatar: '/avatars/mary-joseph.png', completed: false },
   { id: 'paul', name: 'Paul', avatar: '/avatars/paul.png', completed: false },

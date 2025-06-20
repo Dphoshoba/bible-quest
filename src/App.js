@@ -100,21 +100,29 @@ function App() {
   useEffect(() => {
     console.log('[BibleQuest] App initializing');
     
-    // Preload all character avatars
+    // Preload all character avatars with retry logic
     const preloadImages = async () => {
       try {
         const imagePromises = characters.map(char => {
           return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onload = () => {
-              // Only log errors, not successful loads
-              resolve();
+            const loadImage = (retryCount = 0) => {
+              const img = new Image();
+              img.onload = () => {
+                console.log(`[BibleQuest] Successfully loaded avatar: ${char.name}`);
+                resolve();
+              };
+              img.onerror = () => {
+                console.error(`[BibleQuest] Failed to load avatar: ${char.name} (attempt ${retryCount + 1})`);
+                if (retryCount < 2) {
+                  // Retry after a short delay
+                  setTimeout(() => loadImage(retryCount + 1), 1000 * (retryCount + 1));
+                } else {
+                  reject(new Error(`Failed to load ${char.name} after 3 attempts`));
+                }
+              };
+              img.src = char.avatar;
             };
-            img.onerror = () => {
-              console.error(`[BibleQuest] Failed to load avatar: ${char.name}`);
-              reject();
-            };
-            img.src = char.avatar;
+            loadImage();
           });
         });
 
