@@ -1,5 +1,5 @@
 // API configuration
-export const API_BASE_URL = 'http://192.168.68.70:5050';  // Your local IP address
+export const API_BASE_URL = "https://bible-quest-lvwg.onrender.com";
 
 export const API_ENDPOINTS = {
   askAI: `${API_BASE_URL}/api/ask-ai`,
@@ -7,10 +7,12 @@ export const API_ENDPOINTS = {
   bible: `${API_BASE_URL}/api/bible`,
   bibleBooks: `${API_BASE_URL}/api/bible-books`,
   bibleChapters: `${API_BASE_URL}/api/bible-chapters`,
-  // Add other endpoints as needed
+  bibles: `${API_BASE_URL}/api/bibles`
 };
 
-export default {
+const config = {
   API_BASE_URL,
   API_ENDPOINTS
-}; 
+};
+
+export default config; 

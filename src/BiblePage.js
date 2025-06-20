@@ -29,28 +29,36 @@ function BiblePage() {
     console.log('Making request to:', endpoint);
     console.log('Request body:', body);
     
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    
-    console.log('Response status:', response.status);
-    
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Error response:', errorText);
-      throw new Error(`${response.status} ${response.statusText}: ${errorText}`);
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+      
+      console.log('Response status:', response.status);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
+        throw new Error(`${response.status} ${response.statusText}: ${errorText}`);
+      }
+      
+      const data = await response.json();
+      console.log('Response data:', data);
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
+      return data;
+    } catch (err) {
+      console.error('Request failed:', err);
+      throw err;
     }
-    
-    const data = await response.json();
-    console.log('Response data:', data);
-    
-    if (data.error) {
-      throw new Error(data.error);
-    }
-    
-    return data;
   }
 
   // Fetch books on mount
@@ -151,7 +159,18 @@ function BiblePage() {
   return (
     <div style={{ maxWidth: 900, margin: '0 auto', padding: 24 }}>
       <h2>Bible (KJV & NLT)</h2>
-      {error && <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>}
+      {error && (
+        <div style={{ 
+          color: 'red', 
+          marginBottom: 12, 
+          padding: 12, 
+          background: '#ffebee', 
+          borderRadius: 4,
+          border: '1px solid #ffcdd2'
+        }}>
+          {error}
+        </div>
+      )}
       <div style={{ marginBottom: 16 }}>
         <label>
           Book:
@@ -185,13 +204,21 @@ function BiblePage() {
         </label>
       </div>
       {loading ? (
-        <div>Loading...</div>
+        <div style={{ textAlign: 'center', padding: 20 }}>Loading Bible passage...</div>
       ) : (
         <div style={{ display: 'flex', gap: 32 }}>
           <div style={{ flex: 1, background: '#f3f3f3', padding: 16, borderRadius: 8 }}>
             <h3>KJV</h3>
             {kjvError ? (
-              <div style={{ color: 'red' }}>{kjvError}</div>
+              <div style={{ 
+                color: 'red', 
+                padding: 12, 
+                background: '#ffebee', 
+                borderRadius: 4,
+                border: '1px solid #ffcdd2'
+              }}>
+                {kjvError}
+              </div>
             ) : (
               <div dangerouslySetInnerHTML={{ __html: kjvText }} />
             )}
@@ -199,7 +226,15 @@ function BiblePage() {
           <div style={{ flex: 1, background: '#e3f2fd', padding: 16, borderRadius: 8 }}>
             <h3>NLT</h3>
             {nltError ? (
-              <div style={{ color: 'red' }}>{nltError}</div>
+              <div style={{ 
+                color: 'red', 
+                padding: 12, 
+                background: '#ffebee', 
+                borderRadius: 4,
+                border: '1px solid #ffcdd2'
+              }}>
+                {nltError}
+              </div>
             ) : (
               <div dangerouslySetInnerHTML={{ __html: nltText }} />
             )}

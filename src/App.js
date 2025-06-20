@@ -59,9 +59,9 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-const BACKEND_URL = ""; // Using relative URLs instead of hardcoded IP
+// const BACKEND_URL = ""; // Using relative URLs instead of hardcoded IP
 
-const API_KEY = process.env.REACT_APP_BIBLE_API_KEY;
+// const API_KEY = process.env.REACT_APP_BIBLE_API_KEY;
 
 const isPremiumUser = false;
 
@@ -95,7 +95,6 @@ function App() {
   const [textSize, setTextSize] = useState(() => parseInt(localStorage.getItem('textSize') || '18', 10));
   const [appError, setAppError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [assetsLoaded, setAssetsLoaded] = useState(false);
 
   // Add initialization logging and asset preloading
   useEffect(() => {
@@ -121,7 +120,6 @@ function App() {
 
         await Promise.allSettled(imagePromises);
         console.log('[BibleQuest] Asset loading complete');
-        setAssetsLoaded(true);
       } catch (err) {
         console.error('[BibleQuest] Asset loading error:', err);
         setAppError('Failed to load some assets');
@@ -260,14 +258,6 @@ function App() {
     }
     setChallengeLoading(false);
   };
-
-  async function getBibles() {
-    const res = await fetch('https://api.scripture.api.bible/v1/bibles', {
-      headers: { 'api-key': API_KEY }
-    });
-    const data = await res.json();
-    console.log(data); // List of available Bibles
-  }
 
   // Render loading state
   if (isLoading) {

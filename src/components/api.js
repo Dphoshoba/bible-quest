@@ -59,8 +59,10 @@ export const fetchApi = async (endpoint, options = {}) => {
   }
 };
 
-export default {
+const apiConfig = {
   API_BASE_URL,
   API_ENDPOINTS,
   fetchApi
 };
+
+export default apiConfig;
