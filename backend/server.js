@@ -10,28 +10,6 @@ import webhookRoutes from './webhook.js';
 import donationRoutes from './donationRoutes.js';
 import rateLimit from 'express-rate-limit';
 
-// Fix __dirname for ES module
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Load .env
-const envPath = path.join(__dirname, '.env');
-console.log('Looking for .env at:', envPath);
-if (!fs.existsSync(envPath)) {
-  const defaultEnv = `PORT=5050
-STRIPE_SECRET_KEY=your_stripe_key
-STRIPE_PUBLISHABLE_KEY=your_publishable_key
-OPENAI_API_KEY=your_openai_key`;
-  fs.writeFileSync(envPath, defaultEnv);
-  console.log('Default .env created at:', envPath);
-}
-dotenv.config({ path: envPath });
-
-// Debug logs
-console.log('PORT:', process.env.PORT);
-console.log('STRIPE_SECRET_KEY prefix:', process.env.STRIPE_SECRET_KEY?.substring(0, 7));
-console.log('OPENAI_API_KEY prefix:', process.env.OPENAI_API_KEY?.substring(0, 7));
-
 const app = express();
 const PORT = process.env.PORT || 5050;
 
