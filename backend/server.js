@@ -41,8 +41,11 @@ const corsOptions = {
 
     callback(new Error('Not allowed by CORS'));
   },
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 };
 
 // Cross-platform CORS
@@ -65,8 +68,24 @@ const aiLimiter = rateLimit({
 });
 app.use('/api/ask-ai', aiLimiter);
 
+// Handle preflight OPTIONS requests for AI endpoint
+app.options('/api/ask-ai', (req, res) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.status(204).end();
+});
+
 app.post('/api/ask-ai', async (req, res) => {
   console.log('POST /api/ask-ai');
+  
+  // Set CORS headers for the response
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
   const { prompt, character } = req.body;
 
   try {
