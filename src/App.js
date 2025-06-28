@@ -11,6 +11,8 @@ import './App.css';
 import { API_ENDPOINTS } from "./components/api.js";
 import ShareButton, { FacebookShareButton } from './components/ShareButton.js';
 import BiblePage from './BiblePage.js';
+import AiBuddy from "./components/AiBuddy.js";
+import CorsTest from "./components/CorsTest.js";
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -331,6 +333,9 @@ function App() {
               <button onClick={decreaseTextSize} style={{ fontSize: 18, background: 'none', border: 'none', cursor: 'pointer', color: darkMode ? '#ffe082' : '#333' }} title="Smaller text">A-</button>
               <button onClick={increaseTextSize} style={{ fontSize: 22, background: 'none', border: 'none', cursor: 'pointer', color: darkMode ? '#ffe082' : '#333' }} title="Larger text">A+</button>
             </div>
+
+            {/* CORS Test Component - Temporary for debugging */}
+            <CorsTest />
 
             {/* Daily Bible Fact or Verse */}
             <div style={{
