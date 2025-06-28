@@ -9,47 +9,13 @@ import rateLimit from 'express-rate-limit';
 const app = express();
 const PORT = process.env.PORT || 5050;
 
-// Whitelist of allowed origins
-const whitelist = [
-  'http://localhost:3000',
-  'http://localhost:5050',
-  'https://bible-quest.netlify.app', // Your main site
-  'https://gleaming-biscotti-314cd2.netlify.app', // Your new Netlify URL
-  'https://gentle-alfajores-7ea2c7.netlify.app', // Your latest Netlify URL
-  'https://helpful-conkies-d34e73.netlify.app', // Your current Netlify URL
-  'https://idyllic-tartufo-de9771.netlify.app' // Your latest Netlify URL
-];
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-
-    // Allow from the whitelist
-    if (whitelist.indexOf(origin) !== -1) {
-      return callback(null, true);
-    }
-    
-    // Allow any Netlify subdomain for preview deploys and new deployments
-    try {
-      if (new URL(origin).hostname.endsWith('.netlify.app')) {
-        return callback(null, true);
-      }
-    } catch (e) {
-      // Invalid URL, proceed to error
-    }
-
-    callback(new Error('Not allowed by CORS'));
-  },
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
-  credentials: true,
-  preflightContinue: false,
-  optionsSuccessStatus: 204
-};
-
 // Cross-platform CORS
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: true, // Allow all origins for now
+  credentials: true,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With']
+}));
 
 app.use(express.json());
 app.use('/webhook', webhookRoutes);
@@ -70,6 +36,10 @@ app.use('/api/ask-ai', aiLimiter);
 
 // Handle preflight OPTIONS requests for AI endpoint
 app.options('/api/ask-ai', (req, res) => {
+  console.log('OPTIONS request received for /api/ask-ai');
+  console.log('Origin:', req.headers.origin);
+  console.log('Request headers:', req.headers);
+  
   res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
   res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
@@ -123,6 +93,32 @@ app.post('/api/ask-ai', async (req, res) => {
 // Health checks
 app.get('/api/test', (req, res) => {
   res.json({ message: 'Backend is working!' });
+});
+
+// Test CORS endpoint
+app.get('/api/test-cors', (req, res) => {
+  console.log('GET /api/test-cors');
+  console.log('Origin:', req.headers.origin);
+  
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
+  res.json({ 
+    message: 'CORS test successful!',
+    origin: req.headers.origin,
+    timestamp: new Date().toISOString()
+  });
+});
+
+app.options('/api/test-cors', (req, res) => {
+  console.log('OPTIONS request for /api/test-cors');
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.status(204).end();
 });
 
 app.get('/test-stripe', (req, res) => {
