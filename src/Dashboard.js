@@ -3,20 +3,20 @@ import './App.css';
 import ShareButton from './components/ShareButton.js';
 
 const characters = [
-  { id: 'david', name: 'David', avatar: '/avatars/david.png', completed: true },
-  { id: 'esther', name: 'Esther', avatar: '/avatars/esther.png', completed: false },
-  { id: 'samson', name: 'Samson', avatar: '/avatars/samson.png', completed: false },
-  { id: 'joseph', name: 'Joseph', avatar: '/avatars/joseph.png', completed: false },
-  { id: 'mary-joseph', name: 'Mary & Joseph', avatar: '/avatars/mary-joseph.png', completed: false },
-  { id: 'paul', name: 'Paul', avatar: '/avatars/paul.png', completed: false },
-  { id: 'jesus', name: 'Jesus', avatar: '/avatars/jesus.png', completed: false },
-  { id: 'adam-eve', name: 'Adam & Eve', avatar: '/avatars/adam-eve.png', completed: false },
-  { id: 'noah', name: 'Noah', avatar: '/avatars/noah.png', completed: false },
-  { id: 'abraham', name: 'Abraham', avatar: '/avatars/abraham.png', completed: false },
-  { id: 'samuel', name: 'Samuel', avatar: '/avatars/samuel.png', completed: false },
-  { id: 'naomi', name: 'Naomi', avatar: '/avatars/naomi.png', completed: false },
-  { id: 'daniel', name: 'Daniel', avatar: '/avatars/daniel.png', completed: false },
-  { id: 'cain-abel', name: 'Cain & Abel', avatar: '/avatars/cain-abel.png', completed: false }
+  { id: 'david', name: 'David', avatar: '/avatars/david.jpg', completed: true },
+  { id: 'esther', name: 'Esther', avatar: '/avatars/esther.jpg', completed: false },
+  { id: 'samson', name: 'Samson', avatar: '/avatars/samson.jpg', completed: false },
+  { id: 'joseph', name: 'Joseph', avatar: '/avatars/joseph.jpg', completed: false },
+  { id: 'mary-joseph', name: 'Mary & Joseph', avatar: '/avatars/mary-joseph.jpg', completed: false },
+  { id: 'paul', name: 'Paul', avatar: '/avatars/paul.jpg', completed: false },
+  { id: 'jesus', name: 'Jesus', avatar: '/avatars/jesus.jpg', completed: false },
+  { id: 'adam-eve', name: 'Adam & Eve', avatar: '/avatars/adam-eve.jpg', completed: false },
+  { id: 'noah', name: 'Noah', avatar: '/avatars/noah.jpg', completed: false },
+  { id: 'abraham', name: 'Abraham', avatar: '/avatars/abraham.jpg', completed: false },
+  { id: 'samuel', name: 'Samuel', avatar: '/avatars/samuel.jpg', completed: false },
+  { id: 'naomi', name: 'Naomi', avatar: '/avatars/naomi.jpg', completed: false },
+  { id: 'daniel', name: 'Daniel', avatar: '/avatars/daniel.jpg', completed: false },
+  { id: 'cain-abel', name: 'Cain & Abel', avatar: '/avatars/cain-abel.jpg', completed: false }
 ];
 
 function Dashboard() {

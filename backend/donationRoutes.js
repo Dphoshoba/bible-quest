@@ -1,26 +1,3 @@
-import { fileURLToPath } from 'url';
-import path from 'path';
-import fs from 'fs';
-import dotenv from 'dotenv';
-
-// Debug: Check if .env file exists
-const envPath = 'C:/Users/david/Desktop/bible-quest/backend/.env';
-console.log('DonationRoutes: Looking for .env at:', envPath);
-console.log('DonationRoutes: .env file exists:', fs.existsSync(envPath));
-
-if (fs.existsSync(envPath)) {
-  console.log('DonationRoutes: .env file contents:', fs.readFileSync(envPath, 'utf8'));
-}
-
-// Load .env from backend directory
-dotenv.config({ path: envPath });
-
-// Debug: Log environment variables
-console.log('DonationRoutes: Environment variables loaded:');
-console.log('DonationRoutes: STRIPE_SECRET_KEY exists:', !!process.env.STRIPE_SECRET_KEY);
-console.log('DonationRoutes: STRIPE_SECRET_KEY starts with:', process.env.STRIPE_SECRET_KEY?.substring(0, 7));
-
-// Now import other modules
 import express from 'express';
 import Stripe from 'stripe';
 
