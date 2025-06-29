@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { CharacterContext } from './App.js';
+import { CharacterContext } from './CharacterContext.js';
 
 function CharacterCarousel() {
   const { characters, isPremiumUser } = useContext(CharacterContext);

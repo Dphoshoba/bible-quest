@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { CharacterContext } from "./App.js";
+import { CharacterContext } from './CharacterContext.js';
 import AiBuddy from "./components/AiBuddy.js";
 import { API_ENDPOINTS } from "./config.js";
 import ShareButton from './components/ShareButton.js';
