@@ -252,7 +252,6 @@ function BiblePage() {
         setBook(fallbackContentMemo().books[0].id);
         setKjvText(fallbackContentMemo().sampleText.kjv);
         setNltText(fallbackContentMemo().sampleText.nlt);
-        setError('Backend is currently unavailable. Showing sample content. You can still use highlighting and notes features.');
       }
     }
     fetchBooks();
@@ -628,69 +627,6 @@ function BiblePage() {
               ❌ Cancel
             </button>
           </div>
-        </div>
-      )}
-
-      {/* Highlights List */}
-      {Object.keys(highlights).length > 0 && (
-        <div style={{ 
-          background: '#e8f5e8',
-          padding: '16px',
-          borderRadius: '12px',
-          marginBottom: '24px',
-          border: '1px solid #c3e6c3'
-        }}>
-          <h4 style={{ margin: '0 0 12px 0', color: '#155724' }}>🎨 Your Highlights</h4>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-            {Object.entries(highlights).map(([text, highlight]) => (
-              <div
-                key={text}
-                style={{
-                  background: highlight.color,
-                  padding: '6px 12px',
-                  borderRadius: '20px',
-                  fontSize: '12px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  maxWidth: '200px'
-                }}
-              >
-                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {text}
-                </span>
-                <button
-                  onClick={() => removeHighlight(text)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontSize: '14px',
-                    color: '#666'
-                  }}
-                >
-                  ×
-                </button>
-              </div>
-            ))}
-          </div>
-          
-          {/* Debug Info */}
-          <details style={{ marginTop: '12px' }}>
-            <summary style={{ cursor: 'pointer', color: '#155724', fontWeight: '600' }}>
-              🔧 Debug Info
-            </summary>
-            <pre style={{ 
-              background: '#f8f9fa', 
-              padding: '8px', 
-              borderRadius: '4px', 
-              fontSize: '12px',
-              marginTop: '8px',
-              overflow: 'auto'
-            }}>
-              {JSON.stringify(highlights, null, 2)}
-            </pre>
-          </details>
         </div>
       )}
 
