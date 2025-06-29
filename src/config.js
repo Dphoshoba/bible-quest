@@ -1,5 +1,5 @@
 // API configuration
-export const API_BASE_URL = "https://bible-quest-backend.onrender.com";
+export const API_BASE_URL = "https://bible-quest-rupb.onrender.com";
 
 export const API_ENDPOINTS = {
   askAI: `${API_BASE_URL}/api/ask-ai`,
