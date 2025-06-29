@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5050;
 
 // Enable CORS for all routes
 app.use(cors({
-  origin: ['https://bible-quest.netlify.app', 'http://localhost:3000', 'http://localhost:3001'],
+  origin: true, // Allow all origins temporarily
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With']
