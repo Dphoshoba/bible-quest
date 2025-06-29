@@ -9,6 +9,18 @@ import rateLimit from 'express-rate-limit';
 const app = express();
 const PORT = process.env.PORT || 5050;
 
+// Enable CORS for all routes
+app.use(cors({
+  origin: ['https://bible-quest.netlify.app', 'http://localhost:3000', 'http://localhost:3001'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With']
+}));
+
+app.use(express.json());
+app.use('/webhook', webhookRoutes);
+app.use('/', donationRoutes);
+
 // Simple root endpoint to test if server is running
 app.get('/', (req, res) => {
   res.json({ 
@@ -17,33 +29,6 @@ app.get('/', (req, res) => {
     cors: 'enabled'
   });
 });
-
-// Aggressive CORS handling - handle ALL requests
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  
-  console.log(`[CORS] ${req.method} ${req.path} - Origin: ${origin}`);
-  
-  // ALWAYS set CORS headers for every response
-  res.setHeader('Access-Control-Allow-Origin', origin || '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Max-Age', '86400'); // 24 hours
-  
-  // Handle ALL OPTIONS requests immediately
-  if (req.method === 'OPTIONS') {
-    console.log(`[CORS] Handling OPTIONS preflight for ${req.path}`);
-    res.status(204).end();
-    return;
-  }
-  
-  next();
-});
-
-app.use(express.json());
-app.use('/webhook', webhookRoutes);
-app.use('/', donationRoutes);
 
 // OpenAI setup
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
