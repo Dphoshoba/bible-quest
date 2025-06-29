@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { API_ENDPOINTS, API_BASE_URL } from './config.js';
+import { API_ENDPOINTS } from './config.js';
 
 const KJV_ID = 'de4e12af7f28f599-01';
 const NLT_ID = '65eec8e0b60e656b-01';
@@ -27,12 +27,8 @@ function BiblePage() {
   const [kjvError, setKjvError] = useState('');
   
   // New state for enhanced features
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [searching, setSearching] = useState(false);
   const [notes, setNotes] = useState('');
   const [showNotes, setShowNotes] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
   const [showHighlightTools, setShowHighlightTools] = useState(false);
   const [selectedText, setSelectedText] = useState('');
   const [highlights, setHighlights] = useState({});
@@ -85,46 +81,6 @@ function BiblePage() {
       throw err;
     }
   }
-
-  // Search functionality
-  const handleSearch = async () => {
-    if (!searchTerm.trim()) return;
-    
-    setSearching(true);
-    try {
-      console.log('Searching for:', searchTerm);
-      const data = await makeRequest(API_ENDPOINTS.bibleSearch, {
-        bibleId: KJV_ID,
-        query: searchTerm,
-        limit: 10
-      });
-      
-      console.log('Raw search response:', data);
-      
-      // Handle different possible response structures
-      let results = [];
-      if (data.data?.passages) {
-        results = data.data.passages;
-      } else if (data.data) {
-        results = Array.isArray(data.data) ? data.data : [data.data];
-      } else if (data.passages) {
-        results = data.passages;
-      }
-      
-      setSearchResults(results);
-      console.log('Processed search results:', results);
-      
-      if (results.length === 0) {
-        console.log('No search results found');
-      }
-    } catch (err) {
-      console.error('Search failed:', err);
-      setSearchResults([]);
-      // Show error to user
-      setError('Search failed: ' + err.message);
-    }
-    setSearching(false);
-  };
 
   // Navigation functions
   const navigateToChapter = (newChapter) => {
@@ -240,68 +196,6 @@ function BiblePage() {
     
     console.log('Highlighted text length:', highlightedText.length);
     return highlightedText;
-  };
-
-  // Test search function for debugging
-  const testSearch = async () => {
-    console.log('Testing search with term: "love"');
-    setSearchTerm('love');
-    setTimeout(() => {
-      handleSearch();
-    }, 100);
-  };
-
-  // Test endpoint connectivity
-  const testEndpoint = async () => {
-    console.log('Testing endpoint connectivity...');
-    console.log('API_BASE_URL:', API_BASE_URL);
-    console.log('testCors endpoint:', API_ENDPOINTS.testCors);
-    
-    try {
-      // Test root endpoint first
-      console.log('Testing root endpoint...');
-      const rootResponse = await fetch(API_BASE_URL, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      console.log('Root response status:', rootResponse.status);
-      console.log('Root response headers:', rootResponse.headers);
-      
-      if (!rootResponse.ok) {
-        throw new Error(`Root endpoint failed: ${rootResponse.status} ${rootResponse.statusText}`);
-      }
-      
-      const rootData = await rootResponse.json();
-      console.log('Root endpoint response:', rootData);
-      
-      // Test CORS endpoint
-      console.log('Testing CORS endpoint...');
-      const response = await fetch(API_ENDPOINTS.testCors, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      console.log('CORS response status:', response.status);
-      console.log('CORS response headers:', response.headers);
-      
-      if (!response.ok) {
-        throw new Error(`CORS endpoint failed: ${response.status} ${response.statusText}`);
-      }
-      
-      const data = await response.json();
-      console.log('CORS endpoint response:', data);
-      setError('Both endpoints working! Root: ' + JSON.stringify(rootData) + ' | CORS: ' + JSON.stringify(data));
-    } catch (err) {
-      console.error('Endpoint test failed:', err);
-      setError('Endpoint test failed: ' + err.message);
-    }
   };
 
   // Fetch books on mount
@@ -513,21 +407,6 @@ function BiblePage() {
         {/* Action Buttons */}
         <div style={{ display: 'flex', gap: '12px', marginTop: '16px', flexWrap: 'wrap' }}>
           <button
-            onClick={() => setShowSearch(!showSearch)}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '6px',
-              border: 'none',
-              background: 'rgba(255,255,255,0.2)',
-              color: 'white',
-              cursor: 'pointer',
-              fontSize: '14px'
-            }}
-          >
-            🔍 {showSearch ? 'Hide Search' : 'Search Bible'}
-          </button>
-          
-          <button
             onClick={() => setShowNotes(!showNotes)}
             style={{
               padding: '8px 16px',
@@ -570,114 +449,6 @@ function BiblePage() {
           border: '1px solid #ffcdd2'
         }}>
           {error}
-        </div>
-      )}
-
-      {/* Search Section */}
-      {showSearch && (
-        <div style={{ 
-          background: '#f8f9fa',
-          padding: '20px',
-          borderRadius: '12px',
-          marginBottom: '24px',
-          border: '1px solid #e9ecef'
-        }}>
-          <h3 style={{ margin: '0 0 16px 0', color: '#495057' }}>🔍 Search Bible</h3>
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Enter search term..."
-              style={{
-                flex: 1,
-                minWidth: '200px',
-                padding: '10px 12px',
-                borderRadius: '6px',
-                border: '1px solid #ced4da',
-                fontSize: '14px'
-              }}
-              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-            />
-            <button
-              onClick={handleSearch}
-              disabled={searching}
-              style={{
-                padding: '10px 20px',
-                borderRadius: '6px',
-                border: 'none',
-                background: '#007bff',
-                color: 'white',
-                cursor: 'pointer',
-                fontSize: '14px'
-              }}
-            >
-              {searching ? 'Searching...' : 'Search'}
-            </button>
-            <button
-              onClick={testSearch}
-              style={{
-                padding: '10px 20px',
-                borderRadius: '6px',
-                border: 'none',
-                background: '#28a745',
-                color: 'white',
-                cursor: 'pointer',
-                fontSize: '14px'
-              }}
-            >
-              🧪 Test Search
-            </button>
-            <button
-              onClick={testEndpoint}
-              style={{
-                padding: '10px 20px',
-                borderRadius: '6px',
-                border: 'none',
-                background: '#ffc107',
-                color: 'black',
-                cursor: 'pointer',
-                fontSize: '14px'
-              }}
-            >
-              🔗 Test Endpoint
-            </button>
-          </div>
-          
-          {/* Search Results */}
-          {searchResults.length > 0 && (
-            <div style={{ marginTop: '16px' }}>
-              <h4 style={{ margin: '0 0 12px 0', color: '#495057' }}>Search Results:</h4>
-              <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                {searchResults.map((result, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      padding: '8px 12px',
-                      background: 'white',
-                      marginBottom: '8px',
-                      borderRadius: '6px',
-                      border: '1px solid #e9ecef',
-                      cursor: 'pointer'
-                    }}
-                    onClick={() => {
-                      // Navigate to the search result
-                      if (result.reference) {
-                        console.log('Navigate to:', result.reference);
-                      }
-                    }}
-                  >
-                    <div style={{ fontWeight: '600', color: '#495057' }}>
-                      {result.reference || 'Unknown Reference'}
-                    </div>
-                    <div style={{ fontSize: '12px', color: '#6c757d', marginTop: '4px' }}>
-                      {result.text ? result.text.substring(0, 100) + '...' : 'No preview available'}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       )}
 
