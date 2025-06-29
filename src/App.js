@@ -196,6 +196,10 @@ function App() {
       setFactLoading(true);
       setFactError("");
       try {
+        // Add timeout to prevent hanging
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+        
         const res = await fetch(API_ENDPOINTS.askAI, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -203,7 +207,10 @@ function App() {
             prompt: "Give me a fun Bible fact or a short Bible verse for children, and explain it simply.",
             character: "general"
           }),
+          signal: controller.signal
         });
+        
+        clearTimeout(timeoutId);
         
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
@@ -220,8 +227,19 @@ function App() {
         }
       } catch (err) {
         console.error('[BibleQuest] Fact fetch error:', err);
-        setFactError("Something went wrong. Please try again.");
-        setAppError(err);
+        // Don't set appError for network/CORS issues, just set factError
+        if (err.name === 'AbortError') {
+          setFactError("Request timed out. Please try again later.");
+        } else if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+          setFactError("Unable to load today's Bible fact. Please try again later.");
+          console.log('[BibleQuest] Network error - app will continue without daily fact');
+        } else {
+          setFactError("Unable to load today's Bible fact. Please try again later.");
+        }
+        // Only set appError for actual app-breaking errors, not network issues
+        if (!err.message.includes('Failed to fetch') && !err.message.includes('NetworkError') && err.name !== 'AbortError') {
+          setAppError(err);
+        }
       } finally {
         setFactLoading(false);
       }
@@ -256,6 +274,11 @@ function App() {
           character: "general"
         }),
       });
+      
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      
       const data = await res.json();
       if (data.answer) {
         setDailyChallenge(data.answer);
@@ -263,7 +286,13 @@ function App() {
         localStorage.setItem('dailyChallengeDate', today);
       } else setChallengeError("Sorry, I couldn't get a challenge today.");
     } catch (err) {
-      setChallengeError("Something went wrong. Please try again.");
+      console.error('[BibleQuest] Challenge fetch error:', err);
+      // Handle network errors gracefully
+      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+        setChallengeError("Unable to load challenge. Please check your connection and try again.");
+      } else {
+        setChallengeError("Something went wrong. Please try again.");
+      }
     }
     setChallengeLoading(false);
   };
