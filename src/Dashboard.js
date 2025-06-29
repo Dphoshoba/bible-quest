@@ -39,31 +39,140 @@ function Dashboard() {
     .sort((a, b) => b.completed - a.completed);
 
   return (
-    <div className="dashboard">
-      <h2>
+    <div style={{ 
+      background: 'white', 
+      borderRadius: '12px', 
+      padding: '2rem', 
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      margin: '20px',
+      minHeight: '80vh'
+    }}>
+      
+      {/* Back Button */}
+      <Link to="/" style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '8px',
+        padding: '8px 16px',
+        background: '#6c757d',
+        color: 'white',
+        textDecoration: 'none',
+        borderRadius: '6px',
+        marginBottom: '20px',
+        fontSize: '14px'
+      }}>
+        ← Back to Home
+      </Link>
+
+      <h2 style={{ color: '#2c3e50', marginBottom: '2rem', display: 'flex', alignItems: 'center' }}>
         <img src="/icons/progress.png" alt="Progress" style={{ width: '28px', marginRight: '10px' }} />
         My Bible Quest Progress
       </h2>
 
-      <p className="progress-summary">{completedCount} of {characters.length} stories completed ({percentage}%)</p>
+      <p style={{ marginTop: '0.5rem', fontWeight: 'bold', color: '#333', fontSize: '18px' }}>
+        {completedCount} of {characters.length} stories completed ({percentage}%)
+      </p>
 
       <ShareButton message={`I have completed ${completedCount} of ${characters.length} stories on Bible Quest!`} />
 
-      <div className="progress-filters">
-        <button onClick={() => setFilter('all')} className={filter === 'all' ? 'active' : ''}>All</button>
-        <button onClick={() => setFilter('completed')} className={filter === 'completed' ? 'active' : ''}>Completed</button>
-        <button onClick={() => setFilter('incomplete')} className={filter === 'incomplete' ? 'active' : ''}>Incomplete</button>
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem', justifyContent: 'center' }}>
+        <button 
+          onClick={() => setFilter('all')} 
+          style={{
+            background: filter === 'all' ? '#3498db' : '#f8f9fa',
+            color: filter === 'all' ? 'white' : '#333',
+            border: 'none',
+            padding: '0.5rem 1rem',
+            borderRadius: '20px',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}
+        >
+          All
+        </button>
+        <button 
+          onClick={() => setFilter('completed')} 
+          style={{
+            background: filter === 'completed' ? '#3498db' : '#f8f9fa',
+            color: filter === 'completed' ? 'white' : '#333',
+            border: 'none',
+            padding: '0.5rem 1rem',
+            borderRadius: '20px',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}
+        >
+          Completed
+        </button>
+        <button 
+          onClick={() => setFilter('incomplete')} 
+          style={{
+            background: filter === 'incomplete' ? '#3498db' : '#f8f9fa',
+            color: filter === 'incomplete' ? 'white' : '#333',
+            border: 'none',
+            padding: '0.5rem 1rem',
+            borderRadius: '20px',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}
+        >
+          Incomplete
+        </button>
       </div>
 
-      <div className="dashboard-grid">
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', 
+        gap: '1.5rem', 
+        padding: '1rem' 
+      }}>
         {filteredCharacters.map((char) => (
           <Link key={char.id} to={`/stories/${char.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-            <div className="character">
-              <div className={`status-badge ${char.completed ? 'done' : 'todo'}`}>
+            <div style={{
+              background: '#fff',
+              borderRadius: '12px',
+              padding: '1rem',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.06)',
+              transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+              textAlign: 'center',
+              position: 'relative',
+              width: '250px',
+              margin: '0 auto',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = 'translateY(-4px)';
+              e.target.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.12)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = 'translateY(0)';
+              e.target.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.06)';
+            }}
+            >
+              <div style={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                fontSize: '1.2rem',
+                background: '#fff',
+                borderRadius: '50%',
+                padding: '4px',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.1)'
+              }}>
                 {char.completed ? '✅' : '🕒'}
               </div>
-              <img src={char.avatar} alt={char.name} className="avatar" />
-              <h3>{char.name}</h3>
+              <img 
+                src={char.avatar} 
+                alt={char.name} 
+                style={{
+                  width: '100%',
+                  maxHeight: '180px',
+                  objectFit: 'cover',
+                  borderRadius: '8px',
+                  marginBottom: '0.5rem'
+                }} 
+              />
+              <h3 style={{ margin: '0.5rem 0 0.25rem', fontSize: '1.1rem' }}>{char.name}</h3>
             </div>
           </Link>
         ))}
