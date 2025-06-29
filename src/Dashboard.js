@@ -20,6 +20,7 @@ const characters = [
   { id: 'cain-abel', name: 'Cain & Abel', avatar: '/avatars/cain-abel.jpg', completed: false }
 ];
 
+// Dashboard component with clickable character cards - Updated for deployment
 function Dashboard() {
   const [filter, setFilter] = useState('all');
 
