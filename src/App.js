@@ -418,10 +418,12 @@ function App() {
             </div>
 
             <h1>Welcome to Bible Quest</h1>
-            <div className="agency-info" style={{ marginBottom: 24 }}>
-              <img src="/avatars/logo.png" alt="Eternal Echoes & Visions Logo"
-                style={{ height: 100, marginRight: 16, verticalAlign: 'middle' }} />
-              <span style={{ fontSize: 24, fontWeight: 600, verticalAlign: 'middle' }}>
+            <div className="agency-info" style={{ marginBottom: 24, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+                <img src="/avatars/logo.png" alt="Eternal Echoes & Visions Logo" style={{ height: 100, verticalAlign: 'middle' }} />
+                <img src="/avatars/icon_1.png" alt="Agency Icon" style={{ height: 100, verticalAlign: 'middle' }} />
+              </div>
+              <span style={{ fontSize: 24, fontWeight: 600, marginTop: 12, textAlign: 'center' }}>
                 Eternal Echoes &amp; Visions
               </span>
             </div>
