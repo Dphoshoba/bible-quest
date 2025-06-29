@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { API_ENDPOINTS } from './config.js';
+import { API_ENDPOINTS, API_BASE_URL } from './config.js';
 
 const KJV_ID = 'de4e12af7f28f599-01';
 const NLT_ID = '65eec8e0b60e656b-01';
@@ -254,11 +254,50 @@ function BiblePage() {
   // Test endpoint connectivity
   const testEndpoint = async () => {
     console.log('Testing endpoint connectivity...');
+    console.log('API_BASE_URL:', API_BASE_URL);
+    console.log('testCors endpoint:', API_ENDPOINTS.testCors);
+    
     try {
-      const response = await fetch('https://bible-quest-backend.onrender.com/api/test-cors');
+      // Test root endpoint first
+      console.log('Testing root endpoint...');
+      const rootResponse = await fetch(API_BASE_URL, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log('Root response status:', rootResponse.status);
+      console.log('Root response headers:', rootResponse.headers);
+      
+      if (!rootResponse.ok) {
+        throw new Error(`Root endpoint failed: ${rootResponse.status} ${rootResponse.statusText}`);
+      }
+      
+      const rootData = await rootResponse.json();
+      console.log('Root endpoint response:', rootData);
+      
+      // Test CORS endpoint
+      console.log('Testing CORS endpoint...');
+      const response = await fetch(API_ENDPOINTS.testCors, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log('CORS response status:', response.status);
+      console.log('CORS response headers:', response.headers);
+      
+      if (!response.ok) {
+        throw new Error(`CORS endpoint failed: ${response.status} ${response.statusText}`);
+      }
+      
       const data = await response.json();
-      console.log('Endpoint test response:', data);
-      setError('Endpoint test successful: ' + JSON.stringify(data));
+      console.log('CORS endpoint response:', data);
+      setError('Both endpoints working! Root: ' + JSON.stringify(rootData) + ' | CORS: ' + JSON.stringify(data));
     } catch (err) {
       console.error('Endpoint test failed:', err);
       setError('Endpoint test failed: ' + err.message);
