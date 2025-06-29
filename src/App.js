@@ -2,14 +2,11 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import BibleStoryPage from './BibleStoryPage.js';
 import Dashboard from './Dashboard.js';
-import UpgradeButton from './UpgradeButton.js';
 import QuizPage from './QuizPage.js';
 import CharacterCarousel from './CharacterCarousel.js';
 import AchievementsPage from './components/AchievementsPage.js';
 import ParentalDashboard from './components/ParentalDashboard.js';
 import './App.css';
-import { API_ENDPOINTS } from "./components/api.js";
-import ShareButton, { FacebookShareButton } from './components/ShareButton.js';
 import BiblePage from './BiblePage.js';
 
 // Error Boundary Component
@@ -59,10 +56,6 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-// const BACKEND_URL = ""; // Using relative URLs instead of hardcoded IP
-
-// const API_KEY = process.env.REACT_APP_BIBLE_API_KEY;
-
 const isPremiumUser = false;
 
 const characters = [
@@ -86,7 +79,6 @@ export const CharacterContext = React.createContext({ characters, isPremiumUser 
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [appError, setAppError] = useState(null);
 
   useEffect(() => {
     console.log('[BibleQuest] App initializing');
@@ -110,22 +102,6 @@ function App() {
       }}>
         <h2>Loading Bible Quest...</h2>
         <p>Please wait while we prepare your journey</p>
-      </div>
-    );
-  }
-
-  // Render error state
-  if (appError) {
-    return (
-      <div style={{ 
-        padding: '20px', 
-        textAlign: 'center', 
-        color: '#000000',
-        background: '#ffffff'
-      }}>
-        <h2>Something went wrong</h2>
-        <p>{appError.message || 'An unknown error occurred.'}</p>
-        <button onClick={() => window.location.reload()}>Try Again</button>
       </div>
     );
   }
@@ -158,6 +134,7 @@ function App() {
                 position: 'relative',
                 zIndex: 1000
               }}
+              onClick={() => console.log('Dashboard clicked!')}
               onMouseEnter={(e) => {
                 e.target.style.transform = 'translateY(-2px)';
                 e.target.style.boxShadow = '0 4px 16px rgba(76, 175, 80, 0.4)';
@@ -186,6 +163,7 @@ function App() {
                 position: 'relative',
                 zIndex: 1000
               }}
+              onClick={() => console.log('Achievements clicked!')}
               onMouseEnter={(e) => {
                 e.target.style.transform = 'translateY(-2px)';
                 e.target.style.boxShadow = '0 4px 16px rgba(255, 152, 0, 0.4)';
@@ -213,6 +191,7 @@ function App() {
                 position: 'relative',
                 zIndex: 1000
               }}
+              onClick={() => console.log('Parent Dashboard clicked!')}
               onMouseEnter={(e) => {
                 e.target.style.transform = 'translateY(-2px)';
                 e.target.style.boxShadow = '0 4px 16px rgba(33, 150, 243, 0.4)';
@@ -240,6 +219,7 @@ function App() {
                 position: 'relative',
                 zIndex: 1000
               }}
+              onClick={() => console.log('Bible clicked!')}
               onMouseEnter={(e) => {
                 e.target.style.transform = 'translateY(-2px)';
                 e.target.style.boxShadow = '0 4px 16px rgba(156, 39, 176, 0.4)';
@@ -253,10 +233,32 @@ function App() {
               </Link>
             </div>
 
-            {/* Welcome Message */}
+            {/* Welcome Message and Logos */}
             <div style={{ textAlign: 'center', margin: '40px 0' }}>
-              <h1 style={{ color: '#1a237e', marginBottom: '20px' }}>Welcome to Bible Quest</h1>
-              <p style={{ fontSize: '18px', color: '#666' }}>Select a Bible character to begin your journey</p>
+              <h1 style={{ color: '#1a237e', marginBottom: '20px', textShadow: '0 0 12px #ffe082, 0 0 24px #fffde7' }}>Welcome to Bible Quest</h1>
+              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: '20px' }}>
+                <div style={{ position: 'relative', display: 'inline-block' }}>
+                  <img 
+                    src="/avatars/logo.png" 
+                    alt="Eternal Echoes & Visions Logo" 
+                    style={{ 
+                      height: 100, 
+                      verticalAlign: 'middle',
+                      boxShadow: '0 0 32px 8px #ffe082, 0 0 64px 16px #fffde7',
+                      borderRadius: '16px',
+                      animation: 'bibleGlow 2.5s infinite alternate'
+                    }} 
+                  />
+                </div>
+                <img 
+                  src="/avatars/icon_1.png" 
+                  alt="Agency Icon" 
+                  style={{ height: 100, verticalAlign: 'middle' }} 
+                />
+              </div>
+              <span style={{ fontSize: 24, fontWeight: 600, textAlign: 'center', color: '#1a237e' }}>
+                Eternal Echoes &amp; Visions
+              </span>
             </div>
 
             {/* Character Carousel */}
@@ -273,6 +275,14 @@ function App() {
               <Route path="/parent-dashboard" element={<ParentalDashboard />} />
               <Route path="/bible" element={<BiblePage />} />
             </Routes>
+
+            {/* CSS Animations */}
+            <style>{`
+              @keyframes bibleGlow {
+                0% { box-shadow: 0 0 16px 4px #ffe082, 0 0 32px 8px #fffde7; }
+                100% { box-shadow: 0 0 32px 8px #ffd700, 0 0 64px 16px #fffde7; }
+              }
+            `}</style>
           </div>
         </Router>
       </CharacterContext.Provider>
