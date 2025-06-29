@@ -281,6 +281,56 @@ app.get('/api/bibles', async (req, res) => {
   }
 });
 
+// Bible search endpoint
+app.post('/api/bible-search', async (req, res) => {
+  console.log('\n=== Bible Search Request ===');
+  console.log('Request body:', req.body);
+  
+  const { bibleId, query, limit = 10 } = req.body;
+  
+  if (!process.env.BIBLE_API_KEY) {
+    console.error('Bible API key not configured');
+    return res.status(500).json({ error: 'Bible API key not set in backend.' });
+  }
+  if (!bibleId || !query) {
+    console.error('Missing required parameters:', { bibleId, query });
+    return res.status(400).json({ error: 'Missing bibleId or query.' });
+  }
+  
+  try {
+    // Encode the query for URL
+    const encodedQuery = encodeURIComponent(query);
+    const url = `https://api.scripture.api.bible/v1/bibles/${bibleId}/search?query=${encodedQuery}&limit=${limit}`;
+    
+    console.log('Making search request to:', url);
+    
+    const apiRes = await fetch(url, {
+      headers: { 
+        'api-key': process.env.BIBLE_API_KEY,
+        'Accept': 'application/json'
+      }
+    });
+    
+    console.log('Search API response status:', apiRes.status);
+    
+    if (!apiRes.ok) {
+      const errorText = await apiRes.text();
+      console.error('Bible Search API error response:', errorText);
+      return res.status(apiRes.status).json({ 
+        error: `Bible Search API error: ${apiRes.status} ${apiRes.statusText}`,
+        details: errorText
+      });
+    }
+    
+    const data = await apiRes.json();
+    console.log('Bible Search API success for query:', query);
+    res.json(data);
+  } catch (err) {
+    console.error('Bible Search API error:', err);
+    res.status(500).json({ error: 'Failed to search Bible: ' + err.message });
+  }
+});
+
 // Root route handler
 app.get('/', (req, res) => {
   res.json({
@@ -290,6 +340,7 @@ app.get('/', (req, res) => {
       bible: '/api/bible',
       books: '/api/bible-books',
       chapters: '/api/bible-chapters',
+      search: '/api/bible-search',
       bibles: '/api/bibles',
       ai: '/api/ask-ai'
     }
