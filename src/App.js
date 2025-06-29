@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import CharacterCarousel from './CharacterCarousel.js';
-import BibleStoryPage from './BibleStoryPage.js';
-import Dashboard from './Dashboard.js';
-import QuizPage from './QuizPage.js';
-import AchievementsPage from './components/AchievementsPage.js';
-import ParentalDashboard from './components/ParentalDashboard.js';
-import BiblePage from './BiblePage.js';
-import { CharacterContext, characters, isPremiumUser } from './CharacterContext.js';
+import CharacterCarousel from './CharacterCarousel';
+import BibleStoryPage from './BibleStoryPage';
+import Dashboard from './Dashboard';
+import QuizPage from './QuizPage';
+import AchievementsPage from './components/AchievementsPage';
+import ParentalDashboard from './components/ParentalDashboard';
+import BiblePage from './BiblePage';
+import { CharacterContext, characters, isPremiumUser } from './CharacterContext';
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {

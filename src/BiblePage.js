@@ -251,6 +251,20 @@ function BiblePage() {
     }, 100);
   };
 
+  // Test endpoint connectivity
+  const testEndpoint = async () => {
+    console.log('Testing endpoint connectivity...');
+    try {
+      const response = await fetch('https://bible-quest-backend.onrender.com/api/test-cors');
+      const data = await response.json();
+      console.log('Endpoint test response:', data);
+      setError('Endpoint test successful: ' + JSON.stringify(data));
+    } catch (err) {
+      console.error('Endpoint test failed:', err);
+      setError('Endpoint test failed: ' + err.message);
+    }
+  };
+
   // Fetch books on mount
   useEffect(() => {
     async function fetchBooks() {
@@ -574,6 +588,20 @@ function BiblePage() {
               }}
             >
               🧪 Test Search
+            </button>
+            <button
+              onClick={testEndpoint}
+              style={{
+                padding: '10px 20px',
+                borderRadius: '6px',
+                border: 'none',
+                background: '#ffc107',
+                color: 'black',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}
+            >
+              🔗 Test Endpoint
             </button>
           </div>
           
