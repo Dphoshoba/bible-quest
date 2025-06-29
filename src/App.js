@@ -100,6 +100,25 @@ function App() {
   useEffect(() => {
     console.log('[BibleQuest] App initializing');
     
+    // Initialize audio elements with error handling
+    const initAudio = () => {
+      try {
+        const bgMusic = document.getElementById('bg-music');
+        const whooshAudio = document.getElementById('whoosh-audio');
+        
+        if (bgMusic) {
+          bgMusic.volume = 0.2;
+          bgMusic.muted = true; // Start muted to avoid autoplay issues
+        }
+        
+        if (whooshAudio) {
+          whooshAudio.volume = 0.5;
+        }
+      } catch (error) {
+        console.log('[BibleQuest] Audio initialization failed:', error);
+      }
+    };
+    
     // Preload all character avatars with retry logic
     const preloadImages = async () => {
       try {
@@ -136,6 +155,7 @@ function App() {
       }
     };
 
+    initAudio();
     preloadImages();
   }, []);
 
@@ -545,11 +565,27 @@ function App() {
                   onClick={() => {
                     navigator.clipboard.writeText(window.location.href);
                     const whoosh = document.getElementById('whoosh-audio');
-                    if (whoosh) whoosh.play();
+                    if (whoosh) {
+                      try {
+                        whoosh.play().catch(error => {
+                          console.log('[BibleQuest] Audio play failed:', error);
+                        });
+                      } catch (error) {
+                        console.log('[BibleQuest] Audio play failed:', error);
+                      }
+                    }
                   }}
                   onMouseOver={() => {
                     const whoosh = document.getElementById('whoosh-audio');
-                    if (whoosh) whoosh.play();
+                    if (whoosh) {
+                      try {
+                        whoosh.play().catch(error => {
+                          console.log('[BibleQuest] Audio play failed:', error);
+                        });
+                      } catch (error) {
+                        console.log('[BibleQuest] Audio play failed:', error);
+                      }
+                    }
                   }}
                 >
                   Copy
@@ -570,11 +606,17 @@ function App() {
             </div>
 
             {/* Background Music & Whoosh FX */}
-            <audio id="bg-music" src="/sounds/general.mp3" autoPlay loop volume="0.2"></audio>
-            <audio id="whoosh-audio" src="/sounds/click.mp3"></audio>
+            <audio id="bg-music" src="/sounds/general.mp3" autoPlay loop volume="0.2" preload="none"></audio>
+            <audio id="whoosh-audio" src="/sounds/click.mp3" preload="none"></audio>
             <button id="mute-btn" style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 10000, background: '#fff', border: '1px solid #ccc', borderRadius: 24, padding: 8, fontSize: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.10)' }} onClick={() => {
               const bg = document.getElementById('bg-music');
-              if (bg) bg.muted = !bg.muted;
+              if (bg) {
+                try {
+                  bg.muted = !bg.muted;
+                } catch (error) {
+                  console.log('[BibleQuest] Audio mute toggle failed:', error);
+                }
+              }
             }}>🔊</button>
 
             {/* Keyframes and CSS for all animations */}
