@@ -4,7 +4,7 @@ import { API_ENDPOINTS } from './config.js';
 const KJV_ID = 'de4e12af7f28f599-01';
 const NLT_ID = '65eec8e0b60e656b-01';
 
-// Highlight colors
+// Highlight color options
 const HIGHLIGHT_COLORS = {
   yellow: '#fff3cd',
   green: '#d4edda',
@@ -136,10 +136,10 @@ function BiblePage() {
   }, [book, chapter]);
 
   // Highlight functionality
-  const saveHighlights = () => {
+  const saveHighlights = useCallback(() => {
     const highlightsKey = `bible_highlights_${book}_${chapter}`;
     localStorage.setItem(highlightsKey, JSON.stringify(highlights));
-  };
+  }, [book, chapter, highlights]);
 
   const loadHighlights = useCallback(() => {
     const highlightsKey = `bible_highlights_${book}_${chapter}`;
@@ -162,7 +162,7 @@ function BiblePage() {
     
     const newHighlight = {
       text: selectedText,
-      color: currentHighlightColor,
+      color: HIGHLIGHT_COLORS[currentHighlightColor],
       timestamp: new Date().toISOString()
     };
     
@@ -305,7 +305,7 @@ function BiblePage() {
     if (Object.keys(highlights).length > 0) {
       saveHighlights();
     }
-  }, [highlights]);
+  }, [highlights, saveHighlights]);
 
   const currentBookName = books.find(b => b.id === book)?.name || '';
   const currentChapterNum = parseInt(chapter) || 1;
