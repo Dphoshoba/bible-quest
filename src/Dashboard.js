@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import ShareButton from './components/ShareButton.js';
+import { Link } from 'react-router-dom';
 
 const characters = [
   { id: 'david', name: 'David', avatar: '/avatars/david.jpg', completed: true },
@@ -52,13 +53,15 @@ function Dashboard() {
 
       <div className="dashboard-grid">
         {filteredCharacters.map((char) => (
-          <div key={char.id} className="character">
-            <div className={`status-badge ${char.completed ? 'done' : 'todo'}`}>
-              {char.completed ? '✅' : '🕒'}
+          <Link key={char.id} to={`/stories/${char.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <div className="character">
+              <div className={`status-badge ${char.completed ? 'done' : 'todo'}`}>
+                {char.completed ? '✅' : '🕒'}
+              </div>
+              <img src={char.avatar} alt={char.name} className="avatar" />
+              <h3>{char.name}</h3>
             </div>
-            <img src={char.avatar} alt={char.name} className="avatar" />
-            <h3>{char.name}</h3>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
