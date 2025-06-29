@@ -9,12 +9,37 @@ import rateLimit from 'express-rate-limit';
 const app = express();
 const PORT = process.env.PORT || 5050;
 
-// Cross-platform CORS
+// Global CORS middleware to ensure all responses have proper headers
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  
+  console.log(`[CORS] ${req.method} ${req.path} - Origin: ${origin}`);
+  console.log(`[CORS] Headers:`, req.headers);
+  
+  // Set CORS headers for all responses
+  res.header('Access-Control-Allow-Origin', origin || '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    console.log(`[CORS] Handling OPTIONS preflight for ${req.path}`);
+    res.status(204).end();
+    return;
+  }
+  
+  next();
+});
+
+// Cross-platform CORS - Apply before rate limiting
 app.use(cors({
   origin: true, // Allow all origins for now
   credentials: true,
   methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With']
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }));
 
 app.use(express.json());
@@ -32,7 +57,15 @@ const aiLimiter = rateLimit({
     error: 'Too many AI requests. Please wait a few minutes before trying again.'
   }
 });
-app.use('/api/ask-ai', aiLimiter);
+
+// Apply rate limiter only to POST requests, not OPTIONS
+app.use('/api/ask-ai', (req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    // Skip rate limiting for preflight requests
+    return next();
+  }
+  return aiLimiter(req, res, next);
+});
 
 // Handle preflight OPTIONS requests for AI endpoint
 app.options('/api/ask-ai', (req, res) => {
