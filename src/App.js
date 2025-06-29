@@ -413,20 +413,77 @@ function App() {
             </div>
 
             {/* Centered Top Navigation */}
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '24px 0 16px 0', gap: 24, flexWrap: 'wrap', zIndex: 2, position: 'relative' }}>
-              <Link to="/dashboard" className="progress-link">
-                <img src="/icons/progress.png" alt="progress" />
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '24px 0 16px 0', gap: 24, flexWrap: 'wrap', zIndex: 10, position: 'relative' }}>
+              <Link to="/dashboard" className="progress-link" style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 8, 
+                padding: '12px 20px', 
+                background: 'linear-gradient(90deg, #4CAF50, #45a049)', 
+                color: 'white', 
+                textDecoration: 'none', 
+                borderRadius: '8px', 
+                fontWeight: 600, 
+                boxShadow: '0 2px 8px rgba(76, 175, 80, 0.3)',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
+              }}>
+                <img src="/icons/progress.png" alt="progress" style={{ width: '20px', height: '20px' }} />
                 View My Progress
               </Link>
-              <Link to="/achievements" className="progress-link">
+              <Link to="/achievements" className="progress-link" style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 8, 
+                padding: '12px 20px', 
+                background: 'linear-gradient(90deg, #FF9800, #F57C00)', 
+                color: 'white', 
+                textDecoration: 'none', 
+                borderRadius: '8px', 
+                fontWeight: 600, 
+                boxShadow: '0 2px 8px rgba(255, 152, 0, 0.3)',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
+              }}>
                 <span role="img" aria-label="badge">🏅</span> My Achievements
               </Link>
-              <Link to="/parent-dashboard" className="progress-link">
+              <Link to="/parent-dashboard" className="progress-link" style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 8, 
+                padding: '12px 20px', 
+                background: 'linear-gradient(90deg, #2196F3, #1976D2)', 
+                color: 'white', 
+                textDecoration: 'none', 
+                borderRadius: '8px', 
+                fontWeight: 600, 
+                boxShadow: '0 2px 8px rgba(33, 150, 243, 0.3)',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
+              }}>
                 <span role="img" aria-label="parent">👨‍👩‍👧‍👦</span> Parent/Teacher Dashboard
               </Link>
-              <Link to="/bible" className="progress-link">
+              <Link to="/bible" className="progress-link" style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 8, 
+                padding: '12px 20px', 
+                background: 'linear-gradient(90deg, #9C27B0, #7B1FA2)', 
+                color: 'white', 
+                textDecoration: 'none', 
+                borderRadius: '8px', 
+                fontWeight: 600, 
+                boxShadow: '0 2px 8px rgba(156, 39, 176, 0.3)',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
+              }}>
                 <span role="img" aria-label="bible">📖</span> Bible (NLT & NKJV)
               </Link>
+            </div>
+
+            {/* Character Carousel Section */}
+            <div style={{ margin: '40px 0', zIndex: 10, position: 'relative' }}>
+              <CharacterCarousel />
             </div>
 
             {/* Main Dashboard Row */}
@@ -655,6 +712,39 @@ function App() {
               @keyframes pulseGlow {
                 0%, 100% { box-shadow: 0 0 12px 2px #03a9f4, 0 0 24px 4px #b3e5fc; }
                 50% { box-shadow: 0 0 24px 6px #03a9f4, 0 0 48px 12px #b3e5fc; }
+              }
+              /* Navigation Links Styling */
+              .progress-link:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+              }
+              .progress-link:active {
+                transform: translateY(0);
+              }
+              /* Ensure CharacterCarousel is properly styled and clickable */
+              .character-carousel {
+                z-index: 10;
+                position: relative;
+                pointer-events: auto;
+              }
+              .character-carousel .character {
+                z-index: 10;
+                position: relative;
+                pointer-events: auto;
+                cursor: pointer;
+                transition: all 0.3s ease;
+              }
+              .character-carousel .character:hover {
+                transform: scale(1.05);
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+              }
+              .character-carousel .character img {
+                pointer-events: auto;
+              }
+              .character-carousel .character a {
+                pointer-events: auto;
+                text-decoration: none;
+                color: inherit;
               }
             `}</style>
 
