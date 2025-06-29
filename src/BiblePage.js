@@ -39,34 +39,31 @@ function BiblePage() {
   const kjvRef = useRef(null);
   const nltRef = useRef(null);
 
-  // Fallback content when backend is unavailable
-  const fallbackContent = {
+  // Check if we should use fallback mode
+  const [useFallback, setUseFallback] = useState(false);
+
+  // Memoize fallback content to avoid dependency issues
+  const fallbackContentMemo = useCallback(() => ({
     books: [
       { id: 'gen', name: 'Genesis' },
       { id: 'exo', name: 'Exodus' },
-      { id: 'mat', name: 'Matthew' },
-      { id: 'mar', name: 'Mark' },
-      { id: 'luk', name: 'Luke' },
-      { id: 'jhn', name: 'John' }
+      { id: 'lev', name: 'Leviticus' }
     ],
     sampleText: {
-      kjv: `<p><strong>Genesis 1:1-5 (KJV)</strong></p>
-      <p>1 In the beginning God created the heaven and the earth.</p>
-      <p>2 And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.</p>
-      <p>3 And God said, Let there be light: and there was light.</p>
-      <p>4 And God saw the light, that it was good: and God divided the light from the darkness.</p>
-      <p>5 And God called the light Day, and the darkness he called Night. And the evening and the morning were the first day.</p>`,
-      nlt: `<p><strong>Genesis 1:1-5 (NLT)</strong></p>
-      <p>1 In the beginning God created the heavens and the earth.</p>
-      <p>2 The earth was formless and empty, and darkness covered the deep waters. And the Spirit of God was hovering over the surface of the waters.</p>
-      <p>3 Then God said, "Let there be light," and there was light.</p>
-      <p>4 And God saw that the light was good. Then he separated the light from the darkness.</p>
-      <p>5 God called the light "day" and the darkness "night." And evening passed and morning came, marking the first day.</p>`
+      kjv: `<p><strong>Genesis 1</strong></p>
+<p><strong>1</strong> In the beginning God created the heaven and the earth.</p>
+<p><strong>2</strong> And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.</p>
+<p><strong>3</strong> And God said, Let there be light: and there was light.</p>
+<p><strong>4</strong> And God saw the light, that it was good: and God divided the light from the darkness.</p>
+<p><strong>5</strong> And God called the light Day, and the darkness he called Night. And the evening and the morning were the first day.</p>`,
+      nlt: `<p><strong>Genesis 1</strong></p>
+<p><strong>1</strong> In the beginning God created the heavens and the earth.</p>
+<p><strong>2</strong> The earth was formless and empty, and darkness covered the deep waters. And the Spirit of God was hovering over the surface of the waters.</p>
+<p><strong>3</strong> Then God said, "Let there be light," and there was light.</p>
+<p><strong>4</strong> And God saw that the light was good. Then he separated the light from the darkness.</p>
+<p><strong>5</strong> God called the light "day" and the darkness "night." And evening passed and morning came, marking the first day.</p>`
     }
-  };
-
-  // Check if we should use fallback mode
-  const [useFallback, setUseFallback] = useState(false);
+  }), []);
 
   // Helper function to format passage reference
   const formatPassageRef = (bookId, chapterNum) => {
@@ -76,7 +73,7 @@ function BiblePage() {
   };
 
   // Helper function to make API requests
-  async function makeRequest(endpoint, body) {
+  const makeRequest = useCallback(async (endpoint, body) => {
     console.log('Making request to:', endpoint);
     console.log('Request body:', body);
     
@@ -117,7 +114,7 @@ function BiblePage() {
       
       throw err;
     }
-  }
+  }, []);
 
   // Navigation functions
   const navigateToChapter = (newChapter) => {
@@ -133,10 +130,10 @@ function BiblePage() {
   };
 
   // Save notes to localStorage
-  const saveNotes = () => {
+  const saveNotes = useCallback(() => {
     const notesKey = `bible_notes_${book}_${chapter}`;
     localStorage.setItem(notesKey, notes);
-  };
+  }, [book, chapter, notes]);
 
   // Load notes from localStorage
   const loadNotes = useCallback(() => {
@@ -251,15 +248,15 @@ function BiblePage() {
         console.error('Error fetching books:', err);
         console.log('Switching to fallback mode');
         setUseFallback(true);
-        setBooks(fallbackContent.books);
-        setBook(fallbackContent.books[0].id);
-        setKjvText(fallbackContent.sampleText.kjv);
-        setNltText(fallbackContent.sampleText.nlt);
+        setBooks(fallbackContentMemo().books);
+        setBook(fallbackContentMemo().books[0].id);
+        setKjvText(fallbackContentMemo().sampleText.kjv);
+        setNltText(fallbackContentMemo().sampleText.nlt);
         setError('Backend is currently unavailable. Showing sample content. You can still use highlighting and notes features.');
       }
     }
     fetchBooks();
-  }, []);
+  }, [makeRequest, fallbackContentMemo]);
 
   // Fetch chapters when book changes
   useEffect(() => {
@@ -286,7 +283,7 @@ function BiblePage() {
       }
     }
     fetchChapters();
-  }, [book, useFallback]);
+  }, [book, useFallback, makeRequest]);
 
   // Fetch passages when book or chapter changes
   useEffect(() => {
@@ -333,7 +330,7 @@ function BiblePage() {
       setLoading(false);
     }
     fetchPassages();
-  }, [book, chapter, useFallback]);
+  }, [book, chapter, useFallback, makeRequest]);
 
   // Load notes and highlights when passage changes
   useEffect(() => {
