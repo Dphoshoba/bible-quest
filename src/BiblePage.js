@@ -47,7 +47,70 @@ function BiblePage() {
     books: [
       { id: 'gen', name: 'Genesis' },
       { id: 'exo', name: 'Exodus' },
-      { id: 'lev', name: 'Leviticus' }
+      { id: 'lev', name: 'Leviticus' },
+      { id: 'num', name: 'Numbers' },
+      { id: 'deu', name: 'Deuteronomy' },
+      { id: 'jos', name: 'Joshua' },
+      { id: 'jdg', name: 'Judges' },
+      { id: 'rut', name: 'Ruth' },
+      { id: '1sa', name: '1 Samuel' },
+      { id: '2sa', name: '2 Samuel' },
+      { id: '1ki', name: '1 Kings' },
+      { id: '2ki', name: '2 Kings' },
+      { id: '1ch', name: '1 Chronicles' },
+      { id: '2ch', name: '2 Chronicles' },
+      { id: 'ezr', name: 'Ezra' },
+      { id: 'neh', name: 'Nehemiah' },
+      { id: 'est', name: 'Esther' },
+      { id: 'job', name: 'Job' },
+      { id: 'psa', name: 'Psalms' },
+      { id: 'pro', name: 'Proverbs' },
+      { id: 'ecc', name: 'Ecclesiastes' },
+      { id: 'sng', name: 'Song of Solomon' },
+      { id: 'isa', name: 'Isaiah' },
+      { id: 'jer', name: 'Jeremiah' },
+      { id: 'lam', name: 'Lamentations' },
+      { id: 'ezk', name: 'Ezekiel' },
+      { id: 'dan', name: 'Daniel' },
+      { id: 'hos', name: 'Hosea' },
+      { id: 'jol', name: 'Joel' },
+      { id: 'amo', name: 'Amos' },
+      { id: 'oba', name: 'Obadiah' },
+      { id: 'jon', name: 'Jonah' },
+      { id: 'mic', name: 'Micah' },
+      { id: 'nam', name: 'Nahum' },
+      { id: 'hab', name: 'Habakkuk' },
+      { id: 'zep', name: 'Zephaniah' },
+      { id: 'hag', name: 'Haggai' },
+      { id: 'zec', name: 'Zechariah' },
+      { id: 'mal', name: 'Malachi' },
+      { id: 'mat', name: 'Matthew' },
+      { id: 'mar', name: 'Mark' },
+      { id: 'luk', name: 'Luke' },
+      { id: 'jhn', name: 'John' },
+      { id: 'act', name: 'Acts' },
+      { id: 'rom', name: 'Romans' },
+      { id: '1co', name: '1 Corinthians' },
+      { id: '2co', name: '2 Corinthians' },
+      { id: 'gal', name: 'Galatians' },
+      { id: 'eph', name: 'Ephesians' },
+      { id: 'php', name: 'Philippians' },
+      { id: 'col', name: 'Colossians' },
+      { id: '1th', name: '1 Thessalonians' },
+      { id: '2th', name: '2 Thessalonians' },
+      { id: '1ti', name: '1 Timothy' },
+      { id: '2ti', name: '2 Timothy' },
+      { id: 'tit', name: 'Titus' },
+      { id: 'phm', name: 'Philemon' },
+      { id: 'heb', name: 'Hebrews' },
+      { id: 'jas', name: 'James' },
+      { id: '1pe', name: '1 Peter' },
+      { id: '2pe', name: '2 Peter' },
+      { id: '1jn', name: '1 John' },
+      { id: '2jn', name: '2 John' },
+      { id: '3jn', name: '3 John' },
+      { id: 'jud', name: 'Jude' },
+      { id: 'rev', name: 'Revelation' }
     ],
     sampleText: {
       kjv: `<p><strong>Genesis 1</strong></p>
@@ -55,13 +118,23 @@ function BiblePage() {
 <p><strong>2</strong> And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.</p>
 <p><strong>3</strong> And God said, Let there be light: and there was light.</p>
 <p><strong>4</strong> And God saw the light, that it was good: and God divided the light from the darkness.</p>
-<p><strong>5</strong> And God called the light Day, and the darkness he called Night. And the evening and the morning were the first day.</p>`,
+<p><strong>5</strong> And God called the light Day, and the darkness he called Night. And the evening and the morning were the first day.</p>
+<p><strong>6</strong> And God said, Let there be a firmament in the midst of the waters, and let it divide the waters from the waters.</p>
+<p><strong>7</strong> And God made the firmament, and divided the waters which were under the firmament from the waters which were above the firmament: and it was so.</p>
+<p><strong>8</strong> And God called the firmament Heaven. And the evening and the morning were the second day.</p>
+<p><strong>9</strong> And God said, Let the waters under the heaven be gathered together unto one place, and let the dry land appear: and it was so.</p>
+<p><strong>10</strong> And God called the dry land Earth; and the gathering together of the waters called he Seas: and God saw that it was good.</p>`,
       nlt: `<p><strong>Genesis 1</strong></p>
 <p><strong>1</strong> In the beginning God created the heavens and the earth.</p>
 <p><strong>2</strong> The earth was formless and empty, and darkness covered the deep waters. And the Spirit of God was hovering over the surface of the waters.</p>
 <p><strong>3</strong> Then God said, "Let there be light," and there was light.</p>
 <p><strong>4</strong> And God saw that the light was good. Then he separated the light from the darkness.</p>
-<p><strong>5</strong> God called the light "day" and the darkness "night." And evening passed and morning came, marking the first day.</p>`
+<p><strong>5</strong> God called the light "day" and the darkness "night." And evening passed and morning came, marking the first day.</p>
+<p><strong>6</strong> Then God said, "Let there be a space between the waters, to separate the waters of the heavens from the waters of the earth."</p>
+<p><strong>7</strong> And that is what happened. God made this space to separate the waters of the earth from the waters of the heavens.</p>
+<p><strong>8</strong> God called the space "sky." And evening passed and morning came, marking the second day.</p>
+<p><strong>9</strong> Then God said, "Let the waters beneath the sky flow together into one place, so dry ground may appear." And that is what happened.</p>
+<p><strong>10</strong> God called the dry ground "land" and the waters "seas." And God saw that it was good.</p>`
     }
   }), []);
 
@@ -191,12 +264,6 @@ function BiblePage() {
     window.getSelection().removeAllRanges();
   };
 
-  const removeHighlight = (text) => {
-    const newHighlights = { ...highlights };
-    delete newHighlights[text];
-    setHighlights(newHighlights);
-  };
-
   const applyHighlightsToText = (text) => {
     if (!text || Object.keys(highlights).length === 0) {
       console.log('No text or highlights to apply');
@@ -259,7 +326,20 @@ function BiblePage() {
 
   // Fetch chapters when book changes
   useEffect(() => {
-    if (!book || useFallback) return;
+    if (!book) return;
+    
+    if (useFallback) {
+      // Use sample chapters for fallback mode
+      const sampleChapters = Array.from({ length: 50 }, (_, i) => ({
+        id: `chapter-${i + 1}`,
+        number: (i + 1).toString()
+      }));
+      setChapters(sampleChapters);
+      if (sampleChapters.length > 0) {
+        setChapter(sampleChapters[0].number);
+      }
+      return;
+    }
     
     async function fetchChapters() {
       try {
