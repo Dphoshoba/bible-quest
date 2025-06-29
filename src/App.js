@@ -386,7 +386,9 @@ function App() {
               textAlign: 'center',
               color: '#1565c0',
               fontSize: 18,
-              fontWeight: 500
+              fontWeight: 500,
+              zIndex: 5,
+              position: 'relative'
             }}>
               {factLoading && "Loading today's Bible fact..."}
               {factError && <span style={{ color: 'red' }}>{factError}</span>}
@@ -413,7 +415,7 @@ function App() {
             </div>
 
             {/* Centered Top Navigation */}
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '24px 0 16px 0', gap: 24, flexWrap: 'wrap', zIndex: 10, position: 'relative' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '24px 0 16px 0', gap: 24, flexWrap: 'wrap', zIndex: 1000, position: 'relative' }}>
               <Link to="/dashboard" className="progress-link" style={{ 
                 display: 'flex', 
                 alignItems: 'center', 
@@ -426,7 +428,9 @@ function App() {
                 fontWeight: 600, 
                 boxShadow: '0 2px 8px rgba(76, 175, 80, 0.3)',
                 transition: 'all 0.3s ease',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                zIndex: 1001,
+                position: 'relative'
               }}>
                 <img src="/icons/progress.png" alt="progress" style={{ width: '20px', height: '20px' }} />
                 View My Progress
@@ -443,7 +447,9 @@ function App() {
                 fontWeight: 600, 
                 boxShadow: '0 2px 8px rgba(255, 152, 0, 0.3)',
                 transition: 'all 0.3s ease',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                zIndex: 1001,
+                position: 'relative'
               }}>
                 <span role="img" aria-label="badge">🏅</span> My Achievements
               </Link>
@@ -459,7 +465,9 @@ function App() {
                 fontWeight: 600, 
                 boxShadow: '0 2px 8px rgba(33, 150, 243, 0.3)',
                 transition: 'all 0.3s ease',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                zIndex: 1001,
+                position: 'relative'
               }}>
                 <span role="img" aria-label="parent">👨‍👩‍👧‍👦</span> Parent/Teacher Dashboard
               </Link>
@@ -475,14 +483,16 @@ function App() {
                 fontWeight: 600, 
                 boxShadow: '0 2px 8px rgba(156, 39, 176, 0.3)',
                 transition: 'all 0.3s ease',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                zIndex: 1001,
+                position: 'relative'
               }}>
                 <span role="img" aria-label="bible">📖</span> Bible (NLT & NKJV)
               </Link>
             </div>
 
             {/* Character Carousel Section */}
-            <div style={{ margin: '40px 0', zIndex: 10, position: 'relative' }}>
+            <div style={{ margin: '40px 0', zIndex: 1000, position: 'relative' }}>
               <CharacterCarousel />
             </div>
 
@@ -723,15 +733,15 @@ function App() {
               }
               /* Ensure CharacterCarousel is properly styled and clickable */
               .character-carousel {
-                z-index: 10;
-                position: relative;
-                pointer-events: auto;
+                z-index: 1000 !important;
+                position: relative !important;
+                pointer-events: auto !important;
               }
               .character-carousel .character {
-                z-index: 10;
-                position: relative;
-                pointer-events: auto;
-                cursor: pointer;
+                z-index: 1001 !important;
+                position: relative !important;
+                pointer-events: auto !important;
+                cursor: pointer !important;
                 transition: all 0.3s ease;
               }
               .character-carousel .character:hover {
@@ -739,12 +749,34 @@ function App() {
                 box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
               }
               .character-carousel .character img {
-                pointer-events: auto;
+                pointer-events: auto !important;
               }
               .character-carousel .character a {
-                pointer-events: auto;
+                pointer-events: auto !important;
                 text-decoration: none;
                 color: inherit;
+                z-index: 1002 !important;
+                position: relative !important;
+              }
+              .character-carousel .character .start-journey {
+                pointer-events: auto !important;
+                z-index: 1002 !important;
+                position: relative !important;
+                cursor: pointer !important;
+              }
+              /* Override any conflicting styles */
+              .twinkling-stars-bg {
+                pointer-events: none !important;
+                z-index: 0 !important;
+              }
+              .floating-stickers {
+                pointer-events: none !important;
+                z-index: 1 !important;
+              }
+              /* Ensure all interactive elements are above background elements */
+              .app-wrapper > * {
+                position: relative;
+                z-index: 5;
               }
             `}</style>
 
