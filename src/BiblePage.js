@@ -140,19 +140,14 @@ function BiblePage() {
 
   // Generate sample text for different chapters
   const getSampleTextForChapter = useCallback((bookName, chapterNum) => {
+    const verses = [];
+    for (let i = 1; i <= 20; i++) {
+      verses.push(`<p data-verse="${i}"><strong>${i}</strong> This is verse ${i} of ${bookName} chapter ${chapterNum}. The Bible contains many wonderful stories and teachings that guide us in our daily lives. Each verse reveals God's love and wisdom for His people throughout history. Reading the Bible helps us grow closer to God and understand His plan for us. May these words bring comfort, guidance, and inspiration to your heart.</p>`);
+    }
+    
     const chapterText = {
-      kjv: `<p><strong>${bookName} ${chapterNum}</strong></p>
-<p><strong>1</strong> This is sample text for ${bookName} chapter ${chapterNum} in the King James Version.</p>
-<p><strong>2</strong> The Bible contains many wonderful stories and teachings that guide us in our daily lives.</p>
-<p><strong>3</strong> Each chapter reveals God's love and wisdom for His people throughout history.</p>
-<p><strong>4</strong> Reading the Bible helps us grow closer to God and understand His plan for us.</p>
-<p><strong>5</strong> May these words bring comfort, guidance, and inspiration to your heart.</p>`,
-      nlt: `<p><strong>${bookName} ${chapterNum}</strong></p>
-<p><strong>1</strong> This is sample text for ${bookName} chapter ${chapterNum} in the New Living Translation.</p>
-<p><strong>2</strong> The Bible contains many wonderful stories and teachings that guide us in our daily lives.</p>
-<p><strong>3</strong> Each chapter reveals God's love and wisdom for His people throughout history.</p>
-<p><strong>4</strong> Reading the Bible helps us grow closer to God and understand His plan for us.</p>
-<p><strong>5</strong> May these words bring comfort, guidance, and inspiration to your heart.</p>`
+      kjv: `<p><strong>${bookName} ${chapterNum}</strong></p>${verses.join('')}`,
+      nlt: `<p><strong>${bookName} ${chapterNum}</strong></p>${verses.join('')}`
     };
     return chapterText;
   }, []);
@@ -212,6 +207,16 @@ function BiblePage() {
   const navigateToChapter = (newChapter) => {
     if (newChapter >= 1 && newChapter <= chapters.length) {
       setChapter(newChapter.toString());
+    }
+  };
+
+  const navigateToVerse = (newVerse) => {
+    if (newVerse >= 1 && newVerse <= 20) {
+      // Scroll to the specific verse
+      const verseElement = document.querySelector(`[data-verse="${newVerse}"]`);
+      if (verseElement) {
+        verseElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
   };
 
@@ -549,6 +554,76 @@ function BiblePage() {
               }}
             >
               Next →
+            </button>
+          </div>
+        </div>
+        
+        {/* Verse Navigation */}
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap', marginTop: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <label style={{ fontWeight: '600' }}>Verse:</label>
+            <select 
+              onChange={e => navigateToVerse(parseInt(e.target.value))} 
+              style={{ 
+                padding: '8px 12px',
+                borderRadius: '6px',
+                border: 'none',
+                fontSize: '14px',
+                minWidth: '80px'
+              }}
+            >
+              <option value="">Select Verse</option>
+              {Array.from({ length: 20 }, (_, i) => (
+                <option key={i + 1} value={i + 1}>
+                  {i + 1}
+                </option>
+              ))}
+            </select>
+          </div>
+          
+          {/* Verse Navigation Buttons */}
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
+              onClick={() => navigateToVerse(1)}
+              style={{
+                padding: '8px 12px',
+                borderRadius: '6px',
+                border: 'none',
+                background: 'rgba(255,255,255,0.2)',
+                color: 'white',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}
+            >
+              ⬆️ First Verse
+            </button>
+            <button
+              onClick={() => navigateToVerse(10)}
+              style={{
+                padding: '8px 12px',
+                borderRadius: '6px',
+                border: 'none',
+                background: 'rgba(255,255,255,0.2)',
+                color: 'white',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}
+            >
+              🔟 Verse 10
+            </button>
+            <button
+              onClick={() => navigateToVerse(20)}
+              style={{
+                padding: '8px 12px',
+                borderRadius: '6px',
+                border: 'none',
+                background: 'rgba(255,255,255,0.2)',
+                color: 'white',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}
+            >
+              ⬇️ Last Verse
             </button>
           </div>
         </div>
