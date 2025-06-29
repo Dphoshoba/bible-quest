@@ -7,7 +7,7 @@ const getBaseUrl = () => {
   
   // For production
   if (window.location.protocol === 'https:') {
-    return 'https://bible-quest-backend.onrender.com';
+    return 'https://bible-quest-rupb.onrender.com';
   }
   
   // For local testing on device
