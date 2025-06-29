@@ -138,6 +138,25 @@ function BiblePage() {
     }
   }), []);
 
+  // Generate sample text for different chapters
+  const getSampleTextForChapter = useCallback((bookName, chapterNum) => {
+    const chapterText = {
+      kjv: `<p><strong>${bookName} ${chapterNum}</strong></p>
+<p><strong>1</strong> This is sample text for ${bookName} chapter ${chapterNum} in the King James Version.</p>
+<p><strong>2</strong> The Bible contains many wonderful stories and teachings that guide us in our daily lives.</p>
+<p><strong>3</strong> Each chapter reveals God's love and wisdom for His people throughout history.</p>
+<p><strong>4</strong> Reading the Bible helps us grow closer to God and understand His plan for us.</p>
+<p><strong>5</strong> May these words bring comfort, guidance, and inspiration to your heart.</p>`,
+      nlt: `<p><strong>${bookName} ${chapterNum}</strong></p>
+<p><strong>1</strong> This is sample text for ${bookName} chapter ${chapterNum} in the New Living Translation.</p>
+<p><strong>2</strong> The Bible contains many wonderful stories and teachings that guide us in our daily lives.</p>
+<p><strong>3</strong> Each chapter reveals God's love and wisdom for His people throughout history.</p>
+<p><strong>4</strong> Reading the Bible helps us grow closer to God and understand His plan for us.</p>
+<p><strong>5</strong> May these words bring comfort, guidance, and inspiration to your heart.</p>`
+    };
+    return chapterText;
+  }, []);
+
   // Helper function to format passage reference
   const formatPassageRef = (bookId, chapterNum) => {
     if (!bookId || !chapterNum) return null;
@@ -317,8 +336,9 @@ function BiblePage() {
         setUseFallback(true);
         setBooks(fallbackContentMemo().books);
         setBook(fallbackContentMemo().books[0].id);
-        setKjvText(fallbackContentMemo().sampleText.kjv);
-        setNltText(fallbackContentMemo().sampleText.nlt);
+        // Set initial chapter to 1
+        setChapter('1');
+        // Initial text will be set by the fetchPassages effect
       }
     }
     fetchBooks();
@@ -366,7 +386,17 @@ function BiblePage() {
 
   // Fetch passages when book or chapter changes
   useEffect(() => {
-    if (!book || !chapter || useFallback) return;
+    if (!book || !chapter) return;
+    
+    if (useFallback) {
+      // Use sample text for fallback mode
+      const currentBookName = books.find(b => b.id === book)?.name || 'Unknown Book';
+      const sampleText = getSampleTextForChapter(currentBookName, chapter);
+      setKjvText(sampleText.kjv);
+      setNltText(sampleText.nlt);
+      setLoading(false);
+      return;
+    }
     
     async function fetchPassages() {
       setLoading(true);
@@ -409,7 +439,7 @@ function BiblePage() {
       setLoading(false);
     }
     fetchPassages();
-  }, [book, chapter, useFallback, makeRequest]);
+  }, [book, chapter, useFallback, makeRequest, books, getSampleTextForChapter]);
 
   // Load notes and highlights when passage changes
   useEffect(() => {
