@@ -364,6 +364,18 @@ function App() {
             {/* CORS Test Component - Temporary for debugging */}
             {/* <CorsTest /> */}
 
+            {/* Twinkling Stars Background */}
+            <div className="twinkling-stars-bg"></div>
+            {/* Floating Stickers */}
+            <div className="floating-stickers">
+              <span className="sticker heart">❤️</span>
+              <span className="sticker cross">✝️</span>
+              <span className="sticker star">⭐</span>
+              <span className="sticker heart">💖</span>
+              <span className="sticker cross">✝️</span>
+              <span className="sticker star">🌟</span>
+            </div>
+
             {/* Daily Bible Fact or Verse */}
             <div style={{
               background: '#e3f2fd',
@@ -400,34 +412,250 @@ function App() {
               </div>
             </div>
 
-            {/* Progress Link */}
-            <div style={{ marginLeft: '2rem', marginBottom: '1rem', textAlign: 'left' }}>
+            {/* Centered Top Navigation */}
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '24px 0 16px 0', gap: 24, flexWrap: 'wrap', zIndex: 2, position: 'relative' }}>
               <Link to="/dashboard" className="progress-link">
                 <img src="/icons/progress.png" alt="progress" />
                 View My Progress
               </Link>
-              <Link to="/achievements" className="progress-link" style={{ marginLeft: 16 }}>
+              <Link to="/achievements" className="progress-link">
                 <span role="img" aria-label="badge">🏅</span> My Achievements
               </Link>
-              <Link to="/parent-dashboard" className="progress-link" style={{ marginLeft: 16 }}>
+              <Link to="/parent-dashboard" className="progress-link">
                 <span role="img" aria-label="parent">👨‍👩‍👧‍👦</span> Parent/Teacher Dashboard
               </Link>
-              <Link to="/bible" className="progress-link" style={{ marginLeft: 16 }}>
+              <Link to="/bible" className="progress-link">
                 <span role="img" aria-label="bible">📖</span> Bible (NLT & NKJV)
               </Link>
             </div>
 
-            {/* Centered Welcome and Logos */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 24 }}>
-              <h1 style={{ textAlign: 'center', marginBottom: 12 }}>Welcome to Bible Quest</h1>
-              <div className="agency-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16 }}>
-                <img src="/avatars/logo.png" alt="Eternal Echoes & Visions Logo" style={{ height: 100, verticalAlign: 'middle' }} />
-                <img src="/avatars/icon_1.png" alt="Agency Icon" style={{ height: 100, verticalAlign: 'middle' }} />
+            {/* Main Dashboard Row */}
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 32, flexWrap: 'wrap', marginBottom: 24, zIndex: 2, position: 'relative' }}>
+              {/* Left: Upgrade & Select Character */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', minWidth: 220 }}>
+                {!isPremiumUser && (
+                  <button
+                    className="upgrade-btn-animated"
+                    onMouseOver={e => e.currentTarget.classList.add('hovered')}
+                    onMouseOut={e => e.currentTarget.classList.remove('hovered')}
+                  >
+                    Upgrade to Premium
+                  </button>
+                )}
+                <span style={{ fontSize: 22, fontWeight: 600, marginBottom: 8 }}>Select a Bible Character</span>
               </div>
-              <span style={{ fontSize: 24, fontWeight: 600, marginTop: 12, textAlign: 'center' }}>
-                Eternal Echoes &amp; Visions
-              </span>
+
+              {/* Center: Logos */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 260 }}>
+                <h1 className="welcome-glow" style={{ textAlign: 'center', marginBottom: 12 }}>Welcome to Bible Quest</h1>
+                <div className="agency-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+                  <div className="bible-icon-glow-wrapper">
+                    <img src="/avatars/logo.png" alt="Eternal Echoes & Visions Logo" className="bible-icon-glow" style={{ height: 100, verticalAlign: 'middle' }} />
+                  </div>
+                  <img src="/avatars/icon_1.png" alt="Agency Icon" style={{ height: 100, verticalAlign: 'middle' }} />
+                </div>
+                <span style={{ fontSize: 24, fontWeight: 600, marginTop: 12, textAlign: 'center' }}>
+                  Eternal Echoes &amp; Visions
+                </span>
+              </div>
+
+              {/* Right: Share & Copy */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', minWidth: 220, gap: 12 }}>
+                <ShareButton className="animated-share-btn" />
+                <button
+                  className="animated-share-btn"
+                  style={{
+                    background: '#4caf50',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: 6,
+                    padding: '10px 18px',
+                    fontSize: 16,
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 8px rgba(76, 175, 80, 0.15)',
+                  }}
+                  onClick={() => {
+                    navigator.clipboard.writeText(window.location.href);
+                    const whoosh = document.getElementById('whoosh-audio');
+                    if (whoosh) whoosh.play();
+                  }}
+                  onMouseOver={() => {
+                    const whoosh = document.getElementById('whoosh-audio');
+                    if (whoosh) whoosh.play();
+                  }}
+                >
+                  Copy
+                </button>
+              </div>
             </div>
+
+            {/* Key Features Highlight */}
+            <div className="key-features-row">
+              <div className="feature-card">📚 Bible Quizzes</div>
+              <div className="feature-card">🎯 Daily Challenges</div>
+              <div className="feature-card">🛡️ Safe for Kids</div>
+            </div>
+
+            {/* Family Illustration Placeholder */}
+            <div style={{ display: 'flex', justifyContent: 'center', margin: '40px 0 0 0' }}>
+              <img src="/avatars/echoes-avatar-collection.jpg" alt="Family gathered reading the Bible" style={{ maxWidth: 340, borderRadius: 18, boxShadow: '0 4px 24px rgba(0,0,0,0.10)' }} />
+            </div>
+
+            {/* Background Music & Whoosh FX */}
+            <audio id="bg-music" src="/sounds/general.mp3" autoPlay loop volume="0.2"></audio>
+            <audio id="whoosh-audio" src="/sounds/click.mp3"></audio>
+            <button id="mute-btn" style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 10000, background: '#fff', border: '1px solid #ccc', borderRadius: 24, padding: 8, fontSize: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.10)' }} onClick={() => {
+              const bg = document.getElementById('bg-music');
+              if (bg) bg.muted = !bg.muted;
+            }}>🔊</button>
+
+            {/* Keyframes and CSS for all animations */}
+            <style>{`
+              .twinkling-stars-bg {
+                position: fixed;
+                top: 0; left: 0; width: 100vw; height: 100vh;
+                z-index: 0;
+                pointer-events: none;
+                background: transparent;
+              }
+              .twinkling-stars-bg::before {
+                content: '';
+                position: absolute;
+                width: 100vw; height: 100vh;
+                background: url('data:image/svg+xml;utf8,<svg width="100%25" height="100%25" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="1.5" fill="white" opacity="0.7"/><circle cx="50" cy="30" r="1" fill="white" opacity="0.5"/><circle cx="90" cy="80" r="1.2" fill="white" opacity="0.8"/><circle cx="200" cy="120" r="1.7" fill="white" opacity="0.6"/><circle cx="300" cy="200" r="1.3" fill="white" opacity="0.7"/></svg>');
+                animation: twinkle 2s infinite linear alternate;
+                opacity: 0.7;
+              }
+              @keyframes twinkle {
+                0% { opacity: 0.7; }
+                100% { opacity: 1; }
+              }
+              .floating-stickers {
+                position: fixed;
+                top: 0; left: 0; width: 100vw; height: 100vh;
+                pointer-events: none;
+                z-index: 1;
+              }
+              .sticker {
+                position: absolute;
+                font-size: 2rem;
+                opacity: 0.7;
+                animation: floatSticker 8s infinite linear;
+              }
+              .sticker.heart { left: 10vw; top: 20vh; animation-delay: 0s; }
+              .sticker.cross { left: 30vw; top: 10vh; animation-delay: 2s; }
+              .sticker.star { left: 60vw; top: 15vh; animation-delay: 4s; }
+              .sticker.heart:last-child { left: 80vw; top: 25vh; animation-delay: 1s; }
+              .sticker.cross:last-child { left: 50vw; top: 30vh; animation-delay: 3s; }
+              .sticker.star:last-child { left: 20vw; top: 35vh; animation-delay: 5s; }
+              @keyframes floatSticker {
+                0% { transform: translateY(0) scale(1); opacity: 0.7; }
+                50% { transform: translateY(-40px) scale(1.1); opacity: 1; }
+                100% { transform: translateY(-80px) scale(1); opacity: 0.7; }
+              }
+              .welcome-glow {
+                opacity: 0;
+                animation: fadeInGlow 2s forwards;
+                text-shadow: 0 0 16px #ffd700, 0 0 32px #ffecb3;
+                color: #ffecb3;
+              }
+              @keyframes fadeInGlow {
+                0% { opacity: 0; filter: blur(8px); }
+                60% { opacity: 1; filter: blur(0); }
+                100% { opacity: 1; }
+              }
+              .bible-icon-glow-wrapper {
+                position: relative;
+                display: inline-block;
+              }
+              .bible-icon-glow {
+                box-shadow: 0 0 32px 8px #ffe082, 0 0 64px 16px #fffde7;
+                border-radius: 16px;
+                animation: bibleGlow 2.5s infinite alternate;
+              }
+              @keyframes bibleGlow {
+                0% { box-shadow: 0 0 16px 4px #ffe082, 0 0 32px 8px #fffde7; }
+                100% { box-shadow: 0 0 32px 8px #ffd700, 0 0 64px 16px #fffde7; }
+              }
+              .upgrade-btn-animated {
+                background: linear-gradient(90deg, #ffb347 0%, #ffcc33 100%);
+                color: #fff;
+                border: none;
+                border-radius: 8px;
+                padding: 12px 28px;
+                font-size: 18px;
+                font-weight: 700;
+                margin-bottom: 16px;
+                box-shadow: 0 4px 16px rgba(255, 204, 51, 0.2);
+                cursor: pointer;
+                animation: bounce 1.5s infinite;
+                transition: transform 0.2s, box-shadow 0.2s;
+                outline: none;
+              }
+              .upgrade-btn-animated.hovered {
+                transform: scale(1.07);
+                box-shadow: 0 8px 32px rgba(255, 204, 51, 0.35);
+              }
+              @keyframes bounce {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-10px); }
+              }
+              .key-features-row {
+                display: flex;
+                justify-content: center;
+                gap: 32px;
+                margin: 32px 0 0 0;
+                z-index: 2;
+                position: relative;
+              }
+              .feature-card {
+                background: linear-gradient(90deg, #e3f2fd 0%, #fffde7 100%);
+                color: #1565c0;
+                font-size: 20px;
+                font-weight: 600;
+                border-radius: 16px;
+                padding: 18px 32px;
+                box-shadow: 0 2px 12px rgba(21, 101, 192, 0.08);
+                display: flex;
+                align-items: center;
+                animation: fadeInFeature 1.5s ease;
+                border: 2px solid #ffe082;
+              }
+              @keyframes fadeInFeature {
+                from { opacity: 0; transform: translateY(30px); }
+                to { opacity: 1; transform: translateY(0); }
+              }
+              /* Character bounce-in animation for CharacterCarousel */
+              .character-carousel .character {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+                animation: bounceInCard 1s forwards;
+              }
+              .character-carousel .character.visible {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+              }
+              @keyframes bounceInCard {
+                0% { opacity: 0; transform: translateY(40px) scale(0.95); }
+                60% { opacity: 1; transform: translateY(-10px) scale(1.05); }
+                100% { opacity: 1; transform: translateY(0) scale(1); }
+              }
+              /* Animated Share/Copy Buttons */
+              .animated-share-btn {
+                animation: pulseGlow 2s infinite;
+                box-shadow: 0 0 12px 2px #03a9f4, 0 0 24px 4px #b3e5fc;
+                transition: box-shadow 0.2s, transform 0.2s;
+              }
+              .animated-share-btn:hover {
+                box-shadow: 0 0 24px 6px #03a9f4, 0 0 48px 12px #b3e5fc;
+                transform: scale(1.05);
+              }
+              @keyframes pulseGlow {
+                0%, 100% { box-shadow: 0 0 12px 2px #03a9f4, 0 0 24px 4px #b3e5fc; }
+                50% { box-shadow: 0 0 24px 6px #03a9f4, 0 0 48px 12px #b3e5fc; }
+              }
+            `}</style>
 
             {!isPremiumUser && <UpgradeButton />}
 
