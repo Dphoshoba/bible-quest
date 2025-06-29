@@ -92,19 +92,36 @@ function BiblePage() {
     
     setSearching(true);
     try {
+      console.log('Searching for:', searchTerm);
       const data = await makeRequest(API_ENDPOINTS.bibleSearch, {
         bibleId: KJV_ID,
         query: searchTerm,
         limit: 10
       });
       
-      // Extract the actual search results from the API response
-      const results = data.data?.passages || data.data || [];
+      console.log('Raw search response:', data);
+      
+      // Handle different possible response structures
+      let results = [];
+      if (data.data?.passages) {
+        results = data.data.passages;
+      } else if (data.data) {
+        results = Array.isArray(data.data) ? data.data : [data.data];
+      } else if (data.passages) {
+        results = data.passages;
+      }
+      
       setSearchResults(results);
-      console.log('Search results:', results);
+      console.log('Processed search results:', results);
+      
+      if (results.length === 0) {
+        console.log('No search results found');
+      }
     } catch (err) {
       console.error('Search failed:', err);
       setSearchResults([]);
+      // Show error to user
+      setError('Search failed: ' + err.message);
     }
     setSearching(false);
   };
@@ -160,6 +177,10 @@ function BiblePage() {
   const addHighlight = () => {
     if (!selectedText) return;
     
+    console.log('Adding highlight for text:', selectedText);
+    console.log('Current highlight color:', currentHighlightColor);
+    console.log('Color value:', HIGHLIGHT_COLORS[currentHighlightColor]);
+    
     const newHighlight = {
       text: selectedText,
       color: HIGHLIGHT_COLORS[currentHighlightColor],
@@ -171,6 +192,7 @@ function BiblePage() {
       [selectedText]: newHighlight
     };
     
+    console.log('New highlights object:', newHighlights);
     setHighlights(newHighlights);
     setSelectedText('');
     setShowHighlightTools(false);
@@ -186,16 +208,47 @@ function BiblePage() {
   };
 
   const applyHighlightsToText = (text) => {
+    if (!text || Object.keys(highlights).length === 0) {
+      console.log('No text or highlights to apply');
+      return text;
+    }
+    
+    console.log('Applying highlights to text. Current highlights:', highlights);
+    console.log('Text length:', text.length);
+    
     let highlightedText = text;
     
-    Object.entries(highlights).forEach(([searchText, highlight]) => {
-      const regex = new RegExp(`(${searchText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-      highlightedText = highlightedText.replace(regex, 
-        `<span style="background-color: ${highlight.color}; padding: 2px 4px; border-radius: 3px;">$1</span>`
-      );
+    // Sort highlights by length (longest first) to avoid partial matches
+    const sortedHighlights = Object.entries(highlights).sort((a, b) => b[0].length - a[0].length);
+    
+    sortedHighlights.forEach(([searchText, highlight]) => {
+      if (searchText && highlight.color) {
+        try {
+          const escapedText = searchText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const regex = new RegExp(`(${escapedText})`, 'gi');
+          const matches = text.match(regex);
+          console.log(`Looking for "${searchText}" - found ${matches ? matches.length : 0} matches`);
+          
+          highlightedText = highlightedText.replace(regex, 
+            `<span style="background-color: ${highlight.color}; padding: 2px 4px; border-radius: 3px; display: inline;">$1</span>`
+          );
+        } catch (err) {
+          console.error('Error applying highlight for text:', searchText, err);
+        }
+      }
     });
     
+    console.log('Highlighted text length:', highlightedText.length);
     return highlightedText;
+  };
+
+  // Test search function for debugging
+  const testSearch = async () => {
+    console.log('Testing search with term: "love"');
+    setSearchTerm('love');
+    setTimeout(() => {
+      handleSearch();
+    }, 100);
   };
 
   // Fetch books on mount
@@ -508,6 +561,20 @@ function BiblePage() {
             >
               {searching ? 'Searching...' : 'Search'}
             </button>
+            <button
+              onClick={testSearch}
+              style={{
+                padding: '10px 20px',
+                borderRadius: '6px',
+                border: 'none',
+                background: '#28a745',
+                color: 'white',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}
+            >
+              🧪 Test Search
+            </button>
           </div>
           
           {/* Search Results */}
@@ -729,6 +796,23 @@ function BiblePage() {
               </div>
             ))}
           </div>
+          
+          {/* Debug Info */}
+          <details style={{ marginTop: '12px' }}>
+            <summary style={{ cursor: 'pointer', color: '#155724', fontWeight: '600' }}>
+              🔧 Debug Info
+            </summary>
+            <pre style={{ 
+              background: '#f8f9fa', 
+              padding: '8px', 
+              borderRadius: '4px', 
+              fontSize: '12px',
+              marginTop: '8px',
+              overflow: 'auto'
+            }}>
+              {JSON.stringify(highlights, null, 2)}
+            </pre>
+          </details>
         </div>
       )}
 
