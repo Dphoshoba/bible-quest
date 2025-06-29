@@ -7,6 +7,7 @@ export const API_ENDPOINTS = {
   bible: `${API_BASE_URL}/api/bible`,
   bibleBooks: `${API_BASE_URL}/api/bible-books`,
   bibleChapters: `${API_BASE_URL}/api/bible-chapters`,
+  bibleSearch: `${API_BASE_URL}/api/bible-search`,
   bibles: `${API_BASE_URL}/api/bibles`,
   testCors: `${API_BASE_URL}/api/test-cors`
 };
