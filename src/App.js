@@ -11,7 +11,6 @@ import './App.css';
 import { API_ENDPOINTS } from "./components/api.js";
 import ShareButton, { FacebookShareButton } from './components/ShareButton.js';
 import BiblePage from './BiblePage.js';
-import CorsTest from "./components/CorsTest.js";
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -363,7 +362,7 @@ function App() {
             </div>
 
             {/* CORS Test Component - Temporary for debugging */}
-            <CorsTest />
+            {/* <CorsTest /> */}
 
             {/* Daily Bible Fact or Verse */}
             <div style={{
