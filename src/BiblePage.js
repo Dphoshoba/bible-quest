@@ -39,6 +39,35 @@ function BiblePage() {
   const kjvRef = useRef(null);
   const nltRef = useRef(null);
 
+  // Fallback content when backend is unavailable
+  const fallbackContent = {
+    books: [
+      { id: 'gen', name: 'Genesis' },
+      { id: 'exo', name: 'Exodus' },
+      { id: 'mat', name: 'Matthew' },
+      { id: 'mar', name: 'Mark' },
+      { id: 'luk', name: 'Luke' },
+      { id: 'jhn', name: 'John' }
+    ],
+    sampleText: {
+      kjv: `<p><strong>Genesis 1:1-5 (KJV)</strong></p>
+      <p>1 In the beginning God created the heaven and the earth.</p>
+      <p>2 And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.</p>
+      <p>3 And God said, Let there be light: and there was light.</p>
+      <p>4 And God saw the light, that it was good: and God divided the light from the darkness.</p>
+      <p>5 And God called the light Day, and the darkness he called Night. And the evening and the morning were the first day.</p>`,
+      nlt: `<p><strong>Genesis 1:1-5 (NLT)</strong></p>
+      <p>1 In the beginning God created the heavens and the earth.</p>
+      <p>2 The earth was formless and empty, and darkness covered the deep waters. And the Spirit of God was hovering over the surface of the waters.</p>
+      <p>3 Then God said, "Let there be light," and there was light.</p>
+      <p>4 And God saw that the light was good. Then he separated the light from the darkness.</p>
+      <p>5 God called the light "day" and the darkness "night." And evening passed and morning came, marking the first day.</p>`
+    }
+  };
+
+  // Check if we should use fallback mode
+  const [useFallback, setUseFallback] = useState(false);
+
   // Helper function to format passage reference
   const formatPassageRef = (bookId, chapterNum) => {
     if (!bookId || !chapterNum) return null;
@@ -214,12 +243,19 @@ function BiblePage() {
         if (data.data && data.data.length > 0) {
           setBooks(data.data);
           setBook(data.data[0].id);
+          setUseFallback(false);
         } else {
           throw new Error('No books returned from API');
         }
       } catch (err) {
         console.error('Error fetching books:', err);
-        setError('Failed to load books: ' + err.message);
+        console.log('Switching to fallback mode');
+        setUseFallback(true);
+        setBooks(fallbackContent.books);
+        setBook(fallbackContent.books[0].id);
+        setKjvText(fallbackContent.sampleText.kjv);
+        setNltText(fallbackContent.sampleText.nlt);
+        setError('Backend is currently unavailable. Showing sample content. You can still use highlighting and notes features.');
       }
     }
     fetchBooks();
@@ -227,7 +263,7 @@ function BiblePage() {
 
   // Fetch chapters when book changes
   useEffect(() => {
-    if (!book) return;
+    if (!book || useFallback) return;
     
     async function fetchChapters() {
       try {
@@ -250,11 +286,11 @@ function BiblePage() {
       }
     }
     fetchChapters();
-  }, [book]);
+  }, [book, useFallback]);
 
   // Fetch passages when book or chapter changes
   useEffect(() => {
-    if (!book || !chapter) return;
+    if (!book || !chapter || useFallback) return;
     
     async function fetchPassages() {
       setLoading(true);
@@ -296,9 +332,8 @@ function BiblePage() {
 
       setLoading(false);
     }
-    
     fetchPassages();
-  }, [book, chapter]);
+  }, [book, chapter, useFallback]);
 
   // Load notes and highlights when passage changes
   useEffect(() => {
