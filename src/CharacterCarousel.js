@@ -11,11 +11,11 @@ function CharacterCarousel() {
       <h2>Select a Bible Character</h2>
       <ShareButton message={"Join me on Bible Quest and explore amazing Bible stories!"} style={{ marginBottom: 20 }} />
       {characters.map((char) => (
-        <div key={char.id} className={`character ${char.premium && !isPremiumUser ? 'locked' : ''}`}>
+        <div key={char.id} className={`character${char.premium && !isPremiumUser ? ' locked' : ''}`} tabIndex={0}>
           <img src={char.avatar} alt={char.name} className="avatar" />
           <h3>{char.name}</h3>
           {char.premium && !isPremiumUser && <p className="lock-msg">🔒 Premium</p>}
-          {!char.premium || isPremiumUser ? (
+          {(!char.premium || isPremiumUser) ? (
             <Link to={`/stories/${char.id}`} className="start-journey">Start Journey</Link>
           ) : null}
         </div>

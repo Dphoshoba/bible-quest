@@ -447,7 +447,7 @@ function App() {
 
               {/* Center: Logos */}
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 260 }}>
-                <h1 className="welcome-glow" style={{ textAlign: 'center', marginBottom: 12 }}>Welcome to Bible Quest</h1>
+                <h1 className="welcome-glow" style={{ textAlign: 'center', marginBottom: 12, color: '#1a237e', textShadow: '0 0 12px #ffe082, 0 0 24px #fffde7' }}>Welcome to Bible Quest</h1>
                 <div className="agency-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16 }}>
                   <div className="bible-icon-glow-wrapper">
                     <img src="/avatars/logo.png" alt="Eternal Echoes & Visions Logo" className="bible-icon-glow" style={{ height: 100, verticalAlign: 'middle' }} />
@@ -557,8 +557,8 @@ function App() {
               .welcome-glow {
                 opacity: 0;
                 animation: fadeInGlow 2s forwards;
-                text-shadow: 0 0 16px #ffd700, 0 0 32px #ffecb3;
-                color: #ffecb3;
+                text-shadow: 0 0 12px #ffe082, 0 0 24px #fffde7;
+                color: #1a237e;
               }
               @keyframes fadeInGlow {
                 0% { opacity: 0; filter: blur(8px); }
@@ -628,9 +628,10 @@ function App() {
               }
               /* Character bounce-in animation for CharacterCarousel */
               .character-carousel .character {
-                opacity: 0;
-                transform: translateY(40px) scale(0.95);
-                animation: bounceInCard 1s forwards;
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                animation: bounceInCard 1s;
+                cursor: pointer;
               }
               .character-carousel .character.visible {
                 opacity: 1;
