@@ -221,7 +221,10 @@ function BiblePage() {
         }
       } catch (err) {
         console.error('Error fetching books:', err);
-        setError('Failed to load books: ' + err.message);
+        setError('Backend is currently unavailable. Please try again in a few minutes.');
+        // Set a minimal fallback to prevent complete app failure
+        setBooks([{ id: 'gen', name: 'Genesis' }]);
+        setBook('gen');
       }
     }
     fetchBooks();
