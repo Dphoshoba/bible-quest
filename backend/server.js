@@ -11,11 +11,19 @@ const PORT = process.env.PORT || 5050;
 
 // Enable CORS for all routes
 app.use(cors({
-  origin: ['https://bible-quest.netlify.app', 'http://localhost:3000', 'http://localhost:3001'],
+  origin: true, // Allow all origins temporarily
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With']
 }));
+
+// Add CORS debugging middleware
+app.use((req, res, next) => {
+  console.log('Request origin:', req.headers.origin);
+  console.log('Request method:', req.method);
+  console.log('Request path:', req.path);
+  next();
+});
 
 app.use(express.json());
 app.use('/webhook', webhookRoutes);
