@@ -1,10 +1,44 @@
 import React, { useState } from 'react';
-import { API_ENDPOINTS } from '../config.js';
+import { API_ENDPOINTS, API_BASE_URL } from '../config.js';
 
 function CorsTest() {
   const [testResult, setTestResult] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const testRootEndpoint = async () => {
+    setLoading(true);
+    setError('');
+    setTestResult('');
+    
+    try {
+      console.log('Testing root endpoint:', API_BASE_URL);
+      
+      const response = await fetch(API_BASE_URL, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      console.log('Root Response status:', response.status);
+      console.log('Root Response headers:', response.headers);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('Root Response data:', data);
+      setTestResult(JSON.stringify(data, null, 2));
+      
+    } catch (err) {
+      console.error('Root endpoint test error:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const testCors = async () => {
     setLoading(true);
@@ -93,7 +127,23 @@ function CorsTest() {
     }}>
       <h3 style={{ margin: '0 0 10px 0', color: '#007bff' }}>CORS Test</h3>
       
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '10px', flexWrap: 'wrap' }}>
+        <button 
+          onClick={testRootEndpoint}
+          disabled={loading}
+          style={{
+            background: '#17a2b8',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            padding: '8px 12px',
+            cursor: loading ? 'not-allowed' : 'pointer',
+            fontSize: '12px'
+          }}
+        >
+          {loading ? 'Testing...' : 'Test Root'}
+        </button>
+        
         <button 
           onClick={testCors}
           disabled={loading}
