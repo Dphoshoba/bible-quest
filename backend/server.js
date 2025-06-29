@@ -9,20 +9,29 @@ import rateLimit from 'express-rate-limit';
 const app = express();
 const PORT = process.env.PORT || 5050;
 
-// Global CORS middleware to ensure all responses have proper headers
+// Simple root endpoint to test if server is running
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'BibleQuest Backend is running!',
+    timestamp: new Date().toISOString(),
+    cors: 'enabled'
+  });
+});
+
+// Aggressive CORS handling - handle ALL requests
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   
   console.log(`[CORS] ${req.method} ${req.path} - Origin: ${origin}`);
-  console.log(`[CORS] Headers:`, req.headers);
   
-  // Set CORS headers for all responses
-  res.header('Access-Control-Allow-Origin', origin || '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
-  res.header('Access-Control-Allow-Credentials', 'true');
+  // ALWAYS set CORS headers for every response
+  res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Max-Age', '86400'); // 24 hours
   
-  // Handle preflight requests
+  // Handle ALL OPTIONS requests immediately
   if (req.method === 'OPTIONS') {
     console.log(`[CORS] Handling OPTIONS preflight for ${req.path}`);
     res.status(204).end();
@@ -31,16 +40,6 @@ app.use((req, res, next) => {
   
   next();
 });
-
-// Cross-platform CORS - Apply before rate limiting
-app.use(cors({
-  origin: true, // Allow all origins for now
-  credentials: true,
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204
-}));
 
 app.use(express.json());
 app.use('/webhook', webhookRoutes);
@@ -67,27 +66,8 @@ app.use('/api/ask-ai', (req, res, next) => {
   return aiLimiter(req, res, next);
 });
 
-// Handle preflight OPTIONS requests for AI endpoint
-app.options('/api/ask-ai', (req, res) => {
-  console.log('OPTIONS request received for /api/ask-ai');
-  console.log('Origin:', req.headers.origin);
-  console.log('Request headers:', req.headers);
-  
-  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
-  res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.status(204).end();
-});
-
 app.post('/api/ask-ai', async (req, res) => {
   console.log('POST /api/ask-ai');
-  
-  // Set CORS headers for the response
-  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
-  res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
-  res.header('Access-Control-Allow-Credentials', 'true');
   
   const { prompt, character } = req.body;
 
@@ -133,25 +113,11 @@ app.get('/api/test-cors', (req, res) => {
   console.log('GET /api/test-cors');
   console.log('Origin:', req.headers.origin);
   
-  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  
   res.json({ 
     message: 'CORS test successful!',
     origin: req.headers.origin,
     timestamp: new Date().toISOString()
   });
-});
-
-app.options('/api/test-cors', (req, res) => {
-  console.log('OPTIONS request for /api/test-cors');
-  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.status(204).end();
 });
 
 app.get('/test-stripe', (req, res) => {
