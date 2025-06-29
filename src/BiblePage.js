@@ -79,6 +79,13 @@ function BiblePage() {
       return data;
     } catch (err) {
       console.error('Request failed:', err);
+      
+      // Check if it's a CORS error
+      if (err.message.includes('Failed to fetch') || err.message.includes('CORS')) {
+        console.error('CORS error detected - backend may be deploying or CORS not configured');
+        setError('Backend is currently unavailable. Please try again in a few minutes. If the problem persists, the backend may be deploying updates.');
+      }
+      
       throw err;
     }
   }
