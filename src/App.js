@@ -11,7 +11,6 @@ import './App.css';
 import { API_ENDPOINTS } from "./components/api.js";
 import ShareButton, { FacebookShareButton } from './components/ShareButton.js';
 import BiblePage from './BiblePage.js';
-import AiBuddy from "./components/AiBuddy.js";
 import CorsTest from "./components/CorsTest.js";
 
 // Error Boundary Component
