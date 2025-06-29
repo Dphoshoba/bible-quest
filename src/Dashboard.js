@@ -24,6 +24,9 @@ const characters = [
 function Dashboard() {
   const [filter, setFilter] = useState('all');
 
+  // Log for deployment verification
+  console.log('Dashboard loaded - Character cards are clickable!');
+
   const completedCount = characters.filter(c => c.completed).length;
   const percentage = Math.round((completedCount / characters.length) * 100);
 
