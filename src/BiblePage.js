@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { API_ENDPOINTS } from './config.js';
 
+// Bible API IDs for KJV and NLT versions
 const KJV_ID = 'de4e12af7f28f599-01';
 const NLT_ID = '65eec8e0b60e656b-01';
 
