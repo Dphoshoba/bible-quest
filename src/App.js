@@ -417,9 +417,10 @@ function App() {
               </Link>
             </div>
 
-            <h1>Welcome to Bible Quest</h1>
-            <div className="agency-info" style={{ marginBottom: 24, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+            {/* Centered Welcome and Logos */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 24 }}>
+              <h1 style={{ textAlign: 'center', marginBottom: 12 }}>Welcome to Bible Quest</h1>
+              <div className="agency-info" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16 }}>
                 <img src="/avatars/logo.png" alt="Eternal Echoes & Visions Logo" style={{ height: 100, verticalAlign: 'middle' }} />
                 <img src="/avatars/icon_1.png" alt="Agency Icon" style={{ height: 100, verticalAlign: 'middle' }} />
               </div>
