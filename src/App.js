@@ -154,8 +154,19 @@ function App() {
                 fontWeight: 600, 
                 boxShadow: '0 2px 8px rgba(76, 175, 80, 0.3)',
                 transition: 'all 0.3s ease',
-                cursor: 'pointer'
-              }}>
+                cursor: 'pointer',
+                position: 'relative',
+                zIndex: 1000
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 4px 16px rgba(76, 175, 80, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 2px 8px rgba(76, 175, 80, 0.3)';
+              }}
+              >
                 <img src="/icons/progress.png" alt="progress" style={{ width: '20px', height: '20px' }} />
                 View My Progress
               </Link>
@@ -171,8 +182,19 @@ function App() {
                 fontWeight: 600, 
                 boxShadow: '0 2px 8px rgba(255, 152, 0, 0.3)',
                 transition: 'all 0.3s ease',
-                cursor: 'pointer'
-              }}>
+                cursor: 'pointer',
+                position: 'relative',
+                zIndex: 1000
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 4px 16px rgba(255, 152, 0, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 2px 8px rgba(255, 152, 0, 0.3)';
+              }}
+              >
                 <span role="img" aria-label="badge">🏅</span> My Achievements
               </Link>
               <Link to="/parent-dashboard" style={{ 
@@ -187,8 +209,19 @@ function App() {
                 fontWeight: 600, 
                 boxShadow: '0 2px 8px rgba(33, 150, 243, 0.3)',
                 transition: 'all 0.3s ease',
-                cursor: 'pointer'
-              }}>
+                cursor: 'pointer',
+                position: 'relative',
+                zIndex: 1000
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 4px 16px rgba(33, 150, 243, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 2px 8px rgba(33, 150, 243, 0.3)';
+              }}
+              >
                 <span role="img" aria-label="parent">👨‍👩‍👧‍👦</span> Parent/Teacher Dashboard
               </Link>
               <Link to="/bible" style={{ 
@@ -203,8 +236,19 @@ function App() {
                 fontWeight: 600, 
                 boxShadow: '0 2px 8px rgba(156, 39, 176, 0.3)',
                 transition: 'all 0.3s ease',
-                cursor: 'pointer'
-              }}>
+                cursor: 'pointer',
+                position: 'relative',
+                zIndex: 1000
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 4px 16px rgba(156, 39, 176, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 2px 8px rgba(156, 39, 176, 0.3)';
+              }}
+              >
                 <span role="img" aria-label="bible">📖</span> Bible (NLT & NKJV)
               </Link>
             </div>
@@ -216,7 +260,7 @@ function App() {
             </div>
 
             {/* Character Carousel */}
-            <div style={{ margin: '40px 0' }}>
+            <div style={{ margin: '40px 0', position: 'relative', zIndex: 1000 }}>
               <CharacterCarousel />
             </div>
 
