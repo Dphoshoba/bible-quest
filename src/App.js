@@ -205,10 +205,22 @@ function HomePage({ handleButtonClick, clickMessage }) {
         </Link>
       </div>
 
-      {/* Welcome Message and Logos */}
+      {/* Welcome Message and Logos with Feature Boxes */}
       <div style={{ textAlign: 'center', margin: '40px 0' }}>
         <h1 style={{ color: '#1a237e', marginBottom: '20px', textShadow: '0 0 12px #ffe082, 0 0 24px #fffde7' }}>Welcome to Bible Quest</h1>
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: '20px' }}>
+          {/* Left Feature Box */}
+          <div style={{ minWidth: 120, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+            <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #a5b4fc44', padding: '12px 16px', minWidth: 100, textAlign: 'center', fontSize: 14 }}>
+              <div style={{ fontSize: 22, marginBottom: 4 }}>🧩</div>
+              <div style={{ fontWeight: 700, color: '#3b2f7f' }}>Bible Quizzes</div>
+            </div>
+            <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #a5b4fc44', padding: '12px 16px', minWidth: 100, textAlign: 'center', fontSize: 14 }}>
+              <div style={{ fontSize: 22, marginBottom: 4 }}>📅</div>
+              <div style={{ fontWeight: 700, color: '#3b2f7f' }}>Daily Challenges</div>
+            </div>
+          </div>
+          {/* Logos */}
           <div style={{ position: 'relative', display: 'inline-block' }}>
             <img 
               src="/avatars/logo.png" 
@@ -227,6 +239,13 @@ function HomePage({ handleButtonClick, clickMessage }) {
             alt="Agency Icon" 
             style={{ height: 100, verticalAlign: 'middle' }} 
           />
+          {/* Right Feature Box */}
+          <div style={{ minWidth: 120, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+            <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #a5b4fc44', padding: '12px 16px', minWidth: 100, textAlign: 'center', fontSize: 14 }}>
+              <div style={{ fontSize: 22, marginBottom: 4 }}>🛡️</div>
+              <div style={{ fontWeight: 700, color: '#3b2f7f' }}>Safe for Kids</div>
+            </div>
+          </div>
         </div>
         <span style={{ fontSize: 24, fontWeight: 600, textAlign: 'center', color: '#1a237e' }}>
           Eternal Echoes &amp; Visions
@@ -249,6 +268,7 @@ function HomePage({ handleButtonClick, clickMessage }) {
   );
 }
 
+// FloatingSticker component
 function FloatingSticker({ icon, left, top, size, duration }) {
   return (
     <span
@@ -336,9 +356,14 @@ function App() {
             </button>
 
             {/* Floating Stickers */}
-            {stickers.map((s, i) => (
-              <FloatingSticker key={i} {...s} />
-            ))}
+            {[
+              { icon: '❤️', left: 8, top: 18, size: 32, duration: 13 },
+              { icon: '⭐', left: 85, top: 22, size: 28, duration: 15 },
+              { icon: '✝️', left: 12, top: 65, size: 36, duration: 17 },
+              { icon: '⭐', left: 80, top: 70, size: 24, duration: 14 },
+              { icon: '❤️', left: 50, top: 8, size: 28, duration: 16 },
+              { icon: '✝️', left: 60, top: 80, size: 30, duration: 18 },
+            ].map((s, i) => <FloatingSticker key={i} {...s} />)}
             <style>{`
               @keyframes floatSticker {
                 0% { transform: translateY(0); opacity: 0.7; }
