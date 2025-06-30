@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import CharacterCarousel from './CharacterCarousel.js';
 import BibleStoryPage from './BibleStoryPage.js';
@@ -347,9 +347,30 @@ function Navigation({ handleButtonClick }) {
   return null;
 }
 
+function FloatingSticker({ icon, left, top, size, duration }) {
+  return (
+    <span
+      style={{
+        position: 'absolute',
+        left: left + '%',
+        top: top + '%',
+        fontSize: size,
+        animation: `floatSticker ${duration}s linear infinite`,
+        pointerEvents: 'none',
+        opacity: 0.7,
+        filter: 'drop-shadow(0 2px 8px #fff8)'
+      }}
+    >
+      {icon}
+    </span>
+  );
+}
+
 function App() {
   const [clickMessage, setClickMessage] = useState('');
   const [selectedCharacter, setSelectedCharacter] = useState(null);
+  const [musicPlaying, setMusicPlaying] = useState(true);
+  const audioRef = useRef(null);
 
   const handleButtonClick = (pageName) => {
     console.log(`Navigating to ${pageName}`);
@@ -357,24 +378,158 @@ function App() {
     setTimeout(() => setClickMessage(''), 2000);
   };
 
+  const toggleMusic = () => {
+    if (musicPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setMusicPlaying(!musicPlaying);
+  };
+
+  // Floating stickers data
+  const stickers = [
+    { icon: '❤️', left: 10, top: 10, size: 32, duration: 12 },
+    { icon: '⭐', left: 80, top: 15, size: 28, duration: 14 },
+    { icon: '✝️', left: 20, top: 60, size: 36, duration: 16 },
+    { icon: '⭐', left: 60, top: 80, size: 24, duration: 13 },
+    { icon: '❤️', left: 75, top: 40, size: 28, duration: 15 },
+    { icon: '✝️', left: 40, top: 20, size: 30, duration: 18 },
+    { icon: '⭐', left: 30, top: 75, size: 22, duration: 17 },
+    { icon: '❤️', left: 55, top: 60, size: 26, duration: 19 },
+  ];
+
   return (
     <ErrorBoundary>
       <CharacterContext.Provider value={{ characters, isPremiumUser, selectedCharacter, setSelectedCharacter }}>
         <Router>
-          <div style={{ background: '#f5f6fa', minHeight: '100vh' }}>
-            <Navigation handleButtonClick={handleButtonClick} />
+          <div style={{
+            minHeight: '100vh',
+            background: 'linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%)',
+            position: 'relative',
+            overflow: 'hidden',
+          }}>
+            {/* Background Music */}
+            <audio ref={audioRef} src="/sounds/music.mp3" autoPlay loop volume={0.2} style={{ display: 'none' }} />
+            <button
+              onClick={toggleMusic}
+              style={{
+                position: 'fixed',
+                top: 18,
+                right: 18,
+                zIndex: 2000,
+                background: musicPlaying ? '#4CAF50' : '#aaa',
+                color: 'white',
+                border: 'none',
+                borderRadius: '50%',
+                width: 48,
+                height: 48,
+                fontSize: 22,
+                boxShadow: '0 2px 8px #0002',
+                cursor: 'pointer',
+              }}
+              aria-label={musicPlaying ? 'Pause music' : 'Play music'}
+            >
+              {musicPlaying ? '🔊' : '🔇'}
+            </button>
 
-            <Routes>
-              <Route path="/" element={<HomePage handleButtonClick={handleButtonClick} clickMessage={clickMessage} />} />
-              <Route path="/stories/:id" element={<BibleStoryPage />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/quiz/:id" element={<QuizPage />} />
-              <Route path="/achievements" element={<AchievementsPage />} />
-              <Route path="/parent-dashboard" element={<ParentalDashboard />} />
-              <Route path="/bible" element={<BiblePage />} />
-              <Route path="/cors-test" element={<CorsTest />} />
-            </Routes>
+            {/* Floating Stickers */}
+            {stickers.map((s, i) => (
+              <FloatingSticker key={i} {...s} />
+            ))}
+            <style>{`
+              @keyframes floatSticker {
+                0% { transform: translateY(0); opacity: 0.7; }
+                50% { transform: translateY(-30px) scale(1.1); opacity: 1; }
+                100% { transform: translateY(0); opacity: 0.7; }
+              }
+            `}</style>
+
+            {/* Welcome Section */}
+            <div style={{
+              textAlign: 'center',
+              margin: '60px 0 30px 0',
+              position: 'relative',
+              zIndex: 10,
+            }}>
+              <h1 style={{
+                fontSize: '3.2rem',
+                fontWeight: 800,
+                color: '#3b2f7f',
+                textShadow: '0 0 24px #fff, 0 0 48px #a5b4fc',
+                marginBottom: 12,
+                letterSpacing: 1.5,
+                animation: 'glowText 2.5s infinite alternate',
+              }}>
+                Welcome to Bible Quest
+              </h1>
+              <style>{`
+                @keyframes glowText {
+                  0% { text-shadow: 0 0 24px #fff, 0 0 48px #a5b4fc; }
+                  100% { text-shadow: 0 0 36px #fff, 0 0 64px #818cf8; }
+                }
+              `}</style>
+              <div style={{ margin: '0 auto 18px', display: 'flex', justifyContent: 'center', gap: 24 }}>
+                <img src="/avatars/logo.png" alt="Eternal Echoes & Visions Logo" style={{ height: 90, borderRadius: 16, boxShadow: '0 0 32px 8px #ffe082, 0 0 64px 16px #fffde7' }} />
+                <img src="/avatars/icon_1.png" alt="Bible Quest Icon" style={{ height: 90, borderRadius: 16, boxShadow: '0 0 32px 8px #ffe082, 0 0 64px 16px #fffde7' }} />
+              </div>
+              <span style={{ fontSize: 26, fontWeight: 600, color: '#3b2f7f', textShadow: '0 0 8px #fff' }}>
+                Eternal Echoes &amp; Visions
+              </span>
+            </div>
+
+            {/* Key Features Section */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              gap: 32,
+              margin: '0 auto 40px',
+              maxWidth: 900,
+              flexWrap: 'wrap',
+              zIndex: 10,
+              position: 'relative',
+            }}>
+              <div style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 12px #a5b4fc44', padding: 24, minWidth: 220, textAlign: 'center', margin: 8 }}>
+                <div style={{ fontSize: 38, marginBottom: 8 }}>🧩</div>
+                <div style={{ fontWeight: 700, fontSize: 20, color: '#3b2f7f' }}>Bible Quizzes</div>
+                <div style={{ color: '#555', marginTop: 6 }}>Test your knowledge with fun, interactive quizzes!</div>
+              </div>
+              <div style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 12px #a5b4fc44', padding: 24, minWidth: 220, textAlign: 'center', margin: 8 }}>
+                <div style={{ fontSize: 38, marginBottom: 8 }}>📅</div>
+                <div style={{ fontWeight: 700, fontSize: 20, color: '#3b2f7f' }}>Daily Challenges</div>
+                <div style={{ color: '#555', marginTop: 6 }}>New Bible challenges every day to keep you engaged!</div>
+              </div>
+              <div style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 12px #a5b4fc44', padding: 24, minWidth: 220, textAlign: 'center', margin: 8 }}>
+                <div style={{ fontSize: 38, marginBottom: 8 }}>🛡️</div>
+                <div style={{ fontWeight: 700, fontSize: 20, color: '#3b2f7f' }}>Safe for Kids</div>
+                <div style={{ color: '#555', marginTop: 6 }}>A safe, friendly environment for children to learn and grow.</div>
+              </div>
+            </div>
+
+            {/* Character Carousel */}
+            <div style={{ margin: '40px 0', position: 'relative', zIndex: 1000 }}>
+              <CharacterCarousel />
+            </div>
+
+            {/* CSS Animations */}
+            <style>{`
+              @keyframes bibleGlow {
+                0% { box-shadow: 0 0 16px 4px #ffe082, 0 0 32px 8px #fffde7; }
+                100% { box-shadow: 0 0 32px 8px #ffd700, 0 0 64px 16px #fffde7; }
+              }
+            `}</style>
           </div>
+
+          <Routes>
+            <Route path="/" element={<HomePage handleButtonClick={handleButtonClick} clickMessage={clickMessage} />} />
+            <Route path="/stories/:id" element={<BibleStoryPage />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/quiz/:id" element={<QuizPage />} />
+            <Route path="/achievements" element={<AchievementsPage />} />
+            <Route path="/parent-dashboard" element={<ParentalDashboard />} />
+            <Route path="/bible" element={<BiblePage />} />
+            <Route path="/cors-test" element={<CorsTest />} />
+          </Routes>
         </Router>
       </CharacterContext.Provider>
     </ErrorBoundary>
