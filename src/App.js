@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import CharacterCarousel from './CharacterCarousel.js';
 import BibleStoryPage from './BibleStoryPage.js';
 import Dashboard from './Dashboard.js';
