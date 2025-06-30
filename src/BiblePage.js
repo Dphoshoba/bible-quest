@@ -39,6 +39,12 @@ function BiblePage() {
   const kjvRef = useRef(null);
   const nltRef = useRef(null);
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSearchModal, setShowSearchModal] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState('');
+
   // Helper function to format passage reference
   const formatPassageRef = (bookId, chapterNum) => {
     if (!bookId || !chapterNum) return null;
@@ -322,8 +328,94 @@ function BiblePage() {
   const currentBookName = books.find(b => b.id === book)?.name || '';
   const currentChapterNum = parseInt(chapter) || 1;
 
+  // Bible search handler
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!searchTerm.trim()) return;
+    setSearchLoading(true);
+    setSearchError('');
+    setShowSearchModal(true);
+    try {
+      const res = await fetch(API_ENDPOINTS.bibleSearch, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ bibleId: KJV_ID, query: searchTerm, limit: 20 })
+      });
+      if (!res.ok) throw new Error('Search failed');
+      const data = await res.json();
+      setSearchResults(data.data?.verses || []);
+    } catch (err) {
+      setSearchError('No results found or error searching.');
+      setSearchResults([]);
+    } finally {
+      setSearchLoading(false);
+    }
+  };
+
+  // Handle clicking a search result
+  const handleResultClick = async (result) => {
+    setShowSearchModal(false);
+    setSearchTerm('');
+    setSearchResults([]);
+    setSearchError('');
+    // result has: id, reference, text, etc.
+    // Parse book and chapter from result.reference (e.g., "Genesis 1:31")
+    const refMatch = result.reference.match(/^(.*?) (\d+):(\d+)/);
+    if (refMatch) {
+      const bookName = refMatch[1];
+      const chapterNum = refMatch[2];
+      // Find the book id from books list
+      let foundBook = books.find(b => b.name.toLowerCase() === bookName.toLowerCase());
+      if (!foundBook) {
+        // fallback: try partial match
+        foundBook = books.find(b => bookName.toLowerCase().includes(b.name.toLowerCase()));
+      }
+      if (foundBook) {
+        setBook(foundBook.id);
+        setChapter(chapterNum);
+      }
+    }
+  };
+
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: 24 }}>
+      {/* Search Bar */}
+      <form onSubmit={handleSearch} style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+          placeholder="Search for any word, name, or phrase..."
+          style={{ flex: 1, padding: '10px', borderRadius: '6px', border: '1px solid #bbb', fontSize: '16px' }}
+        />
+        <button type="submit" style={{ padding: '10px 18px', borderRadius: '6px', border: 'none', background: '#007bff', color: 'white', fontSize: '16px', cursor: 'pointer' }}>Search</button>
+      </form>
+
+      {/* Search Modal */}
+      {showSearchModal && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.4)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center'
+        }}>
+          <div style={{ background: 'white', borderRadius: 12, padding: 32, maxWidth: 600, width: '90%', maxHeight: '80vh', overflowY: 'auto', boxShadow: '0 8px 32px rgba(0,0,0,0.2)' }}>
+            <h2 style={{ marginTop: 0 }}>Search Results</h2>
+            {searchLoading && <div>Searching...</div>}
+            {searchError && <div style={{ color: 'red', marginBottom: 12 }}>{searchError}</div>}
+            {!searchLoading && !searchError && searchResults.length === 0 && <div>No results found.</div>}
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {searchResults.map(result => (
+                <li key={result.id} style={{ marginBottom: 18, borderBottom: '1px solid #eee', paddingBottom: 10 }}>
+                  <button onClick={() => handleResultClick(result)} style={{ background: 'none', border: 'none', textAlign: 'left', width: '100%', cursor: 'pointer', padding: 0 }}>
+                    <div style={{ fontWeight: 'bold', color: '#007bff' }}>{result.reference}</div>
+                    <div style={{ color: '#333', fontSize: 15 }}>{result.text}</div>
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <button onClick={() => setShowSearchModal(false)} style={{ marginTop: 18, background: '#dc3545', color: 'white', border: 'none', borderRadius: 6, padding: '8px 18px', cursor: 'pointer' }}>Close</button>
+          </div>
+        </div>
+      )}
+
       {/* Enhanced Header with Navigation */}
       <div style={{ 
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -675,7 +767,8 @@ function BiblePage() {
             borderRadius: '12px',
             border: '1px solid #e9ecef',
             maxHeight: '600px',
-            overflowY: 'auto'
+            overflowY: 'auto',
+            paddingBottom: '40px'
           }} 
           ref={kjvRef}
           onMouseUp={handleTextSelection}
@@ -715,7 +808,8 @@ function BiblePage() {
             borderRadius: '12px',
             border: '1px solid #bbdefb',
             maxHeight: '600px',
-            overflowY: 'auto'
+            overflowY: 'auto',
+            paddingBottom: '40px'
           }} 
           ref={nltRef}
           onMouseUp={handleTextSelection}
