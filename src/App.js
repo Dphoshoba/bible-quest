@@ -358,91 +358,17 @@ function App() {
               }
             `}</style>
 
-            {/* Welcome Section */}
-            <div style={{
-              textAlign: 'center',
-              margin: '60px 0 30px 0',
-              position: 'relative',
-              zIndex: 10,
-            }}>
-              <h1 style={{
-                fontSize: '3.2rem',
-                fontWeight: 800,
-                color: '#3b2f7f',
-                textShadow: '0 0 24px #fff, 0 0 48px #a5b4fc',
-                marginBottom: 12,
-                letterSpacing: 1.5,
-                animation: 'glowText 2.5s infinite alternate',
-              }}>
-                Welcome to Bible Quest
-              </h1>
-              <style>{`
-                @keyframes glowText {
-                  0% { text-shadow: 0 0 24px #fff, 0 0 48px #a5b4fc; }
-                  100% { text-shadow: 0 0 36px #fff, 0 0 64px #818cf8; }
-                }
-              `}</style>
-              <div style={{ margin: '0 auto 18px', display: 'flex', justifyContent: 'center', gap: 24 }}>
-                <img src="/avatars/logo.png" alt="Eternal Echoes & Visions Logo" style={{ height: 90, borderRadius: 16, boxShadow: '0 0 32px 8px #ffe082, 0 0 64px 16px #fffde7' }} />
-                <img src="/avatars/icon_1.png" alt="Bible Quest Icon" style={{ height: 90, borderRadius: 16, boxShadow: '0 0 32px 8px #ffe082, 0 0 64px 16px #fffde7' }} />
-              </div>
-              <span style={{ fontSize: 26, fontWeight: 600, color: '#3b2f7f', textShadow: '0 0 8px #fff' }}>
-                Eternal Echoes &amp; Visions
-              </span>
-            </div>
-
-            {/* Key Features Section */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              gap: 32,
-              margin: '0 auto 40px',
-              maxWidth: 900,
-              flexWrap: 'wrap',
-              zIndex: 10,
-              position: 'relative',
-            }}>
-              <div style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 12px #a5b4fc44', padding: 24, minWidth: 220, textAlign: 'center', margin: 8 }}>
-                <div style={{ fontSize: 38, marginBottom: 8 }}>🧩</div>
-                <div style={{ fontWeight: 700, fontSize: 20, color: '#3b2f7f' }}>Bible Quizzes</div>
-                <div style={{ color: '#555', marginTop: 6 }}>Test your knowledge with fun, interactive quizzes!</div>
-              </div>
-              <div style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 12px #a5b4fc44', padding: 24, minWidth: 220, textAlign: 'center', margin: 8 }}>
-                <div style={{ fontSize: 38, marginBottom: 8 }}>📅</div>
-                <div style={{ fontWeight: 700, fontSize: 20, color: '#3b2f7f' }}>Daily Challenges</div>
-                <div style={{ color: '#555', marginTop: 6 }}>New Bible challenges every day to keep you engaged!</div>
-              </div>
-              <div style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 12px #a5b4fc44', padding: 24, minWidth: 220, textAlign: 'center', margin: 8 }}>
-                <div style={{ fontSize: 38, marginBottom: 8 }}>🛡️</div>
-                <div style={{ fontWeight: 700, fontSize: 20, color: '#3b2f7f' }}>Safe for Kids</div>
-                <div style={{ color: '#555', marginTop: 6 }}>A safe, friendly environment for children to learn and grow.</div>
-              </div>
-            </div>
-
-            {/* Character Carousel */}
-            <div style={{ margin: '40px 0', position: 'relative', zIndex: 1000 }}>
-              <CharacterCarousel />
-            </div>
-
-            {/* CSS Animations */}
-            <style>{`
-              @keyframes bibleGlow {
-                0% { box-shadow: 0 0 16px 4px #ffe082, 0 0 32px 8px #fffde7; }
-                100% { box-shadow: 0 0 32px 8px #ffd700, 0 0 64px 16px #fffde7; }
-              }
-            `}</style>
+            <Routes>
+              <Route path="/" element={<HomePage handleButtonClick={handleButtonClick} clickMessage={clickMessage} />} />
+              <Route path="/stories/:id" element={<BibleStoryPage />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/quiz/:id" element={<QuizPage />} />
+              <Route path="/achievements" element={<AchievementsPage />} />
+              <Route path="/parent-dashboard" element={<ParentalDashboard />} />
+              <Route path="/bible" element={<BiblePage />} />
+              <Route path="/cors-test" element={<CorsTest />} />
+            </Routes>
           </div>
-
-          <Routes>
-            <Route path="/" element={<HomePage handleButtonClick={handleButtonClick} clickMessage={clickMessage} />} />
-            <Route path="/stories/:id" element={<BibleStoryPage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/quiz/:id" element={<QuizPage />} />
-            <Route path="/achievements" element={<AchievementsPage />} />
-            <Route path="/parent-dashboard" element={<ParentalDashboard />} />
-            <Route path="/bible" element={<BiblePage />} />
-            <Route path="/cors-test" element={<CorsTest />} />
-          </Routes>
         </Router>
       </CharacterContext.Provider>
     </ErrorBoundary>
