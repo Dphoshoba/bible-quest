@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import CharacterCarousel from './CharacterCarousel.js';
 import BibleStoryPage from './BibleStoryPage.js';
@@ -248,6 +248,9 @@ function HomePage({ handleButtonClick, clickMessage }) {
         <span style={{ fontSize: 24, fontWeight: 600, textAlign: 'center', color: '#1a237e' }}>
           Eternal Echoes &amp; Visions
         </span>
+        <div style={{ fontSize: 16, fontWeight: 500, textAlign: 'center', color: '#666', marginTop: '8px', fontStyle: 'italic' }}>
+          By - Rev David P H Oshoba George
+        </div>
       </div>
 
       {/* Character Carousel */}
@@ -302,10 +305,19 @@ function App() {
     if (musicPlaying) {
       audioRef.current.pause();
     } else {
-      audioRef.current.play();
+      audioRef.current.play().catch(e => console.log('Audio play failed:', e));
     }
     setMusicPlaying(!musicPlaying);
   };
+
+  // Initialize audio with proper volume and settings
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.15; // Lower volume for softer background music
+      audioRef.current.loop = true;
+      audioRef.current.preload = 'auto';
+    }
+  }, []);
 
   return (
     <ErrorBoundary>
@@ -317,8 +329,17 @@ function App() {
             position: 'relative',
             overflow: 'hidden',
           }}>
-            {/* Background Music */}
-            <audio ref={audioRef} src="/sounds/music.mp3" autoPlay loop volume={0.2} style={{ display: 'none' }} />
+            {/* Background Music - Generic Soft Ambient Music */}
+            <audio 
+              ref={audioRef} 
+              src="/sounds/music.mp3" 
+              autoPlay 
+              loop 
+              style={{ display: 'none' }}
+              onError={(e) => console.log('Audio error:', e)}
+            />
+            
+            {/* Music Control Button */}
             <button
               onClick={toggleMusic}
               style={{
@@ -326,19 +347,32 @@ function App() {
                 top: 18,
                 right: 18,
                 zIndex: 2000,
-                background: musicPlaying ? '#4CAF50' : '#aaa',
+                background: musicPlaying ? 'linear-gradient(135deg, #4CAF50, #45a049)' : 'linear-gradient(135deg, #aaa, #888)',
                 color: 'white',
                 border: 'none',
                 borderRadius: '50%',
                 width: 48,
                 height: 48,
-                fontSize: 22,
-                boxShadow: '0 2px 8px #0002',
+                fontSize: 20,
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
                 cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
-              aria-label={musicPlaying ? 'Pause music' : 'Play music'}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'scale(1.1)';
+                e.target.style.boxShadow = '0 6px 16px rgba(0,0,0,0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'scale(1)';
+                e.target.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+              }}
+              aria-label={musicPlaying ? 'Pause background music' : 'Play background music'}
+              title={musicPlaying ? 'Pause music' : 'Play music'}
             >
-              {musicPlaying ? '🔊' : '🔇'}
+              {musicPlaying ? '🎵' : '🔇'}
             </button>
 
             {/* Floating Stickers */}
