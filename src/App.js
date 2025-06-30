@@ -309,18 +309,6 @@ function App() {
     setMusicPlaying(!musicPlaying);
   };
 
-  // Floating stickers data
-  const stickers = [
-    { icon: '❤️', left: 10, top: 10, size: 32, duration: 12 },
-    { icon: '⭐', left: 80, top: 15, size: 28, duration: 14 },
-    { icon: '✝️', left: 20, top: 60, size: 36, duration: 16 },
-    { icon: '⭐', left: 60, top: 80, size: 24, duration: 13 },
-    { icon: '❤️', left: 75, top: 40, size: 28, duration: 15 },
-    { icon: '✝️', left: 40, top: 20, size: 30, duration: 18 },
-    { icon: '⭐', left: 30, top: 75, size: 22, duration: 17 },
-    { icon: '❤️', left: 55, top: 60, size: 26, duration: 19 },
-  ];
-
   return (
     <ErrorBoundary>
       <CharacterContext.Provider value={{ characters, isPremiumUser, selectedCharacter, setSelectedCharacter }}>
