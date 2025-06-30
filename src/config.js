@@ -9,7 +9,8 @@ export const API_ENDPOINTS = {
   bibleChapters: `${API_BASE_URL}/api/bible-chapters`,
   bibleSearch: `${API_BASE_URL}/api/bible-search`,
   bibles: `${API_BASE_URL}/api/bibles`,
-  testCors: `${API_BASE_URL}/api/test-cors`
+  testCors: `${API_BASE_URL}/api/test-cors`,
+  corsTest: `${API_BASE_URL}/api/cors-test`
 };
 
 const config = {

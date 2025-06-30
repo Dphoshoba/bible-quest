@@ -8,6 +8,7 @@ import AchievementsPage from './components/AchievementsPage.js';
 import ParentalDashboard from './components/ParentalDashboard.js';
 import BiblePage from './BiblePage.js';
 import { CharacterContext, characters, isPremiumUser } from './CharacterContext.js';
+import CorsTest from './components/CorsTest';
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -342,7 +343,7 @@ function Navigation({ handleButtonClick }) {
       </div>
     );
   }
-  
+
   return null;
 }
 
@@ -362,7 +363,7 @@ function App() {
         <Router>
           <div style={{ background: '#f5f6fa', minHeight: '100vh' }}>
             <Navigation handleButtonClick={handleButtonClick} />
-            
+
             <Routes>
               <Route path="/" element={<HomePage handleButtonClick={handleButtonClick} clickMessage={clickMessage} />} />
               <Route path="/stories/:id" element={<BibleStoryPage />} />
@@ -371,6 +372,7 @@ function App() {
               <Route path="/achievements" element={<AchievementsPage />} />
               <Route path="/parent-dashboard" element={<ParentalDashboard />} />
               <Route path="/bible" element={<BiblePage />} />
+              <Route path="/cors-test" element={<CorsTest />} />
             </Routes>
           </div>
         </Router>

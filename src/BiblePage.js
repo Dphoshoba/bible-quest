@@ -52,31 +52,31 @@ function BiblePage() {
     console.log('Request body:', body);
     
     try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
+    const response = await fetch(endpoint, {
+      method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify(body)
-      });
-      
-      console.log('Response status:', response.status);
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Error response:', errorText);
-        throw new Error(`${response.status} ${response.statusText}: ${errorText}`);
-      }
-      
-      const data = await response.json();
-      console.log('Response data:', data);
-      
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      
-      return data;
+      body: JSON.stringify(body)
+    });
+    
+    console.log('Response status:', response.status);
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Error response:', errorText);
+      throw new Error(`${response.status} ${response.statusText}: ${errorText}`);
+    }
+    
+    const data = await response.json();
+    console.log('Response data:', data);
+    
+    if (data.error) {
+      throw new Error(data.error);
+    }
+    
+    return data;
     } catch (err) {
       console.error('Request failed:', err);
       
@@ -339,9 +339,9 @@ function BiblePage() {
         <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <label style={{ fontWeight: '600' }}>Book:</label>
-            <select 
-              value={book} 
-              onChange={e => setBook(e.target.value)} 
+          <select 
+            value={book} 
+            onChange={e => setBook(e.target.value)} 
               style={{ 
                 padding: '8px 12px',
                 borderRadius: '6px',
@@ -349,21 +349,21 @@ function BiblePage() {
                 fontSize: '14px',
                 minWidth: '150px'
               }}
-              disabled={!books.length}
-            >
-              {books.map(b => (
-                <option key={b.id} value={b.id}>
-                  {b.name}
-                </option>
-              ))}
-            </select>
+            disabled={!books.length}
+          >
+            {books.map(b => (
+              <option key={b.id} value={b.id}>
+                {b.name}
+              </option>
+            ))}
+          </select>
           </div>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <label style={{ fontWeight: '600' }}>Chapter:</label>
-            <select 
-              value={chapter} 
-              onChange={e => setChapter(e.target.value)} 
+          <select 
+            value={chapter} 
+            onChange={e => setChapter(e.target.value)} 
               style={{ 
                 padding: '8px 12px',
                 borderRadius: '6px',
@@ -371,14 +371,14 @@ function BiblePage() {
                 fontSize: '14px',
                 minWidth: '80px'
               }}
-              disabled={!chapters.length}
-            >
-              {chapters.map(c => (
-                <option key={c.id} value={c.number}>
-                  {c.number}
-                </option>
-              ))}
-            </select>
+            disabled={!chapters.length}
+          >
+            {chapters.map(c => (
+              <option key={c.id} value={c.number}>
+                {c.number}
+              </option>
+            ))}
+          </select>
           </div>
           
           {/* Chapter Navigation Buttons */}

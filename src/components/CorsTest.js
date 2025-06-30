@@ -2,210 +2,150 @@ import React, { useState } from 'react';
 import { API_ENDPOINTS, API_BASE_URL } from '../config.js';
 
 function CorsTest() {
-  const [testResult, setTestResult] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [testResults, setTestResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const testRootEndpoint = async () => {
-    setLoading(true);
-    setError('');
-    setTestResult('');
-    
-    try {
-      console.log('Testing root endpoint:', API_BASE_URL);
-      
-      const response = await fetch(API_BASE_URL, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      
-      console.log('Root Response status:', response.status);
-      console.log('Root Response headers:', response.headers);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      console.log('Root Response data:', data);
-      setTestResult(JSON.stringify(data, null, 2));
-      
-    } catch (err) {
-      console.error('Root endpoint test error:', err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+  const addResult = (message, success = true) => {
+    setTestResults(prev => [...prev, {
+      message,
+      success,
+      timestamp: new Date().toISOString()
+    }]);
   };
 
   const testCors = async () => {
-    setLoading(true);
-    setError('');
-    setTestResult('');
+    setIsLoading(true);
+    setTestResults([]);
+    
+    addResult('Starting CORS tests...', true);
     
     try {
-      console.log('Testing CORS with endpoint:', API_ENDPOINTS.testCors);
+      // Test 1: Simple GET request
+      addResult('Testing simple GET request...', true);
+      console.log('Testing CORS with endpoint:', API_ENDPOINTS.corsTest);
       
-      const response = await fetch(API_ENDPOINTS.testCors, {
+      const response = await fetch(API_ENDPOINTS.corsTest, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-        },
+          'Accept': 'application/json'
+        }
       });
       
-      console.log('Response status:', response.status);
-      console.log('Response headers:', response.headers);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (response.ok) {
+        const data = await response.json();
+        addResult(`✅ GET request successful: ${data.message}`, true);
+        console.log('CORS test response:', data);
+      } else {
+        addResult(`❌ GET request failed: ${response.status} ${response.statusText}`, false);
       }
-      
-      const data = await response.json();
-      console.log('Response data:', data);
-      setTestResult(JSON.stringify(data, null, 2));
-      
-    } catch (err) {
-      console.error('CORS test error:', err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      addResult(`❌ GET request error: ${error.message}`, false);
+      console.error('CORS test error:', error);
     }
-  };
 
-  const testAiEndpoint = async () => {
-    setLoading(true);
-    setError('');
-    setTestResult('');
-    
     try {
+      // Test 2: POST request (like the Bible API calls)
+      addResult('Testing POST request...', true);
       console.log('Testing AI endpoint:', API_ENDPOINTS.askAI);
       
       const response = await fetch(API_ENDPOINTS.askAI, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify({
-          prompt: 'Hello, this is a test message.',
-          character: 'general'
-        }),
+          prompt: 'Hello',
+          character: 'David'
+        })
       });
       
-      console.log('AI Response status:', response.status);
-      console.log('AI Response headers:', response.headers);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (response.ok) {
+        const data = await response.json();
+        addResult(`✅ POST request successful: ${data.answer ? 'AI responded' : 'No answer'}`, true);
+      } else {
+        addResult(`❌ POST request failed: ${response.status} ${response.statusText}`, false);
       }
-      
-      const data = await response.json();
-      console.log('AI Response data:', data);
-      setTestResult(JSON.stringify(data, null, 2));
-      
-    } catch (err) {
-      console.error('AI endpoint test error:', err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      addResult(`❌ POST request error: ${error.message}`, false);
+      console.error('AI test error:', error);
     }
+
+    try {
+      // Test 3: Bible books endpoint
+      addResult('Testing Bible books endpoint...', true);
+      
+      const response = await fetch(API_ENDPOINTS.bibleBooks, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          bibleId: 'de4e12af7f28f599-02'
+        })
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        addResult(`✅ Bible books request successful: ${data.data ? data.data.length + ' books' : 'No data'}`, true);
+      } else {
+        addResult(`❌ Bible books request failed: ${response.status} ${response.statusText}`, false);
+      }
+    } catch (error) {
+      addResult(`❌ Bible books request error: ${error.message}`, false);
+      console.error('Bible books test error:', error);
+    }
+
+    setIsLoading(false);
+    addResult('CORS tests completed!', true);
   };
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: '10px',
-      left: '10px',
-      background: '#fff',
-      border: '2px solid #007bff',
-      borderRadius: '8px',
-      padding: '15px',
-      zIndex: 3000,
-      maxWidth: '400px',
-      boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
-    }}>
-      <h3 style={{ margin: '0 0 10px 0', color: '#007bff' }}>CORS Test</h3>
+    <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
+      <h2>CORS Test</h2>
+      <p>This will test the connection to your backend API and check for CORS issues.</p>
       
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '10px', flexWrap: 'wrap' }}>
-        <button 
-          onClick={testRootEndpoint}
-          disabled={loading}
-          style={{
-            background: '#17a2b8',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            padding: '8px 12px',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            fontSize: '12px'
-          }}
-        >
-          {loading ? 'Testing...' : 'Test Root'}
-        </button>
-        
-        <button 
-          onClick={testCors}
-          disabled={loading}
-          style={{
-            background: '#28a745',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            padding: '8px 12px',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            fontSize: '12px'
-          }}
-        >
-          {loading ? 'Testing...' : 'Test CORS'}
-        </button>
-        
-        <button 
-          onClick={testAiEndpoint}
-          disabled={loading}
-          style={{
-            background: '#ffc107',
-            color: 'black',
-            border: 'none',
-            borderRadius: '4px',
-            padding: '8px 12px',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            fontSize: '12px'
-          }}
-        >
-          {loading ? 'Testing...' : 'Test AI'}
-        </button>
+      <button 
+        onClick={testCors} 
+        disabled={isLoading}
+        style={{
+          padding: '10px 20px',
+          fontSize: '16px',
+          backgroundColor: isLoading ? '#ccc' : '#007bff',
+          color: 'white',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: isLoading ? 'not-allowed' : 'pointer'
+        }}
+      >
+        {isLoading ? 'Testing...' : 'Run CORS Tests'}
+      </button>
+      
+      <div style={{ marginTop: '20px' }}>
+        <h3>Test Results:</h3>
+        {testResults.map((result, index) => (
+          <div 
+            key={index} 
+            style={{
+              padding: '10px',
+              margin: '5px 0',
+              backgroundColor: result.success ? '#d4edda' : '#f8d7da',
+              border: `1px solid ${result.success ? '#c3e6cb' : '#f5c6cb'}`,
+              borderRadius: '5px',
+              color: result.success ? '#155724' : '#721c24'
+            }}
+          >
+            {result.message}
+          </div>
+        ))}
       </div>
       
-      {error && (
-        <div style={{ 
-          color: 'red', 
-          fontSize: '12px', 
-          marginBottom: '10px',
-          background: '#ffe6e6',
-          padding: '8px',
-          borderRadius: '4px'
-        }}>
-          Error: {error}
-        </div>
-      )}
-      
-      {testResult && (
-        <div style={{ 
-          background: '#f8f9fa', 
-          padding: '8px', 
-          borderRadius: '4px',
-          fontSize: '11px',
-          maxHeight: '200px',
-          overflow: 'auto',
-          border: '1px solid #dee2e6'
-        }}>
-          <strong>Result:</strong>
-          <pre style={{ margin: '5px 0 0 0', whiteSpace: 'pre-wrap' }}>
-            {testResult}
-          </pre>
-        </div>
-      )}
+      <div style={{ marginTop: '20px', fontSize: '14px', color: '#666' }}>
+        <p><strong>Backend URL:</strong> {API_BASE_URL}</p>
+        <p><strong>Frontend Origin:</strong> {window.location.origin}</p>
+      </div>
     </div>
   );
 }

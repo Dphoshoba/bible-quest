@@ -64,6 +64,23 @@ function Dashboard() {
         ← Back to Home
       </Link>
 
+      {/* Temporary CORS Test Link */}
+      <Link to="/cors-test" style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '8px',
+        padding: '8px 16px',
+        background: '#dc3545',
+        color: 'white',
+        textDecoration: 'none',
+        borderRadius: '6px',
+        marginBottom: '20px',
+        marginLeft: '10px',
+        fontSize: '14px'
+      }}>
+        🔧 Test CORS
+      </Link>
+
       <h2 style={{ color: '#2c3e50', marginBottom: '2rem', display: 'flex', alignItems: 'center' }}>
         <img src="/icons/progress.png" alt="Progress" style={{ width: '28px', marginRight: '10px' }} />
         My Bible Quest Progress

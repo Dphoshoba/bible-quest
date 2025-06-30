@@ -19,4 +19,7 @@ export const characters = [
   { id: 'cain-abel', name: 'Cain & Abel', avatar: '/avatars/cain-abel.jpg', premium: true }
 ];
 
-export const CharacterContext = React.createContext({ characters, isPremiumUser }); 
+export const CharacterContext = React.createContext({
+  characters: characters,
+  isPremiumUser: isPremiumUser
+}); 

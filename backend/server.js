@@ -9,20 +9,41 @@ import rateLimit from 'express-rate-limit';
 const app = express();
 const PORT = process.env.PORT || 5050;
 
-// Enable CORS for all routes
+// Enable CORS for all routes with explicit configuration
 app.use(cors({
-  origin: true, // Allow all origins temporarily
+  origin: ['http://localhost:3000', 'https://bible-quest.netlify.app', 'https://bible-quest-app.netlify.app'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With']
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With', 'api-key'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }));
+
+// Handle preflight requests explicitly
+app.options('*', cors());
 
 // Add CORS debugging middleware
 app.use((req, res, next) => {
   console.log('Request origin:', req.headers.origin);
   console.log('Request method:', req.method);
   console.log('Request path:', req.path);
+  console.log('Request headers:', req.headers);
   next();
+});
+
+// Simple test endpoint to verify CORS is working
+app.get('/api/cors-test', (req, res) => {
+  console.log('CORS test endpoint hit');
+  console.log('Origin:', req.headers.origin);
+  console.log('Method:', req.method);
+  
+  res.json({
+    message: 'CORS test successful!',
+    origin: req.headers.origin,
+    method: req.method,
+    timestamp: new Date().toISOString(),
+    cors: 'enabled'
+  });
 });
 
 app.use(express.json());
