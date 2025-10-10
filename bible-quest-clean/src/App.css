@@ -1,149 +1,91 @@
+/* Global layout and typography */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial;
+  background: linear-gradient(135deg, #f0f9ff 0%, #dbeafe 100%);
+  min-height: 100vh;
+}
+
+.app-wrapper { padding: 2rem; text-align: center; }
+
+h1 {
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+  color: #1e40af;
+  animation: fadeIn 1.2s ease-in-out;
+}
+
+/* Character grid and cards */
+
 .character-carousel {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-  padding: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  padding: 1.5rem;
+  justify-items: center;
+  animation: fadeIn 0.9s ease-in-out;
 }
 
 .character {
-  background: #fff;
+  margin: 8px;
+  width: 100%;
+  max-width: 220px;
+  background: linear-gradient(180deg, #ffffff 0%, #f0f8ff 100%);
   border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 12px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
   text-align: center;
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+  animation: slideUp 0.45s ease-in-out both;
 }
 
 .character:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 14px 30px rgba(2, 132, 199, 0.16);
 }
 
 .character .avatar {
   width: 100%;
-  max-height: 180px;
+  max-height: 160px;
   object-fit: cover;
   border-radius: 8px;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
 }
 
 .start-journey {
   display: inline-block;
-  margin-top: 0.75rem;
-  padding: 10px 16px;
-  background-color: #4CAF50;
+  margin-top: 0.6rem;
+  padding: 8px 14px;
+  background-color: #16a34a; /* green-600 */
   color: white;
   text-decoration: none;
-  border-radius: 6px;
-  font-weight: bold;
-  transition: background 0.2s ease;
+  border-radius: 8px;
+  font-weight: 700;
 }
 
-.start-journey:hover {
-  background-color: #3e8e41;
-}
+.start-journey:hover { background-color: #15803d; }
 
-h3 {
-  margin: 0.5rem 0 0.25rem;
-  font-size: 1.1rem;
-}
+h3 { margin: 0.4rem 0 0.2rem; font-size: 1.05rem; }
 
-.verse {
-  font-style: italic;
-  color: #555;
-}
+.verse { font-style: italic; color: #475569; }
 
 .progress-link {
   display: inline-flex;
   align-items: center;
-  font-weight: bold;
-  font-size: 1.1rem;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 1.05rem;
   text-decoration: none;
-  color: #1a73e8;
+  color: #1e40af;
 }
 
-.progress-link img {
-  width: 28px;
-  height: 28px;
-  margin-right: 10px;
-}
-.character-carousel {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 1rem;
-  animation: fadeIn 1s ease-in-out;
-}
+.progress-link img { width: 28px; height: 28px; margin-right: 6px; }
 
-.character {
-  margin: 15px;
-  padding: 10px;
-  border-radius: 10px;
-  background: #f0f8ff;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  width: 180px;
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  animation: slideUp 0.5s ease-in-out both;
-}
+/* Animations */
+@keyframes slideUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeIn 0.7s ease-in-out; }
 
-.character:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-}
-
-@keyframes slideUp {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeIn {
-  0% { opacity: 0 }
-  100% { opacity: 1 }
-}
-
-.fade-in {
-  animation: fadeIn 0.7s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.character {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.character:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 15px rgba(0, 128, 255, 0.3);
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(to bottom right, #f0f9ff, #dbeafe);
-  min-height: 100vh;
-}
-
-.app-wrapper {
-  padding: 2rem;
-  text-align: center;
-}
-
-h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: #1e3a8a;
-  animation: fadeIn 1.2s ease-in-out;
-}
 
 
