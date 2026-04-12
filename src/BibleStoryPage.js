@@ -769,8 +769,78 @@ function BibleStoryPage() {
     }
   };
 
-  if (!character || !story) return <p>Story not found.</p>;
-  if (character.premium && !isPremiumUser) return <p>This story is locked 🔒. Please upgrade to access.</p>;
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
+
+if (character.premium && !isPremiumUser) {
+  return (
+    <div style={{ textAlign: "center", padding: "40px" }}>
+      <h2>🔒 Premium Story</h2>
+      <p>This story is locked. Upgrade to unlock all stories and AI features.</p>
+
+      <button
+        onClick={() => setShowPremiumModal(true)}
+        style={{
+          background: "#ff9800",
+          color: "white",
+          padding: "12px 20px",
+          border: "none",
+          borderRadius: "8px",
+          fontSize: "16px",
+          cursor: "pointer"
+        }}
+      >
+        Upgrade to Premium
+      </button>
+
+      {showPremiumModal && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: "rgba(0,0,0,0.6)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 9999
+        }}>
+          <div style={{
+            background: "#fff",
+            padding: "30px",
+            borderRadius: "10px",
+            textAlign: "center"
+          }}>
+            <h2>Upgrade to Premium</h2>
+            <p>Unlock all stories + AI features</p>
+
+            <button
+              onClick={() => {
+                window.location.href = "/donate"; // or your Stripe route
+              }}
+              style={{
+                background: "#4CAF50",
+                color: "white",
+                padding: "10px 20px",
+                border: "none",
+                borderRadius: "6px",
+                marginTop: "10px"
+              }}
+            >
+              Continue to Payment
+            </button>
+
+            <br /><br />
+
+            <button onClick={() => setShowPremiumModal(false)}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
   const hasLevels = story.levels && story.levels.length > 0;
   const current = hasLevels ? story.levels[level] : null;
@@ -913,13 +983,11 @@ function BibleStoryPage() {
         <div style={{ marginTop: 8, color: 'red', fontSize: 14 }}>{prayerError}</div>
       )}
       {/* AI Story Generator Button (Premium only) */}
-      {character.premium && (
-        <div style={{ marginBottom: 16 }}>
-          <button onClick={handleOpenStoryGen} style={{ background: '#673ab7', color: 'white', border: 'none', borderRadius: 6, padding: '10px 18px', fontSize: 16, cursor: 'pointer' }}>
-            Generate a New Story
-          </button>
-        </div>
-      )}
+      {character.premium && isPremiumUser && (
+  <button onClick={handleOpenStoryGen}>
+    Generate a New Story
+  </button>
+)}
       {/* AI Story Generator Modal */}
       {showStoryGen && (
         <div style={{
