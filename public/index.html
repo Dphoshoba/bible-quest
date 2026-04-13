@@ -72,10 +72,13 @@
         100% { transform: rotate(360deg); }
       }
       
+      /* Allow the React root to grow and scroll when content overflows.
+         Using min-height prevents collapsing on small screens while
+         allowing vertical scrolling on laptops and smaller viewports. */
       #root {
-        height: 100vh;
-        width: 100vw;
-        overflow: hidden;
+        min-height: 100vh;
+        width: 100%;
+        overflow-y: auto;
       }
     </style>
   </head>
