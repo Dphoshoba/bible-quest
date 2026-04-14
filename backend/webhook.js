@@ -17,13 +17,29 @@ dotenv.config({ path: envPath });
 console.log('Webhook: .env path =', envPath);
 console.log('Webhook: STRIPE_SECRET_KEY exists =', !!process.env.STRIPE_SECRET_KEY);
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const router = express.Router();
+const stripeKey = process.env.STRIPE_SECRET_KEY;
+let stripe = null;
+if (stripeKey) {
+  try {
+    stripe = new Stripe(stripeKey);
+  } catch (err) {
+    console.error('Webhook: failed to initialize Stripe:', err?.message || err);
+    stripe = null;
+  }
+} else {
+  console.warn('Webhook: STRIPE_SECRET_KEY not set; webhook route will return 501.');
+}
 
+const router = express.Router();
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-// ✅ FIXED: Use '/' instead of '/webhook'
+// Webhook route (mounted at /webhook)
 router.post('/', bodyParser.raw({ type: 'application/json' }), (req, res) => {
+  if (!stripe || !endpointSecret) {
+    console.warn('Webhook: Stripe or webhook secret not configured');
+    return res.status(501).send('Webhook not configured on server.');
+  }
+
   const sig = req.headers['stripe-signature'];
   let event;
 
@@ -35,10 +51,11 @@ router.post('/', bodyParser.raw({ type: 'application/json' }), (req, res) => {
   }
 
   switch (event.type) {
-    case 'checkout.session.completed':
+    case 'checkout.session.completed': {
       const session = event.data.object;
       console.log('✅ Payment received for:', session.customer_email);
       break;
+    }
     default:
       console.log(`Unhandled event type: ${event.type}`);
   }

@@ -85,6 +85,12 @@ app.post('/api/ask-ai', async (req, res) => {
   
   const { prompt, character } = req.body;
 
+  // Guard: ensure OpenAI key is configured
+  if (!process.env.OPENAI_API_KEY) {
+    console.error('ask-ai: OPENAI_API_KEY is not configured in environment');
+    return res.status(501).json({ error: 'OpenAI API key not configured on server.' });
+  }
+
   try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
