@@ -2,6 +2,14 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { CharacterContext } from './CharacterContext.js';
 
+const FALLBACK_AVATAR =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="220" height="180" viewBox="0 0 220 180">' +
+    '<rect width="220" height="180" fill="#e8eaf6"/>' +
+    '<text x="110" y="105" font-size="64" text-anchor="middle">📖</text></svg>'
+  );
+
 function CharacterCarousel() {
   const { characters, isPremiumUser } = useContext(CharacterContext);
 
@@ -45,8 +53,15 @@ function CharacterCarousel() {
         >
           <img 
             src={char.avatar} 
-            alt={char.name} 
-            className="avatar" 
+            alt={char.name}
+            className="avatar"
+            loading="lazy"
+            onError={(e) => {
+              // Missing artwork: swap in a neutral placeholder instead of a broken-image icon
+              if (e.target.dataset.fallback) return;
+              e.target.dataset.fallback = '1';
+              e.target.src = FALLBACK_AVATAR;
+            }}
             style={{ 
               pointerEvents: 'auto',
               width: '100%',

@@ -3,8 +3,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import Stripe from 'stripe';
-import bodyParser from 'body-parser';
-import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -14,7 +12,6 @@ const __dirname = path.dirname(__filename);
 const envPath = path.join(__dirname, '.env');
 dotenv.config({ path: envPath });
 
-console.log('Webhook: .env path =', envPath);
 console.log('Webhook: STRIPE_SECRET_KEY exists =', !!process.env.STRIPE_SECRET_KEY);
 
 const stripeKey = process.env.STRIPE_SECRET_KEY;
@@ -33,8 +30,9 @@ if (stripeKey) {
 const router = express.Router();
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-// Webhook route (mounted at /webhook)
-router.post('/', bodyParser.raw({ type: 'application/json' }), (req, res) => {
+// Webhook route (mounted at /webhook). Needs the raw body for signature checks,
+// so this router must be mounted BEFORE express.json() in server.js.
+router.post('/', express.raw({ type: 'application/json' }), (req, res) => {
   if (!stripe || !endpointSecret) {
     console.warn('Webhook: Stripe or webhook secret not configured');
     return res.status(501).send('Webhook not configured on server.');
@@ -53,7 +51,7 @@ router.post('/', bodyParser.raw({ type: 'application/json' }), (req, res) => {
   switch (event.type) {
     case 'checkout.session.completed': {
       const session = event.data.object;
-      console.log('✅ Payment received for:', session.customer_email);
+      console.log('✅ Payment received:', session.id, session.metadata?.product);
       break;
     }
     default:
@@ -64,4 +62,3 @@ router.post('/', bodyParser.raw({ type: 'application/json' }), (req, res) => {
 });
 
 export default router;
-

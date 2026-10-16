@@ -4,6 +4,7 @@ export const API_BASE_URL = "https://bible-quest-rupb.onrender.com";
 export const API_ENDPOINTS = {
   askAI: `${API_BASE_URL}/api/ask-ai`,
   createCheckoutSession: `${API_BASE_URL}/api/create-checkout-session`,
+  verifySession: `${API_BASE_URL}/api/verify-session`,
   bible: `${API_BASE_URL}/api/bible`,
   bibleBooks: `${API_BASE_URL}/api/bible-books`,
   bibleChapters: `${API_BASE_URL}/api/bible-chapters`,

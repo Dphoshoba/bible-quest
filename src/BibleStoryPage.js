@@ -2,6 +2,7 @@ import React, { useContext, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { CharacterContext } from './CharacterContext.js';
 import AiBuddy from "./components/AiBuddy.js";
+import { startCheckout } from "./premium.js";
 import { API_ENDPOINTS } from "./config.js";
 import ShareButton from './components/ShareButton.js';
 
@@ -815,9 +816,7 @@ if (character.premium && !isPremiumUser) {
             <p>Unlock all stories + AI features</p>
 
             <button
-              onClick={() => {
-                window.location.href = "/donate"; // or your Stripe route
-              }}
+              onClick={startCheckout}
               style={{
                 background: "#4CAF50",
                 color: "white",

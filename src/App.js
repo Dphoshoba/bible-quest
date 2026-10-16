@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import CharacterCarousel from './CharacterCarousel.js';
 import BibleStoryPage from './BibleStoryPage.js';
@@ -7,8 +7,9 @@ import QuizPage from './QuizPage.js';
 import AchievementsPage from './components/AchievementsPage.js';
 import ParentalDashboard from './components/ParentalDashboard.js';
 import BiblePage from './BiblePage.js';
-import { CharacterContext, characters, isPremiumUser } from './CharacterContext.js';
+import { CharacterContext, characters } from './CharacterContext.js';
 import CorsTest from './components/CorsTest';
+import { readPremium, savePremium, verifySession } from './premium.js';
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -289,7 +290,55 @@ function FloatingSticker({ icon, left, top, size, duration }) {
   );
 }
 
+// Landing page after Stripe checkout: confirm the payment server-side, then unlock.
+function SuccessPage({ onUnlocked }) {
+  const [status, setStatus] = useState('checking'); // checking | ok | failed
+
+  useEffect(() => {
+    const sessionId = new URLSearchParams(window.location.search).get('session_id');
+    if (!sessionId) {
+      setStatus('failed');
+      return;
+    }
+    verifySession(sessionId)
+      .then((paid) => {
+        if (paid) {
+          onUnlocked();
+          setStatus('ok');
+        } else {
+          setStatus('failed');
+        }
+      })
+      .catch(() => setStatus('failed'));
+  }, [onUnlocked]);
+
+  return (
+    <div style={{ textAlign: 'center', padding: '80px 20px', position: 'relative', zIndex: 1000 }}>
+      {status === 'checking' && <h2>Confirming your payment…</h2>}
+      {status === 'ok' && (
+        <>
+          <h2>🎉 Thank you! Premium is unlocked</h2>
+          <p>All Bible characters and stories are now open.</p>
+          <Link to="/" style={{ color: '#1a237e', fontWeight: 600 }}>Start exploring →</Link>
+        </>
+      )}
+      {status === 'failed' && (
+        <>
+          <h2>We couldn't confirm your payment</h2>
+          <p>If you were charged, please contact support and we'll sort it out right away.</p>
+          <Link to="/" style={{ color: '#1a237e', fontWeight: 600 }}>Back to home</Link>
+        </>
+      )}
+    </div>
+  );
+}
+
 function App() {
+  const [isPremium, setIsPremium] = useState(readPremium);
+  const unlockPremium = useCallback(() => {
+    savePremium();
+    setIsPremium(true);
+  }, []);
   const [clickMessage, setClickMessage] = useState('');
   const [selectedCharacter, setSelectedCharacter] = useState(null);
   const [musicPlaying, setMusicPlaying] = useState(true);
@@ -321,7 +370,7 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <CharacterContext.Provider value={{ characters, isPremiumUser, selectedCharacter, setSelectedCharacter }}>
+      <CharacterContext.Provider value={{ characters, isPremiumUser: isPremium, selectedCharacter, setSelectedCharacter }}>
         <Router>
           <div style={{
             minHeight: '100vh',
@@ -400,6 +449,7 @@ function App() {
               <Route path="/achievements" element={<AchievementsPage />} />
               <Route path="/parent-dashboard" element={<ParentalDashboard />} />
               <Route path="/bible" element={<BiblePage />} />
+              <Route path="/success" element={<SuccessPage onUnlocked={unlockPremium} />} />
               <Route path="/cors-test" element={<CorsTest />} />
             </Routes>
           </div>
