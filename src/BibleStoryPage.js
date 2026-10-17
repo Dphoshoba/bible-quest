@@ -849,7 +849,8 @@ if (character.premium && !isPremiumUser) {
             <p>Unlock all stories + AI features</p>
             <p style={{ fontWeight: 700, fontSize: 18, margin: '8px 0' }}>{PREMIUM_PRICE_LABEL}</p>
             <p style={{ fontSize: 13, color: '#666', maxWidth: 280, margin: '0 auto' }}>
-              Charged in US dollars. Your bank may show the amount in your local currency.
+              Charged in US dollars. Your bank may show the amount in your local currency.{' '}
+              <a href="/refunds" style={{ color: '#1a237e' }}>14-day refund policy</a>
             </p>
 
             <button
