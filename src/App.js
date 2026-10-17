@@ -15,6 +15,7 @@ const ParentalDashboard = lazy(() => import('./components/ParentalDashboard.js')
 const BiblePage = lazy(() => import('./BiblePage.js'));
 const CorsTest = lazy(() => import('./components/CorsTest'));
 const DailyChallenge = lazy(() => import('./components/DailyChallenge.js'));
+const Certificate = lazy(() => import('./components/Certificate.js'));
 const PrivacyPolicy = lazy(() => import('./components/LegalPages.js').then((m) => ({ default: m.PrivacyPolicy })));
 const RefundPolicy = lazy(() => import('./components/LegalPages.js').then((m) => ({ default: m.RefundPolicy })));
 
@@ -581,6 +582,7 @@ function App() {
               <Route path="/bible" element={<BiblePage />} />
               <Route path="/success" element={<SuccessPage onUnlocked={unlockPremium} />} />
               <Route path="/daily" element={<DailyChallenge />} />
+              <Route path="/certificate/:id" element={<Certificate />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/refunds" element={<RefundPolicy />} />
               <Route path="/cors-test" element={<CorsTest />} />
