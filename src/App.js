@@ -237,7 +237,9 @@ function HomePage({ handleButtonClick, clickMessage, streak, isPremium, onRestor
           {/* Left Logo */}
           <div style={{ position: 'relative', display: 'inline-block' }}>
             <img 
-              src="/avatars/logo.png" 
+              src="/avatars/logo.png"
+              width={100}
+              height={100}
               alt="Eternal Echoes & Visions Logo" 
               style={{ 
                 height: 100, 
@@ -265,7 +267,9 @@ function HomePage({ handleButtonClick, clickMessage, streak, isPremium, onRestor
           </div>
           {/* Right Logo */}
           <img 
-            src="/avatars/icon_1.png" 
+            src="/avatars/icon_1.png"
+            width={100}
+            height={100}
             alt="Bible Quest Icon" 
             style={{ height: 100, verticalAlign: 'middle' }} 
           />
@@ -315,12 +319,13 @@ function HomePage({ handleButtonClick, clickMessage, streak, isPremium, onRestor
         )}
       </div>
 
-      <InstallButton />
-
       {/* Character Carousel */}
       <div style={{ margin: '40px 0', position: 'relative', zIndex: 1000 }}>
         <CharacterCarousel />
       </div>
+
+      {/* Below the cards so its late appearance can't shift anything above it */}
+      <InstallButton />
 
       {/* Footer */}
       <footer style={{ textAlign: 'center', padding: '24px 16px 72px', fontSize: 14, position: 'relative', zIndex: 1000 }}>
@@ -425,10 +430,8 @@ function App() {
     savePremium(code);
     setIsPremium(true);
   }, []);
-  const [streak, setStreak] = useState(0);
-  useEffect(() => {
-    setStreak(recordVisit());
-  }, []);
+  // Computed before the first paint so the streak badge doesn't pop in and push the page down
+  const [streak, setStreak] = useState(() => recordVisit());
   const [user, setUser] = useState(null);
   const [syncState, setSyncState] = useState('');
   useEffect(() => {
