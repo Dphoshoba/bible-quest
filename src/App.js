@@ -1,15 +1,18 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import CharacterCarousel from './CharacterCarousel.js';
-import BibleStoryPage from './BibleStoryPage.js';
-import Dashboard from './Dashboard.js';
-import QuizPage from './QuizPage.js';
-import AchievementsPage from './components/AchievementsPage.js';
-import ParentalDashboard from './components/ParentalDashboard.js';
-import BiblePage from './BiblePage.js';
 import { CharacterContext, characters } from './CharacterContext.js';
-import CorsTest from './components/CorsTest';
-import { readPremium, savePremium, verifySession } from './premium.js';
+import { readPremium, savePremium, verifySession, restorePurchase } from './premium.js';
+import { recordVisit } from './streak.js';
+
+// Route pages load on demand so the home screen downloads less code up front
+const BibleStoryPage = lazy(() => import('./BibleStoryPage.js'));
+const Dashboard = lazy(() => import('./Dashboard.js'));
+const QuizPage = lazy(() => import('./QuizPage.js'));
+const AchievementsPage = lazy(() => import('./components/AchievementsPage.js'));
+const ParentalDashboard = lazy(() => import('./components/ParentalDashboard.js'));
+const BiblePage = lazy(() => import('./BiblePage.js'));
+const CorsTest = lazy(() => import('./components/CorsTest'));
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -64,7 +67,21 @@ class ErrorBoundary extends React.Component {
 }
 
 // Home Page Component
-function HomePage({ handleButtonClick, clickMessage }) {
+function HomePage({ handleButtonClick, clickMessage, streak, isPremium, onRestore }) {
+  const [restoreMsg, setRestoreMsg] = useState('');
+
+  const handleRestore = async () => {
+    const code = window.prompt('Paste your Premium restore code (shown on your purchase confirmation page):');
+    if (!code) return;
+    setRestoreMsg('Checking…');
+    try {
+      const ok = await onRestore(code);
+      setRestoreMsg(ok ? '✅ Premium restored!' : "That code didn't work. Please check it and try again.");
+    } catch {
+      setRestoreMsg('Could not check the code right now. Please try again.');
+    }
+  };
+
   return (
     <div className="app-wrapper" style={{ 
       background: '#f5f6fa', 
@@ -254,6 +271,21 @@ function HomePage({ handleButtonClick, clickMessage }) {
         </div>
       </div>
 
+      {/* Daily streak + restore purchase */}
+      <div style={{ textAlign: 'center', margin: '0 0 8px', position: 'relative', zIndex: 1000 }}>
+        {streak > 0 && (
+          <span style={{ display: 'inline-block', background: '#fff3e0', color: '#e65100', fontWeight: 700, padding: '8px 16px', borderRadius: 20, marginRight: 12 }}>
+            🔥 {streak}-day streak{streak >= 3 ? ' — Streak Starter badge earned!' : ' — come back tomorrow to keep it going!'}
+          </span>
+        )}
+        {!isPremium && (
+          <button onClick={handleRestore} style={{ background: 'none', border: 'none', color: '#1a237e', textDecoration: 'underline', cursor: 'pointer', fontSize: 14 }}>
+            Already bought Premium? Restore purchase
+          </button>
+        )}
+        {restoreMsg && <div style={{ marginTop: 8, fontSize: 14 }}>{restoreMsg}</div>}
+      </div>
+
       {/* Character Carousel */}
       <div style={{ margin: '40px 0', position: 'relative', zIndex: 1000 }}>
         <CharacterCarousel />
@@ -293,6 +325,8 @@ function FloatingSticker({ icon, left, top, size, duration }) {
 // Landing page after Stripe checkout: confirm the payment server-side, then unlock.
 function SuccessPage({ onUnlocked }) {
   const [status, setStatus] = useState('checking'); // checking | ok | failed
+  const [code, setCode] = useState('');
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const sessionId = new URLSearchParams(window.location.search).get('session_id');
@@ -303,7 +337,8 @@ function SuccessPage({ onUnlocked }) {
     verifySession(sessionId)
       .then((paid) => {
         if (paid) {
-          onUnlocked();
+          onUnlocked(sessionId);
+          setCode(sessionId);
           setStatus('ok');
         } else {
           setStatus('failed');
@@ -319,6 +354,20 @@ function SuccessPage({ onUnlocked }) {
         <>
           <h2>🎉 Thank you! Premium is unlocked</h2>
           <p>All Bible characters and stories are now open.</p>
+          <div style={{ maxWidth: 560, margin: '16px auto', background: '#fffde7', padding: 16, borderRadius: 12 }}>
+            <strong>Save your restore code</strong>
+            <p style={{ fontSize: 14, margin: '8px 0' }}>
+              If you use a new device or clear your browser, paste this code on the home page under
+              “Restore purchase” to get Premium back. Keep it private.
+            </p>
+            <code style={{ display: 'block', wordBreak: 'break-all', fontSize: 12, background: '#fff', padding: 8, borderRadius: 6 }}>{code}</code>
+            <button
+              onClick={() => navigator.clipboard?.writeText(code).then(() => setCopied(true))}
+              style={{ marginTop: 8, padding: '6px 14px', cursor: 'pointer' }}
+            >
+              {copied ? 'Copied ✓' : 'Copy code'}
+            </button>
+          </div>
           <Link to="/" style={{ color: '#1a237e', fontWeight: 600 }}>Start exploring →</Link>
         </>
       )}
@@ -335,9 +384,18 @@ function SuccessPage({ onUnlocked }) {
 
 function App() {
   const [isPremium, setIsPremium] = useState(readPremium);
-  const unlockPremium = useCallback(() => {
-    savePremium();
+  const unlockPremium = useCallback((code) => {
+    savePremium(code);
     setIsPremium(true);
+  }, []);
+  const [streak, setStreak] = useState(0);
+  useEffect(() => {
+    setStreak(recordVisit());
+  }, []);
+  const handleRestore = useCallback(async (code) => {
+    const ok = await restorePurchase(code);
+    if (ok) setIsPremium(true);
+    return ok;
   }, []);
   const [clickMessage, setClickMessage] = useState('');
   const [selectedCharacter, setSelectedCharacter] = useState(null);
@@ -441,8 +499,9 @@ function App() {
               }
             `}</style>
 
+            <Suspense fallback={<div style={{ textAlign: 'center', padding: 60 }}>Loading…</div>}>
             <Routes>
-              <Route path="/" element={<HomePage handleButtonClick={handleButtonClick} clickMessage={clickMessage} />} />
+              <Route path="/" element={<HomePage handleButtonClick={handleButtonClick} clickMessage={clickMessage} streak={streak} isPremium={isPremium} onRestore={handleRestore} />} />
               <Route path="/stories/:id" element={<BibleStoryPage />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/quiz/:id" element={<QuizPage />} />
@@ -452,6 +511,7 @@ function App() {
               <Route path="/success" element={<SuccessPage onUnlocked={unlockPremium} />} />
               <Route path="/cors-test" element={<CorsTest />} />
             </Routes>
+            </Suspense>
           </div>
         </Router>
       </CharacterContext.Provider>

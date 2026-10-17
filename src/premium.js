@@ -12,9 +12,30 @@ export function readPremium() {
   }
 }
 
-export function savePremium() {
+const CODE_KEY = 'bq_premium_code';
+
+// The Stripe session id doubles as a private "restore code": long, unguessable, and only
+// ever shown to the buyer on the success page. Entering it on a new device re-verifies it.
+export function readRestoreCode() {
+  try {
+    return localStorage.getItem(CODE_KEY) || '';
+  } catch {
+    return '';
+  }
+}
+
+export async function restorePurchase(code) {
+  const trimmed = String(code || '').trim();
+  if (!/^cs_[A-Za-z0-9_]+$/.test(trimmed)) return false;
+  const paid = await verifySession(trimmed);
+  if (paid) savePremium(trimmed);
+  return paid;
+}
+
+export function savePremium(code) {
   try {
     localStorage.setItem(PREMIUM_KEY, '1');
+    if (code) localStorage.setItem(CODE_KEY, code);
   } catch {
     /* storage unavailable (private mode): premium lasts for this session only */
   }
