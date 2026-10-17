@@ -65,8 +65,9 @@ function CharacterCarousel() {
             style={{ 
               pointerEvents: 'auto',
               width: '100%',
-              maxHeight: '180px',
-              objectFit: 'cover',
+              height: '180px',
+              objectFit: 'contain',
+              background: '#f3f4f8',
               borderRadius: '8px',
               marginBottom: '0.5rem'
             }} 
@@ -76,7 +77,7 @@ function CharacterCarousel() {
             <Link
               to={`/stories/${char.id}`}
               className="lock-msg"
-              style={{ display: 'inline-block', color: '#e65100', fontWeight: 'bold', textDecoration: 'underline', margin: '8px 0' }}
+              style={{ display: 'inline-block', color: '#bf360c', fontWeight: 'bold', textDecoration: 'underline', margin: '8px 0' }}
             >
               🔒 Premium – tap to unlock
             </Link>
@@ -92,7 +93,7 @@ function CharacterCarousel() {
                 display: 'inline-block',
                 marginTop: '0.75rem',
                 padding: '10px 16px',
-                backgroundColor: '#4CAF50',
+                backgroundColor: '#2e7d32',
                 color: 'white',
                 textDecoration: 'none',
                 borderRadius: '6px',
@@ -103,10 +104,10 @@ function CharacterCarousel() {
                 fontSize: '1rem'
               }}
               onMouseEnter={(e) => {
-                e.target.style.backgroundColor = '#3e8e41';
+                e.target.style.backgroundColor = '#1b5e20';
               }}
               onMouseLeave={(e) => {
-                e.target.style.backgroundColor = '#4CAF50';
+                e.target.style.backgroundColor = '#2e7d32';
               }}
             >
               Start Journey

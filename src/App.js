@@ -226,7 +226,7 @@ function HomePage({ handleButtonClick, clickMessage, streak, isPremium, onRestor
       {/* Welcome Message and Logos with Feature Boxes */}
       <div style={{ textAlign: 'center', margin: '40px 0' }}>
         <h1 style={{ color: '#1a237e', marginBottom: '20px', textShadow: '0 0 12px #ffe082, 0 0 24px #fffde7' }}>Welcome to Bible Quest</h1>
-        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: '20px' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: '20px', flexWrap: 'wrap' }}>
           {/* Left Logo */}
           <div style={{ position: 'relative', display: 'inline-block' }}>
             <img 
@@ -242,7 +242,7 @@ function HomePage({ handleButtonClick, clickMessage, streak, isPremium, onRestor
             />
           </div>
           {/* Feature Cards Between Logos */}
-          <div style={{ display: 'flex', flexDirection: 'row', gap: 12 }}>
+          <div style={{ display: 'flex', flexDirection: 'row', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
             <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #a5b4fc44', padding: '12px 16px', minWidth: 100, textAlign: 'center', fontSize: 14 }}>
               <div style={{ fontSize: 22, marginBottom: 4 }}>🧩</div>
               <div style={{ fontWeight: 700, color: '#3b2f7f' }}>Bible Quizzes</div>
@@ -274,7 +274,7 @@ function HomePage({ handleButtonClick, clickMessage, streak, isPremium, onRestor
       {/* Daily streak + restore purchase */}
       <div style={{ textAlign: 'center', margin: '0 0 8px', position: 'relative', zIndex: 1000 }}>
         {streak > 0 && (
-          <span style={{ display: 'inline-block', background: '#fff3e0', color: '#e65100', fontWeight: 700, padding: '8px 16px', borderRadius: 20, marginRight: 12 }}>
+          <span style={{ display: 'inline-block', background: '#fff3e0', color: '#bf360c', fontWeight: 700, padding: '8px 16px', borderRadius: 20, marginRight: 12 }}>
             🔥 {streak}-day streak{streak >= 3 ? ' — Streak Starter badge earned!' : ' — come back tomorrow to keep it going!'}
           </span>
         )}
@@ -451,7 +451,7 @@ function App() {
               onClick={toggleMusic}
               style={{
                 position: 'fixed',
-                top: 18,
+                bottom: 18,
                 right: 18,
                 zIndex: 2000,
                 background: musicPlaying ? 'linear-gradient(135deg, #4CAF50, #45a049)' : 'linear-gradient(135deg, #aaa, #888)',
@@ -499,6 +499,7 @@ function App() {
               }
             `}</style>
 
+            <main>
             <Suspense fallback={<div style={{ textAlign: 'center', padding: 60 }}>Loading…</div>}>
             <Routes>
               <Route path="/" element={<HomePage handleButtonClick={handleButtonClick} clickMessage={clickMessage} streak={streak} isPremium={isPremium} onRestore={handleRestore} />} />
@@ -512,6 +513,7 @@ function App() {
               <Route path="/cors-test" element={<CorsTest />} />
             </Routes>
             </Suspense>
+            </main>
           </div>
         </Router>
       </CharacterContext.Provider>
