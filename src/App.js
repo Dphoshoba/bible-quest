@@ -13,6 +13,7 @@ const AchievementsPage = lazy(() => import('./components/AchievementsPage.js'));
 const ParentalDashboard = lazy(() => import('./components/ParentalDashboard.js'));
 const BiblePage = lazy(() => import('./BiblePage.js'));
 const CorsTest = lazy(() => import('./components/CorsTest'));
+const DailyChallenge = lazy(() => import('./components/DailyChallenge.js'));
 const PrivacyPolicy = lazy(() => import('./components/LegalPages.js').then((m) => ({ default: m.PrivacyPolicy })));
 const RefundPolicy = lazy(() => import('./components/LegalPages.js').then((m) => ({ default: m.RefundPolicy })));
 
@@ -251,7 +252,7 @@ function HomePage({ handleButtonClick, clickMessage, streak, isPremium, onRestor
             </div>
             <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #a5b4fc44', padding: '12px 16px', minWidth: 100, textAlign: 'center', fontSize: 14 }}>
               <div style={{ fontSize: 22, marginBottom: 4 }}>📅</div>
-              <div style={{ fontWeight: 700, color: '#3b2f7f' }}>Daily Challenges</div>
+              <Link to="/daily" style={{ fontWeight: 700, color: '#3b2f7f' }}>Daily Challenges</Link>
             </div>
             <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #a5b4fc44', padding: '12px 16px', minWidth: 100, textAlign: 'center', fontSize: 14 }}>
               <div style={{ fontSize: 22, marginBottom: 4 }}>🛡️</div>
@@ -275,6 +276,11 @@ function HomePage({ handleButtonClick, clickMessage, streak, isPremium, onRestor
 
       {/* Daily streak + restore purchase */}
       <div style={{ textAlign: 'center', margin: '0 0 8px', position: 'relative', zIndex: 1000 }}>
+        <div style={{ marginBottom: 12 }}>
+          <Link to="/daily" style={{ display: 'inline-block', background: '#5e35b1', color: '#fff', textDecoration: 'none', fontWeight: 700, padding: '12px 24px', borderRadius: 24, boxShadow: '0 2px 8px rgba(94,53,177,0.35)' }}>
+            📅 Today's Challenge: 5 quick questions
+          </Link>
+        </div>
         {streak > 0 && (
           <span style={{ display: 'inline-block', background: '#fff3e0', color: '#bf360c', fontWeight: 700, padding: '8px 16px', borderRadius: 20, marginRight: 12 }}>
             🔥 {streak}-day streak{streak >= 3 ? ' — Streak Starter badge earned!' : ' — come back tomorrow to keep it going!'}
@@ -518,6 +524,7 @@ function App() {
               <Route path="/parent-dashboard" element={<ParentalDashboard />} />
               <Route path="/bible" element={<BiblePage />} />
               <Route path="/success" element={<SuccessPage onUnlocked={unlockPremium} />} />
+              <Route path="/daily" element={<DailyChallenge />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/refunds" element={<RefundPolicy />} />
               <Route path="/cors-test" element={<CorsTest />} />

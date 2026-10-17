@@ -4,7 +4,7 @@ import { App as CapacitorApp } from "@capacitor/app";
 import { API_ENDPOINTS } from "./config.js";
 import ShareButton from './components/ShareButton.js';
 
-const quizzes = {
+export const quizzes = {
   david: [
     { question: "What did David use to defeat Goliath?", options: ["Sword", "Stone and Sling", "Arrow"], answer: "Stone and Sling" },
     { question: "What was David's job before becoming king?", options: ["Shepherd", "Farmer", "Fisherman"], answer: "Shepherd" },
