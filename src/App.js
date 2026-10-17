@@ -6,6 +6,7 @@ import { readPremium, savePremium, verifySession, restorePurchase } from './prem
 import { recordVisit } from './streak.js';
 import { accountsEnabled, watchUser, signIn, signOutUser, syncAccount } from './account.js';
 import InstallButton from './components/InstallButton.js';
+import { isNativeApp } from './native.js';
 
 // Route pages load on demand so the home screen downloads less code up front
 const BibleStoryPage = lazy(() => import('./BibleStoryPage.js'));
@@ -289,13 +290,13 @@ function HomePage({ handleButtonClick, clickMessage, streak, isPremium, onRestor
             🔥 {streak}-day streak{streak >= 3 ? ' — Streak Starter badge earned!' : ' — come back tomorrow to keep it going!'}
           </span>
         )}
-        {!isPremium && (
+        {!isPremium && !isNativeApp() && (
           <button onClick={handleRestore} style={{ background: 'none', border: 'none', color: '#1a237e', textDecoration: 'underline', cursor: 'pointer', fontSize: 14 }}>
             Already bought Premium? Restore purchase
           </button>
         )}
         {restoreMsg && <div style={{ marginTop: 8, fontSize: 14 }}>{restoreMsg}</div>}
-        {accountsEnabled && (
+        {accountsEnabled && !isNativeApp() && (
           <div style={{ marginTop: 10, fontSize: 14 }}>
             {user ? (
               <>
@@ -324,7 +325,7 @@ function HomePage({ handleButtonClick, clickMessage, streak, isPremium, onRestor
       {/* Footer */}
       <footer style={{ textAlign: 'center', padding: '24px 16px 72px', fontSize: 14, position: 'relative', zIndex: 1000 }}>
         <Link to="/privacy" style={{ color: '#1a237e', marginRight: 16 }}>Privacy Policy</Link>
-        <Link to="/refunds" style={{ color: '#1a237e' }}>Refund Policy</Link>
+        {!isNativeApp() && <Link to="/refunds" style={{ color: '#1a237e' }}>Refund Policy</Link>}
       </footer>
 
       {/* CSS Animations */}
@@ -431,6 +432,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [syncState, setSyncState] = useState('');
   useEffect(() => {
+    if (isNativeApp()) return undefined; // no accounts in the Android app
     let unsubscribe = () => {};
     let cancelled = false;
     watchUser(async (u) => {

@@ -1,8 +1,19 @@
 // Initialize Capacitor for web environment
 (async () => {
   try {
+    // Inside the Android app Capacitor's real bridge is already installed (Capacitor 7 has no
+    // `isNative` flag, only isNativePlatform()), so leave it untouched.
+    const nativePlatform =
+      typeof window !== 'undefined' &&
+      typeof window.Capacitor?.isNativePlatform === 'function' &&
+      window.Capacitor.isNativePlatform() === true;
+    if (nativePlatform) {
+      console.log('Running in the native app - using the real Capacitor bridge');
+      return;
+    }
+
     // Check if we're in a web environment
-    const isWeb = typeof window !== 'undefined' && !window.Capacitor?.isNative;
+    const isWeb = typeof window !== 'undefined';
     
     if (isWeb) {
       console.log('Running in web environment - initializing web-compatible Capacitor');

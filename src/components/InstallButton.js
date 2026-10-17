@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { isNativeApp } from '../native.js';
 
 const isStandalone = () =>
   (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
@@ -29,7 +30,7 @@ function InstallButton() {
     };
   }, []);
 
-  if (installed) return null;
+  if (installed || isNativeApp()) return null;
   if (!promptEvent && !isIos()) return null;
 
   const install = async () => {

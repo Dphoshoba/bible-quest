@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { CharacterContext } from './CharacterContext.js';
+import { isNativeApp } from './native.js';
 
 const FALLBACK_AVATAR =
   'data:image/svg+xml;utf8,' +
@@ -73,7 +74,10 @@ function CharacterCarousel() {
             }} 
           />
           <h3 style={{ margin: '0.5rem 0 0.25rem', fontSize: '1.1rem' }}>{char.name}</h3>
-          {char.premium && !isPremiumUser && (
+          {char.premium && !isPremiumUser && isNativeApp() && (
+            <p style={{ color: '#bf360c', fontWeight: 'bold', margin: '8px 0' }}>🔒 Coming soon</p>
+          )}
+          {char.premium && !isPremiumUser && !isNativeApp() && (
             <Link
               to={`/stories/${char.id}`}
               className="lock-msg"

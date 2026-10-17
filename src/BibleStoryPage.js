@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { CharacterContext } from './CharacterContext.js';
 import AiBuddy from "./components/AiBuddy.js";
 import { startCheckout, PREMIUM_PRICE_LABEL } from "./premium.js";
+import { isNativeApp } from "./native.js";
 import { API_ENDPOINTS } from "./config.js";
 import ShareButton from './components/ShareButton.js';
 
@@ -809,6 +810,16 @@ function BibleStoryPage() {
   const [showPremiumModal, setShowPremiumModal] = useState(false);
 
 if (character.premium && !isPremiumUser) {
+  // The Android app is free-only for now: no purchase prompts, just a friendly message
+  if (isNativeApp()) {
+    return (
+      <div style={{ textAlign: "center", padding: "40px" }}>
+        <h2>🔒 Coming soon</h2>
+        <p>This story isn't available in the app yet.</p>
+        <button onClick={() => navigate("/")}>Back to stories</button>
+      </div>
+    );
+  }
   return (
     <div style={{ textAlign: "center", padding: "40px" }}>
       <h2>🔒 Premium Story</h2>
