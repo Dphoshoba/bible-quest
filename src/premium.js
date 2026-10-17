@@ -2,6 +2,9 @@ import { API_BASE_URL } from './config.js';
 
 const PREMIUM_KEY = 'bq_premium';
 
+// Shown to buyers before checkout. Must match PREMIUM_PRICE_CENTS on the backend (default 500).
+export const PREMIUM_PRICE_LABEL = 'US$5.00 one-time payment';
+
 // Premium flag lives in localStorage (per device). It is only ever set after the
 // backend confirms with Stripe that the checkout session was actually paid.
 export function readPremium() {

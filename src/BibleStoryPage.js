@@ -2,7 +2,7 @@ import React, { useContext, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { CharacterContext } from './CharacterContext.js';
 import AiBuddy from "./components/AiBuddy.js";
-import { startCheckout } from "./premium.js";
+import { startCheckout, PREMIUM_PRICE_LABEL } from "./premium.js";
 import { API_ENDPOINTS } from "./config.js";
 import ShareButton from './components/ShareButton.js';
 
@@ -814,6 +814,10 @@ if (character.premium && !isPremiumUser) {
           }}>
             <h2>Upgrade to Premium</h2>
             <p>Unlock all stories + AI features</p>
+            <p style={{ fontWeight: 700, fontSize: 18, margin: '8px 0' }}>{PREMIUM_PRICE_LABEL}</p>
+            <p style={{ fontSize: 13, color: '#666', maxWidth: 280, margin: '0 auto' }}>
+              Charged in US dollars. Your bank may show the amount in your local currency.
+            </p>
 
             <button
               onClick={startCheckout}
