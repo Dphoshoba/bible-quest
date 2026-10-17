@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { CharacterContext } from './CharacterContext.js';
 import AiBuddy from "./components/AiBuddy.js";
@@ -574,6 +574,11 @@ const stories = {
   }
 };
 
+// Recorded narration clips in public/audio/<storyId>-<levelIndex>.mp3.
+// Add a story id and its level indexes here after dropping new files into public/audio.
+const NARRATED = { david: [0, 1, 2], esther: [0, 1, 2] };
+const hasNarration = (storyId, lvl) => (NARRATED[storyId] || []).includes(lvl);
+
 function BibleStoryPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -618,7 +623,21 @@ function BibleStoryPage() {
   const [verseExplainError, setVerseExplainError] = useState("");
 
   const synthRef = useRef(window.speechSynthesis);
+  const audioRef = useRef(null);
   const [reading, setReading] = useState(false);
+
+  // Stop any narration when the level or story changes, and when leaving the page
+  useEffect(() => {
+    const synth = synthRef.current;
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+      synth?.cancel();
+      setReading(false);
+    };
+  }, [id, level]);
 
   // Helper: detect if a line is a Bible verse (simple heuristic: contains quotes and a dash)
   const isVerseLine = (line) => /".+"\s*–\s*.+/.test(line);
@@ -751,8 +770,22 @@ function BibleStoryPage() {
 
   const handleReadAloud = () => {
     if (reading) {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
       synthRef.current.cancel();
       setReading(false);
+      return;
+    }
+    // Prefer the recorded narration when one exists for this story level
+    if (hasLevels && hasNarration(id, level)) {
+      const audio = new Audio(`/audio/${id}-${level}.mp3`);
+      audio.onended = () => setReading(false);
+      audio.onerror = () => setReading(false);
+      audioRef.current = audio;
+      setReading(true);
+      audio.play().catch(() => setReading(false));
       return;
     }
     let text = "";
@@ -865,7 +898,7 @@ if (character.premium && !isPremiumUser) {
       {/* Read Aloud button */}
       <div style={{ marginBottom: 12 }}>
         <button onClick={handleReadAloud} style={{ background: '#4caf50', color: 'white', border: 'none', borderRadius: 6, padding: '8px 16px', fontSize: 15, cursor: 'pointer' }}>
-          {reading ? 'Stop' : '🔊 Read Aloud'}
+          {reading ? 'Stop' : hasLevels && hasNarration(id, level) ? '🎧 Listen to the story' : '🔊 Read Aloud'}
         </button>
       </div>
       {hasLevels && current ? (
