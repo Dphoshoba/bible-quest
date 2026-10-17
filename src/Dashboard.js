@@ -11,7 +11,7 @@ const characters = [
   { id: 'mary-joseph', name: 'Mary & Joseph', avatar: '/avatars/mary-joseph.png', completed: false },
   { id: 'paul', name: 'Paul', avatar: '/avatars/paul.png', completed: false },
   { id: 'jesus', name: 'Jesus', avatar: '/avatars/jesus.jpg', completed: false },
-  { id: 'adam-eve', name: 'Adam & Eve', avatar: '/avatars/adam-eve.jpg', completed: false },
+  { id: 'adam-eve', name: 'Adam & Eve', avatar: '/avatars/adam-eve.png', completed: false },
   { id: 'noah', name: 'Noah', avatar: '/avatars/noah.png', completed: false },
   { id: 'abraham', name: 'Abraham', avatar: '/avatars/abraham.jpg', completed: false },
   { id: 'samuel', name: 'Samuel', avatar: '/avatars/samuel.png', completed: false },

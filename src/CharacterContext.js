@@ -10,7 +10,7 @@ export const characters = [
   { id: 'mary-joseph', name: 'Mary & Joseph', avatar: '/avatars/mary-joseph.png', premium: true },
   { id: 'paul', name: 'Paul', avatar: '/avatars/paul.png', premium: true },
   { id: 'jesus', name: 'Jesus', avatar: '/avatars/jesus.jpg', premium: true },
-  { id: 'adam-eve', name: 'Adam & Eve', avatar: '/avatars/adam-eve.jpg', premium: true },
+  { id: 'adam-eve', name: 'Adam & Eve', avatar: '/avatars/adam-eve.png', premium: true },
   { id: 'noah', name: 'Noah', avatar: '/avatars/noah.png', premium: true },
   { id: 'abraham', name: 'Abraham', avatar: '/avatars/abraham.jpg', premium: true },
   { id: 'samuel', name: 'Samuel', avatar: '/avatars/samuel.png', premium: true },
