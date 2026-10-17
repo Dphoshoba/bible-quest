@@ -72,7 +72,15 @@ function CharacterCarousel() {
             }} 
           />
           <h3 style={{ margin: '0.5rem 0 0.25rem', fontSize: '1.1rem' }}>{char.name}</h3>
-          {char.premium && !isPremiumUser && <p className="lock-msg" style={{ color: '#ff9800', fontWeight: 'bold' }}>🔒 Premium</p>}
+          {char.premium && !isPremiumUser && (
+            <Link
+              to={`/stories/${char.id}`}
+              className="lock-msg"
+              style={{ display: 'inline-block', color: '#e65100', fontWeight: 'bold', textDecoration: 'underline', margin: '8px 0' }}
+            >
+              🔒 Premium – tap to unlock
+            </Link>
+          )}
           {(!char.premium || isPremiumUser) ? (
             <Link 
               to={`/stories/${char.id}`} 
