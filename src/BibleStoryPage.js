@@ -576,7 +576,10 @@ const stories = {
 
 // Recorded narration clips in public/audio/<storyId>-<levelIndex>.mp3.
 // Add a story id and its level indexes here after dropping new files into public/audio.
-const NARRATED = { david: [0, 1, 2], esther: [0, 1, 2] };
+const NARRATED = Object.fromEntries(
+  ['david', 'esther', 'samson', 'joseph', 'mary-joseph', 'paul', 'jesus', 'adam-eve',
+   'noah', 'abraham', 'samuel', 'naomi', 'daniel', 'cain-abel'].map((storyId) => [storyId, [0, 1, 2]])
+);
 const hasNarration = (storyId, lvl) => (NARRATED[storyId] || []).includes(lvl);
 
 function BibleStoryPage() {
