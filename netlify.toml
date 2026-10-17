@@ -54,6 +54,11 @@
     Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
   for = "/avatars/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"

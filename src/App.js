@@ -5,6 +5,7 @@ import { CharacterContext, characters } from './CharacterContext.js';
 import { readPremium, savePremium, verifySession, restorePurchase } from './premium.js';
 import { recordVisit } from './streak.js';
 import { accountsEnabled, watchUser, signIn, signOutUser, syncAccount } from './account.js';
+import InstallButton from './components/InstallButton.js';
 
 // Route pages load on demand so the home screen downloads less code up front
 const BibleStoryPage = lazy(() => import('./BibleStoryPage.js'));
@@ -312,6 +313,8 @@ function HomePage({ handleButtonClick, clickMessage, streak, isPremium, onRestor
           </div>
         )}
       </div>
+
+      <InstallButton />
 
       {/* Character Carousel */}
       <div style={{ margin: '40px 0', position: 'relative', zIndex: 1000 }}>
