@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { App as CapacitorApp } from "@capacitor/app";
 import { API_ENDPOINTS } from "./config.js";
 import ShareButton from './components/ShareButton.js';
+import ReportAnswer from './components/ReportAnswer.js';
 
 export const quizzes = {
   david: [
@@ -271,6 +272,7 @@ function QuizPage() {
       {hint && (
         <div style={{ marginTop: 10, background: '#e3f7ff', padding: 10, borderRadius: 6, color: '#222' }}>
           <strong>Buddy says:</strong> {hint}
+          <div><ReportAnswer text={hint} source="Quiz hint" /></div>
         </div>
       )}
       {hintError && (

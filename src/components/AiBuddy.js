@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { API_ENDPOINTS } from "../config.js";
+import ReportAnswer from "./ReportAnswer.js";
 
 console.log('AiBuddy rendered');
 
@@ -150,6 +151,7 @@ function AiBuddy({ character, context = '', style = {}, position = {} }) {
             {response && (
               <div style={{ marginTop: 18, background: '#f1f8ff', padding: 12, borderRadius: 6, color: '#222' }}>
                 <strong>Buddy:</strong> {response}
+                <div><ReportAnswer text={response} source="Bible Buddy chat" /></div>
               </div>
             )}
             {error && (

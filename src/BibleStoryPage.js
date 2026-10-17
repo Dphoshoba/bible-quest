@@ -4,6 +4,7 @@ import { CharacterContext } from './CharacterContext.js';
 import AiBuddy from "./components/AiBuddy.js";
 import { startCheckout, PREMIUM_PRICE_LABEL } from "./premium.js";
 import { isNativeApp } from "./native.js";
+import ReportAnswer from "./components/ReportAnswer.js";
 import { API_ENDPOINTS } from "./config.js";
 import ShareButton from './components/ShareButton.js';
 
@@ -936,7 +937,7 @@ if (character.premium && !isPremiumUser) {
                 <div style={{ marginTop: 6 }}>
                   {verseExplanation && (
                     <div style={{ background: '#e3f7ff', padding: 8, borderRadius: 6, color: '#222' }}>
-                      <strong>Explanation:</strong> {verseExplanation}
+                      <strong>Explanation:</strong> {verseExplanation} <ReportAnswer text={verseExplanation} source="Verse explanation" />
                     </div>
                   )}
                   {verseExplainError && (
@@ -980,7 +981,7 @@ if (character.premium && !isPremiumUser) {
               <div style={{ marginTop: 6 }}>
                 {verseExplanation && (
                   <div style={{ background: '#e3f7ff', padding: 8, borderRadius: 6, color: '#222' }}>
-                    <strong>Explanation:</strong> {verseExplanation}
+                    <strong>Explanation:</strong> {verseExplanation} <ReportAnswer text={verseExplanation} source="Verse explanation" />
                   </div>
                 )}
                 {verseExplainError && (
@@ -1011,7 +1012,7 @@ if (character.premium && !isPremiumUser) {
       </div>
       {reflection && (
         <div style={{ marginTop: 10, background: '#fffbe7', padding: 10, borderRadius: 6, color: '#222' }}>
-          <strong>Reflection:</strong> {reflection}
+          <strong>Reflection:</strong> {reflection} <ReportAnswer text={reflection} source="Story reflection" />
         </div>
       )}
       {reflectionError && (
@@ -1019,7 +1020,7 @@ if (character.premium && !isPremiumUser) {
       )}
       {summary && (
         <div style={{ marginTop: 10, background: "#e3f7ff", padding: 10, borderRadius: 6 }}>
-          <strong>Summary:</strong> {summary}
+          <strong>Summary:</strong> {summary} <ReportAnswer text={summary} source="Story summary" />
         </div>
       )}
       {summaryError && (
@@ -1027,7 +1028,7 @@ if (character.premium && !isPremiumUser) {
       )}
       {prayer && (
         <div style={{ marginTop: 10, background: '#f1ffe7', padding: 10, borderRadius: 6, color: '#222' }}>
-          <strong>Prayer:</strong> {prayer}
+          <strong>Prayer:</strong> {prayer} <ReportAnswer text={prayer} source="Story prayer" />
         </div>
       )}
       {prayerError && (
@@ -1111,6 +1112,7 @@ if (character.premium && !isPremiumUser) {
               <div style={{ marginTop: 18, background: '#f1f8ff', padding: 12, borderRadius: 6, color: '#222', maxHeight: 250, overflowY: 'auto' }}>
                 <strong>Story:</strong>
                 <div style={{ marginTop: 8, whiteSpace: 'pre-line' }}>{storyGenResult}</div>
+                <ReportAnswer text={storyGenResult} source="Generated story" />
               </div>
             )}
             {storyGenError && (

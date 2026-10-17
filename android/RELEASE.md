@@ -66,9 +66,11 @@ Set `sdk.dir` in `android/local.properties` if Gradle cannot find the SDK (Andro
 
 ## Open items before submitting
 
-- **AI helper (Bible Buddy):** Google's AI-generated content policy expects an in-app way to report
-  offensive AI answers. A "Report this answer" button is not built yet. Either add one, or hide Bible
-  Buddy in the Android release.
+- **AI helper (Bible Buddy):** every AI-written answer now has a "Report this answer" link (Bible Buddy,
+  verse explanations, summaries, reflections, prayers, generated stories, quiz hints). It opens the email
+  app addressed to davidoshoba@gmail.com with the answer pre-filled. In Play Console's AI-generated
+  content declaration, describe this reporting method. Check that mailbox regularly, and test the link on
+  a real phone (it needs an email app installed).
 - **Designed for Families:** because children are a target audience, review the Families policy
   checklist in Play Console and answer the questionnaire carefully.
 - **Store graphics:** a 512x512 icon is ready (`public/icon-512.png`). You still need a 1024x500 feature

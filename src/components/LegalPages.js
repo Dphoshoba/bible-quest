@@ -74,7 +74,8 @@ export function PrivacyPolicy() {
         safety check and a short answer can be produced. We do not ask for or intentionally store these
         questions, and we do not link them to any person. Please remind children never to type personal
         information such as their name, address, school or phone number. If they do, tell them to stop and
-        talk to a parent.
+        talk to a parent. Every AI-written answer has a "Report this answer" link. It opens your email app
+        with the answer filled in, and we only receive what you choose to send.
       </p>
 
       <h2>Bible text</h2>
