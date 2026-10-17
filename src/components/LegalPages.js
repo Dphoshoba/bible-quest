@@ -36,9 +36,15 @@ export function PrivacyPolicy() {
 
       <h2>The short version</h2>
       <ul>
-        <li>There are no accounts. We do not ask children for their name, email, age or photo.</li>
+        <li>
+          Accounts are optional and for parents only. We never ask children for their name, email, age
+          or photo.
+        </li>
         <li>There are no ads and no tracking or analytics tools.</li>
-        <li>Progress is saved on your own device, not on our servers.</li>
+        <li>
+          Progress is saved on your own device. If a parent chooses to sign in, it is also saved to the
+          parent's account so it can follow them between devices.
+        </li>
         <li>Payments are handled by Stripe. We never see card numbers.</li>
       </ul>
 
@@ -47,8 +53,19 @@ export function PrivacyPolicy() {
         To remember where you are, the app saves a few things in your browser's storage on your own
         device: stories and quizzes completed, quiz high scores, your daily streak and last visit date,
         the weekly goal a parent types in, and whether Premium has been unlocked (including a private
-        restore code). This information stays on your device. We cannot see it. Clearing your browser's
-        site data removes it.
+        restore code). Unless a parent signs in (see the next section), this information stays on your
+        device and we cannot see it. Clearing your browser's site data removes it.
+      </p>
+
+      <h2>Parent accounts (optional)</h2>
+      <p>
+        A parent or guardian can choose to sign in with their Google account so Premium and progress sync
+        between devices. Sign-in is handled by Google and Firebase. When a parent signs in we receive and
+        store their Google account's unique ID and email address, whether Premium is unlocked, and the
+        progress listed above (stories and quizzes completed, scores, streak, daily challenge count and
+        weekly goal). We use this only to provide syncing and to restore Premium. Children should not
+        create accounts. A parent can sign out at any time, and can ask us to delete the account and its
+        data by emailing <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
       </p>
 
       <h2>Bible Buddy (the AI helper)</h2>
@@ -83,7 +100,8 @@ export function PrivacyPolicy() {
 
       <h2>Hosting and logs</h2>
       <p>
-        The app is delivered by hosting providers (Netlify and Render). Like most web services, they may
+        The app is delivered by hosting providers (Netlify and Render), and optional parent accounts are
+        stored with Google Firebase. Like most web services, they may
         keep technical logs such as IP addresses and browser type for security and reliability. We do not
         use these logs to identify children.
       </p>

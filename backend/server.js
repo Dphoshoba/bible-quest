@@ -4,6 +4,7 @@ import express from 'express';
 import cors from 'cors';
 import webhookRoutes from './webhook.js';
 import donationRoutes from './donationRoutes.js';
+import accountRoutes from './accountRoutes.js';
 import rateLimit from 'express-rate-limit';
 
 const app = express();
@@ -48,6 +49,7 @@ app.get('/api/cors-test', (req, res) => {
 
 app.use(express.json({ limit: '10kb' }));
 app.use('/', donationRoutes);
+app.use('/', accountRoutes);
 
 // Simple root endpoint to test if server is running
 app.get('/', (req, res) => {

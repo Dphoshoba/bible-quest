@@ -4,6 +4,7 @@ import CharacterCarousel from './CharacterCarousel.js';
 import { CharacterContext, characters } from './CharacterContext.js';
 import { readPremium, savePremium, verifySession, restorePurchase } from './premium.js';
 import { recordVisit } from './streak.js';
+import { accountsEnabled, watchUser, signIn, signOutUser, syncAccount } from './account.js';
 
 // Route pages load on demand so the home screen downloads less code up front
 const BibleStoryPage = lazy(() => import('./BibleStoryPage.js'));
@@ -70,7 +71,7 @@ class ErrorBoundary extends React.Component {
 }
 
 // Home Page Component
-function HomePage({ handleButtonClick, clickMessage, streak, isPremium, onRestore }) {
+function HomePage({ handleButtonClick, clickMessage, streak, isPremium, onRestore, user, syncState, onSignIn, onSignOut }) {
   const [restoreMsg, setRestoreMsg] = useState('');
 
   const handleRestore = async () => {
@@ -292,6 +293,23 @@ function HomePage({ handleButtonClick, clickMessage, streak, isPremium, onRestor
           </button>
         )}
         {restoreMsg && <div style={{ marginTop: 8, fontSize: 14 }}>{restoreMsg}</div>}
+        {accountsEnabled && (
+          <div style={{ marginTop: 10, fontSize: 14 }}>
+            {user ? (
+              <>
+                👤 {user.email} ·{' '}
+                {syncState === 'syncing' ? 'Syncing…' : syncState === 'error' ? 'Sync problem, will retry next visit' : 'Synced ✓'} ·{' '}
+                <button onClick={onSignOut} style={{ background: 'none', border: 'none', color: '#1a237e', textDecoration: 'underline', cursor: 'pointer', fontSize: 14 }}>
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <button onClick={onSignIn} style={{ background: '#fff', border: '1px solid #c5cae9', borderRadius: 20, padding: '8px 16px', cursor: 'pointer', fontSize: 14, color: '#1a237e', fontWeight: 600 }}>
+                Parent sign-in: keep progress &amp; Premium on every device
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Character Carousel */}
@@ -406,6 +424,44 @@ function App() {
   useEffect(() => {
     setStreak(recordVisit());
   }, []);
+  const [user, setUser] = useState(null);
+  const [syncState, setSyncState] = useState('');
+  useEffect(() => {
+    let unsubscribe = () => {};
+    let cancelled = false;
+    watchUser(async (u) => {
+      if (cancelled) return;
+      setUser(u ? { email: u.email } : null);
+      if (!u) {
+        setSyncState('');
+        return;
+      }
+      setSyncState('syncing');
+      try {
+        const result = await syncAccount();
+        if (result.premium) setIsPremium(true);
+        setStreak(recordVisit());
+        setSyncState('synced');
+      } catch (err) {
+        console.error('Account sync failed:', err);
+        setSyncState('error');
+      }
+    }).then((off) => {
+      unsubscribe = off;
+    });
+    return () => {
+      cancelled = true;
+      unsubscribe();
+    };
+  }, []);
+  const handleSignIn = useCallback(() => {
+    signIn().catch((err) => {
+      if (err?.code !== 'auth/popup-closed-by-user') alert('Sorry, sign-in did not work. Please try again.');
+    });
+  }, []);
+  const handleSignOut = useCallback(() => {
+    signOutUser().catch(() => {});
+  }, []);
   const handleRestore = useCallback(async (code) => {
     const ok = await restorePurchase(code);
     if (ok) setIsPremium(true);
@@ -516,7 +572,7 @@ function App() {
             <main>
             <Suspense fallback={<div style={{ textAlign: 'center', padding: 60 }}>Loading…</div>}>
             <Routes>
-              <Route path="/" element={<HomePage handleButtonClick={handleButtonClick} clickMessage={clickMessage} streak={streak} isPremium={isPremium} onRestore={handleRestore} />} />
+              <Route path="/" element={<HomePage handleButtonClick={handleButtonClick} clickMessage={clickMessage} streak={streak} isPremium={isPremium} onRestore={handleRestore} user={user} syncState={syncState} onSignIn={handleSignIn} onSignOut={handleSignOut} />} />
               <Route path="/stories/:id" element={<BibleStoryPage />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/quiz/:id" element={<QuizPage />} />
