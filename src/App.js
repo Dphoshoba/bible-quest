@@ -290,7 +290,7 @@ function HomePage({ handleButtonClick, clickMessage, streak, isPremium, onRestor
           </Link>
         </div>
         {streak > 0 && (
-          <span style={{ display: 'inline-block', background: '#fff3e0', color: '#bf360c', fontWeight: 700, padding: '8px 16px', borderRadius: 20, marginRight: 12 }}>
+          <span style={{ display: 'inline-block', background: '#fff3e0', color: '#bf360c', fontWeight: 700, padding: '8px 16px', borderRadius: 20, margin: '0 12px 8px 0', maxWidth: 'calc(100% - 24px)', boxSizing: 'border-box' }}>
             🔥 {streak}-day streak{streak >= 3 ? ' — Streak Starter badge earned!' : ' — come back tomorrow to keep it going!'}
           </span>
         )}

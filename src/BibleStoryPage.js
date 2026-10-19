@@ -904,11 +904,14 @@ if (character.premium && !isPremiumUser) {
       <AiBuddy character={character?.name || id} context={current?.title || story?.name || id} />
       <h2>{story.name}</h2>
       <ShareButton message={`I'm reading the story of ${story.name} on Bible Quest!`} style={{ marginBottom: 16 }} />
-      {story.image && (
+      {character?.avatar && (
         <img
-          src={story.image}
+          src={character.avatar}
           alt={story.name}
-          style={{ maxWidth: "100%", height: "auto", marginBottom: "20px" }}
+          width={200}
+          height={200}
+          style={{ display: "block", width: 200, height: 200, maxWidth: "100%", objectFit: "cover", objectPosition: "center 22%", borderRadius: 12, margin: "0 0 20px" }}
+          onError={(e) => { e.currentTarget.style.display = "none"; }}
         />
       )}
       {/* Read Aloud button */}
