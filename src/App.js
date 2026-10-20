@@ -18,6 +18,7 @@ const BiblePage = lazy(() => import('./BiblePage.js'));
 const CorsTest = lazy(() => import('./components/CorsTest'));
 const DailyChallenge = lazy(() => import('./components/DailyChallenge.js'));
 const Certificate = lazy(() => import('./components/Certificate.js'));
+const AndroidApp = lazy(() => import('./components/AndroidApp.js'));
 const PrivacyPolicy = lazy(() => import('./components/LegalPages.js').then((m) => ({ default: m.PrivacyPolicy })));
 const RefundPolicy = lazy(() => import('./components/LegalPages.js').then((m) => ({ default: m.RefundPolicy })));
 
@@ -326,6 +327,11 @@ function HomePage({ handleButtonClick, clickMessage, streak, isPremium, onRestor
 
       {/* Below the cards so its late appearance can't shift anything above it */}
       <InstallButton />
+      {!isNativeApp() && (
+        <div style={{ textAlign: 'center', margin: '0 0 8px', fontSize: 14, position: 'relative', zIndex: 1000 }}>
+          <Link to="/android" style={{ color: '#1a237e', fontWeight: 600 }}>🤖 Android phone? Get the Android app</Link>
+        </div>
+      )}
 
       {/* Footer */}
       <footer style={{ textAlign: 'center', padding: '24px 16px 72px', fontSize: 14, position: 'relative', zIndex: 1000 }}>
@@ -591,6 +597,7 @@ function App() {
               <Route path="/success" element={<SuccessPage onUnlocked={unlockPremium} />} />
               <Route path="/daily" element={<DailyChallenge />} />
               <Route path="/certificate/:id" element={<Certificate />} />
+              <Route path="/android" element={<AndroidApp />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/refunds" element={<RefundPolicy />} />
               <Route path="/cors-test" element={<CorsTest />} />
