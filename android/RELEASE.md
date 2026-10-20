@@ -4,7 +4,7 @@ This is the first Android release: **free, no purchases, no sign-in** (Premium s
 The Android app detects it is running natively and hides Upgrade, Restore purchase, parent sign-in and
 the refund link. Locked characters show "Coming soon".
 
-Current version: `versionCode 3`, `versionName 1.1.1` (in `android/app/build.gradle`).
+Current version: `versionCode 4`, `versionName 1.1.2` (in `android/app/build.gradle`).
 Raise `versionCode` by at least 1 for every upload to Google Play.
 
 ## One-time setup (only you can do these)
