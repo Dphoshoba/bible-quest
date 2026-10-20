@@ -1,10 +1,16 @@
 # Releasing Bible Quest on Google Play
 
-This is the first Android release: **free, no purchases, no sign-in** (Premium stays on the website).
-The Android app detects it is running natively and hides Upgrade, Restore purchase, parent sign-in and
-the refund link. Locked characters show "Coming soon".
+**Two kinds of Android build:**
 
-Current version: `versionCode 4`, `versionName 1.1.2` (in `android/app/build.gradle`).
+1. **Direct-install APK** (website / GitHub release; the default `npm run build`): Premium works in the app.
+   A locked character opens the Stripe payment page in the phone's browser, the buyer gets a restore code,
+   and pastes it into **Restore purchase** in the app. Parent sign-in stays hidden inside the app.
+2. **Google Play build:** Google Play forbids taking payments like this, so build it with the purchase UI
+   off: `REACT_APP_NATIVE_PREMIUM=off npm run build` (PowerShell: `$env:REACT_APP_NATIVE_PREMIUM="off"`
+   first). Locked characters then show "Coming soon" and Upgrade/Restore/refund items are hidden. In-app
+   Premium on Play would need Google Play Billing.
+
+Current version: `versionCode 5`, `versionName 1.1.3` (in `android/app/build.gradle`).
 Raise `versionCode` by at least 1 for every upload to Google Play.
 
 ## One-time setup (only you can do these)

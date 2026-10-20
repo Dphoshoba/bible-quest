@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { CharacterContext } from './CharacterContext.js';
 import AiBuddy from "./components/AiBuddy.js";
 import { startCheckout, PREMIUM_PRICE_LABEL } from "./premium.js";
-import { isNativeApp } from "./native.js";
+import { isNativeApp, purchasesHidden } from "./native.js";
 import ReportAnswer from "./components/ReportAnswer.js";
 import { API_ENDPOINTS } from "./config.js";
 import ShareButton from './components/ShareButton.js';
@@ -812,7 +812,7 @@ function BibleStoryPage() {
 
 if (character.premium && !isPremiumUser) {
   // The Android app is free-only for now: no purchase prompts, just a friendly message
-  if (isNativeApp()) {
+  if (purchasesHidden()) {
     return (
       <div style={{ textAlign: "center", padding: "40px" }}>
         <h2>🔒 Coming soon</h2>
@@ -867,6 +867,12 @@ if (character.premium && !isPremiumUser) {
               Charged in US dollars. Your bank may show the amount in your local currency.{' '}
               <a href="/refunds" style={{ color: '#1a237e' }}>14-day refund policy</a>
             </p>
+            {isNativeApp() && (
+              <p style={{ fontSize: 13, color: '#333', maxWidth: 300, margin: '10px auto 0', background: '#fffde7', padding: 8, borderRadius: 8 }}>
+                Payment opens in your phone's browser. After paying you'll get a <strong>restore code</strong>.
+                Come back to this app, go to the home screen and tap <strong>Restore purchase</strong> to unlock.
+              </p>
+            )}
 
             <button
               onClick={startCheckout}

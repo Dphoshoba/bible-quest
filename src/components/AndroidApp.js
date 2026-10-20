@@ -44,11 +44,14 @@ function AndroidApp() {
       <ul>
         <li>Stories and quizzes for <strong>David</strong> and <strong>Esther</strong> at three reading levels, with narration</li>
         <li>Daily Challenge, streaks, badges and printable certificates</li>
-        <li>No accounts, no ads and no tracking</li>
+        <li>No accounts, no ads and no tracking (payments are handled by Stripe in your browser)</li>
       </ul>
       <p>
-        The other characters and Premium are available on the website, which you can also add to your home
-        screen like an app.
+        <strong>Premium</strong> (US$5, one-time) unlocks all 14 characters. In the app, tap a locked
+        character and choose <em>Continue to Payment</em>. Payment opens in your phone's browser; afterwards
+        you'll see a <em>restore code</em>. Go back to the app, tap <em>Restore purchase</em> on the home
+        screen and paste the code. You can also use Bible Quest on the website, which you can add to your
+        home screen like an app.
       </p>
 
       <h2>Staying safe</h2>

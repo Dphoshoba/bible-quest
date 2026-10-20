@@ -12,7 +12,8 @@ const PORT = process.env.PORT || 5050;
 
 // Enable CORS for all routes with explicit configuration
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://bible-quest.netlify.app', 'https://bible-quest-app.netlify.app', process.env.CLIENT_URL].filter(Boolean),
+  // https://localhost and capacitor://localhost are the origins of the Android/iOS app (Capacitor)
+  origin: ['http://localhost:3000', 'https://localhost', 'capacitor://localhost', 'https://bible-quest.netlify.app', 'https://bible-quest-app.netlify.app', process.env.CLIENT_URL].filter(Boolean),
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With', 'api-key'],
