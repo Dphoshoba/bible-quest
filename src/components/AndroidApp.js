@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 // Update these when a new APK is published as a GitHub release (keep the asset named BibleQuest.apk).
 const APK_URL = 'https://github.com/Dphoshoba/bible-quest/releases/latest/download/BibleQuest.apk';
 const RELEASES_URL = 'https://github.com/Dphoshoba/bible-quest/releases/latest';
-const VERSION = '1.1.1';
+const VERSION = '1.1.2';
 const SIZE = '47 MB';
-const SHA256 = '125b71577a27bd119b663a5db795d932bdf568190af5891fc2192aa773825ee8';
+const SHA256 = 'ba231d07a66b5c8fb6dbc7976224cd386c83b1391aa2e3b0c9830e7dfc3a0219';
 
 const page = { maxWidth: 720, margin: '0 auto', padding: '32px 20px 64px', lineHeight: 1.65, color: '#222', position: 'relative', zIndex: 1000 };
 
