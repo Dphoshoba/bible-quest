@@ -841,6 +841,15 @@ if (character.premium && !isPremiumUser) {
         Upgrade to Premium
       </button>
 
+      <div style={{ marginTop: 16 }}>
+        <button
+          onClick={() => navigate("/")}
+          style={{ background: "#fff", color: "#1a237e", border: "2px solid #1a237e", borderRadius: 8, padding: "10px 18px", fontSize: 15, cursor: "pointer" }}
+        >
+          ← Back to characters
+        </button>
+      </div>
+
       {showPremiumModal && (
         <div style={{
           position: "fixed",
@@ -850,16 +859,28 @@ if (character.premium && !isPremiumUser) {
           height: "100%",
           background: "rgba(0,0,0,0.6)",
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          overflowY: "auto",
+          padding: 16,
+          boxSizing: "border-box",
           zIndex: 9999
         }}>
           <div style={{
             background: "#fff",
-            padding: "30px",
+            padding: "20px 24px 28px",
             borderRadius: "10px",
-            textAlign: "center"
+            textAlign: "center",
+            margin: "auto",
+            maxWidth: 360,
+            width: "100%"
           }}>
+            <div style={{ textAlign: "left" }}>
+              <button
+                onClick={() => setShowPremiumModal(false)}
+                style={{ background: "none", border: "none", color: "#1a237e", fontSize: 16, fontWeight: 600, cursor: "pointer", padding: "4px 0" }}
+              >
+                ← Back
+              </button>
+            </div>
             <h2>Upgrade to Premium</h2>
             <p>Unlock all stories + AI features</p>
             <p style={{ fontWeight: 700, fontSize: 18, margin: '8px 0' }}>{PREMIUM_PRICE_LABEL}</p>
@@ -890,8 +911,11 @@ if (character.premium && !isPremiumUser) {
 
             <br /><br />
 
-            <button onClick={() => setShowPremiumModal(false)}>
-              Close
+            <button
+              onClick={() => setShowPremiumModal(false)}
+              style={{ background: "#fff", color: "#1a237e", border: "2px solid #1a237e", borderRadius: 6, padding: "10px 20px", fontSize: 15, cursor: "pointer" }}
+            >
+              Not now
             </button>
           </div>
         </div>

@@ -10,7 +10,7 @@
    first). Locked characters then show "Coming soon" and Upgrade/Restore/refund items are hidden. In-app
    Premium on Play would need Google Play Billing.
 
-Current version: `versionCode 5`, `versionName 1.1.3` (in `android/app/build.gradle`).
+Current version: `versionCode 6`, `versionName 1.1.4` (in `android/app/build.gradle`).
 Raise `versionCode` by at least 1 for every upload to Google Play.
 
 ## One-time setup (only you can do these)
